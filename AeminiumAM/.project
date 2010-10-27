@@ -3,6 +3,7 @@
 	<name>AeminiumAM</name>
 	<comment></comment>
 	<projects>
+		<project>Aeminium</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
