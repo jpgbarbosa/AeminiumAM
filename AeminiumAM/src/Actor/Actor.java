@@ -13,7 +13,6 @@ public class Actor{
 
 	protected void react() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	public void sendMessage() {
