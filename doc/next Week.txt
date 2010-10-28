@@ -1,0 +1,2 @@
+next meeting:
+	-> define Actor's Model structure
