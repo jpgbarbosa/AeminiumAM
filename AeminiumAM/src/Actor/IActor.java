@@ -1,7 +1,7 @@
 package Actor;
 public interface IActor {
 
-	void react();
+	abstract void react();
 
 	void sendMessage();
 
