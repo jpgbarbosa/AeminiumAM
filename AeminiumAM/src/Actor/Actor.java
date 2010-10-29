@@ -23,7 +23,7 @@ public class Actor{
 						throws Exception {
 					
 					react();
-					
+					System.out.println("Ended");
 				}}, Runtime.NO_HINTS);
 		
 		rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);

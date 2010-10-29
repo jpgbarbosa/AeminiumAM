@@ -18,7 +18,8 @@ public class Test {
 		
 		@Override
 		public void react(){
-			body = new AeminiumFibonacci.FibBody(6, 1);
+			System.out.println("Cenas");
+			result = 42;
 		}		
 		
 	}
@@ -33,7 +34,7 @@ public class Test {
 		
 		rt.shutdown();
 	
-		System.out.println("ola: "+body.value);
+		System.out.println("ola: "+a.result);
 		
 
 	}
