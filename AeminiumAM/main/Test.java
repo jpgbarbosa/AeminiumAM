@@ -1,14 +1,11 @@
 package main;
 
-import actor.*;
 import aeminium.runtime.Runtime;
-import aeminium.runtime.examples.fjtests.AeminiumFibonacci;
-import aeminium.runtime.examples.fjtests.AeminiumFibonacci.FibBody;
 import aeminium.runtime.implementations.Factory;
 
+import actor.*;
 
 public class Test {
-	public static FibBody body;
 
 	public static class TestActor extends Actor {
 		int result;
@@ -19,7 +16,7 @@ public class Test {
 		
 		@Override
 		public void react(){
-			System.out.println("Cenas");
+			System.out.println("React");
 			result = 42;
 		}		
 
