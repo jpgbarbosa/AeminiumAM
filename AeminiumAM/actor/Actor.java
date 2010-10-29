@@ -4,28 +4,27 @@ import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
 import aeminium.runtime.*;
 
+import actor.AeminiumRuntime;
+
 
 public abstract class Actor{
-	Runtime rt = null;
+	public Actor() {}
 
-	public Actor(Runtime rt) {
-		this.rt = rt;
-	}
+	public abstract void react(Object obj);
 
-	public abstract void react();
+	public void sendMessage(Object obj) {
 
-	public void sendMessage() {
-
-		Task t1 = rt.createNonBlockingTask(new Body(){		
+		Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body(){		
 				@Override
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react();
+					react(null);
+					
 					System.out.println("Ended");
 				}}, Runtime.NO_HINTS);
 
-		rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
+		AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 	}
 
 }

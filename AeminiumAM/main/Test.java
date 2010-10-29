@@ -1,21 +1,19 @@
 package main;
-
-import aeminium.runtime.Runtime;
-import aeminium.runtime.implementations.Factory;
-
 import actor.*;
 
 public class Test {
+	
+	static AeminiumRuntime art = new AeminiumRuntime();
 
 	public static class TestActor extends Actor {
 		int result;
 
-		public TestActor(Runtime rt) {
-			super(rt);
+		public TestActor() {
+			super();
 		}
 		
 		@Override
-		public void react(){
+		public void react(Object obj){
 			System.out.println("React");
 			result = 42;
 		}		
@@ -24,12 +22,12 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		Runtime rt = Factory.getRuntime();
-		rt.init();
-		TestActor a = new TestActor(rt);
-		a.sendMessage();
+		
+		TestActor a = new TestActor();
+		
+		a.sendMessage(null);
 
-		rt.shutdown();
+		art.endAeminiumRuntime();
 	
 		System.out.println("ola: "+a.result);
 
