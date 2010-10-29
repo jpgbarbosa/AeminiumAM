@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
@@ -5,3 +6,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+>>>>>>> cf7967a4c7a632e263e6c17a6d453b690e4640b4
