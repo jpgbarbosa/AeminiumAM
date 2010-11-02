@@ -6,7 +6,9 @@ public class Test {
 	static AeminiumRuntime art = new AeminiumRuntime();
 
 	public static class TestActor extends Actor {
-		int result;
+		
+		@readOnly(isReadOnly = true)
+		private int result;
 
 		public TestActor() {
 			super();
