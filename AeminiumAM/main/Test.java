@@ -6,9 +6,9 @@ public class Test {
 	static AeminiumRuntime art = new AeminiumRuntime();
 
 	public static class TestActor extends Actor {
-		
-		@readOnly(isReadOnly = true)
-		private int result;
+	
+		@readOnly
+		public int result;
 
 		public TestActor() {
 			super();
@@ -16,7 +16,6 @@ public class Test {
 		
 		@Override
 		public void react(Object obj){
-			System.out.println("React");
 			result = 42;
 		}		
 
@@ -31,7 +30,7 @@ public class Test {
 
 		art.endAeminiumRuntime();
 	
-		System.out.println("ola: "+a.result);
+		System.out.println("Testing result: "+a.result);
 
 	}
 
