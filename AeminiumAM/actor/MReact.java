@@ -1,20 +1,17 @@
 package actor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
+import aeminium.runtime.Body;
+import aeminium.runtime.DataGroup;
 import aeminium.runtime.Runtime;
-import aeminium.runtime.*;
+import aeminium.runtime.Task;
 
-import actor.AeminiumRuntime;
-
-
-public abstract class Actor{
-	public Actor() {}
+public abstract class MReact {
+	
+	public MReact(){};
 
 	public abstract void react(Object obj);
-
-	public void sendMessage(Object obj) {
+	
+	public void sendToAR() {
 
 		if(canBeParallelized()){
 			System.out.println("going to be par");
@@ -48,22 +45,9 @@ public abstract class Actor{
 			AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 		}
 	}
-	
-	private boolean canBeParallelized(){
-		
-		for (Field f: this.getClass().getFields()) {
-			if(f.getAnnotations().length == 0){
-				return false;
-			}
-			else{
-				for (Annotation an : f.getAnnotations()) {
-					if(an instanceof readOnly && ((readOnly) an).isReadOnly() == false){
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
 
+	private boolean canBeParallelized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
