@@ -10,12 +10,17 @@ import actor.AeminiumRuntime;
 
 
 public abstract class Actor{
+	
+	public Object object;
+	
 	public Actor() {}
 
 	public abstract void react(Object obj);
 
-	public void sendMessage(Object obj) {
+	synchronized public void sendMessage(Object obj) {
 
+		object = obj;
+		
 		if(canBeParallelized()){
 			System.out.println("going to be par");
 			
@@ -24,7 +29,7 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(null);
+					react(object);
 					
 				}}, Runtime.NO_HINTS);
 
@@ -41,7 +46,7 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(null);
+					react(object);
 					
 				}},dg, Runtime.NO_HINTS);
 			

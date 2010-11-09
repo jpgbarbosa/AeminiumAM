@@ -7,7 +7,9 @@ import aeminium.runtime.Task;
 
 public abstract class MReact {
 	
-	public MReact(){};
+	public MReact(){
+		sendToAR();
+	};
 
 	public abstract void react(Object obj);
 	
@@ -47,7 +49,7 @@ public abstract class MReact {
 	}
 
 	private boolean canBeParallelized() {
-		// TODO Auto-generated method stub
+		// TODO: Mreact canBeParallelized todo
 		return false;
 	}
 }
