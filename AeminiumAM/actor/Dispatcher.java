@@ -2,6 +2,9 @@ package actor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Locale;
 
 import main.Test.TestActor;
 
@@ -23,17 +26,26 @@ public class Dispatcher {
 				@Override
 				public void execute(Runtime rt, Task current)
 						throws Exception {
-					try{
-						Object [] oa = new Object[1];
-						oa[0] = object;
+					try{						
+						Class<?> c = actor.getClass();
+						Object t = c.newInstance();
 						
-						for(int i=0; i<actor.getClass().getDeclaredMethods().length; i++){
-							//.getDeclaredMethod(name, new Class[]{Object[].class}).invoke(actor, oa);
-							//for(int x=0; x<actor.getClass().getDeclaredMethods()[i].getTypeParameters().length; x++){
-								System.out.println("nome: "+actor.getClass().getDeclaredMethods()[i].getTypeParameters().length);
-						}
-						
-						
+						Method[] allMethods = c.getDeclaredMethods();
+					    for (Method m : allMethods) {
+					    	if(m.getName() == name){
+					    		try {
+					    		    m.setAccessible(true);
+					    		    Object ob = new Object();
+					    		    ob = object;
+					    		    
+					    		    m.invoke(t, ob);
+
+					    		// Handle any exceptions thrown by method to be invoked.
+					    		} catch (InvocationTargetException x) {
+					    		    x.getCause();
+					    		}
+					    	}
+					    }	
 					} catch(Exception e){
 						e.printStackTrace();
 					}

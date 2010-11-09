@@ -10,16 +10,13 @@ import actor.AeminiumRuntime;
 
 
 public abstract class Actor{
-	@readOnly
-	public Object object;
 	
 	public Actor() {}
 
 	public abstract void react(Object obj);
 
-	synchronized public void sendMessage(Object obj) {
+	synchronized public void sendMessage(final Object obj) {
 
-		object = obj;
 		
 		if(canBeParallelized()){
 			System.out.println("going to be par");
@@ -29,7 +26,7 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(object);
+					react(obj);
 					
 				}}, Runtime.NO_HINTS);
 
@@ -46,7 +43,7 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(object);
+					react(obj);
 					
 				}},dg, Runtime.NO_HINTS);
 			
@@ -56,13 +53,14 @@ public abstract class Actor{
 	
 	private boolean canBeParallelized(){
 		
-		for (Field f: this.getClass().getFields()) {			
+		for (Field f: this.getClass().getFields()) {
 			if(f.getAnnotations().length == 0){
 				return false;
 			}
 			else{
 				for (Annotation an : f.getAnnotations()) {
 					if(an instanceof readOnly && ((readOnly) an).isReadOnly() == false){
+						return false;
 					}
 				}
 			}

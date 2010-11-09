@@ -6,12 +6,11 @@ public class Test {
 	static AeminiumRuntime art = new AeminiumRuntime();
 
 	public static class TestActor extends Actor {
-
 		@readOnly
-		int val=3;
+		public int val=3;
 		
 		@readOnly
-		int result;
+		public int result;
 
 		public TestActor() {
 			super();
@@ -38,6 +37,10 @@ public class Test {
 		
 		public void react1(Object m){
 			System.out.println("react1 em execução!");
+		}
+		
+		public void react2(Object m){
+			System.out.println("react2 em execução!");
 		}
 
 	}
