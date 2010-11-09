@@ -35,6 +35,7 @@ public class Test {
 			*/
 		}
 		
+		
 		public void react1(Object m){
 			System.out.println("react1 em execução!");
 		}
