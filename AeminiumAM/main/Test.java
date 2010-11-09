@@ -10,6 +10,7 @@ public class Test {
 		@readOnly
 		int val=3;
 		
+		@readOnly
 		int result;
 
 		public TestActor() {
@@ -21,6 +22,8 @@ public class Test {
 			
 			result = 42 + ((Integer)obj) + val;
 			
+			Dispatcher.dispatcToAM(this,"react1",obj);
+						
 			/* With this sleep, we are giving time to subActor performs his react*/
 			/*
 			try {
@@ -31,7 +34,11 @@ public class Test {
 				e.printStackTrace();
 			}
 			*/
-		}		
+		}
+		
+		public void react1(Object m){
+			System.out.println("react1 em execução!");
+		}
 
 	}
 

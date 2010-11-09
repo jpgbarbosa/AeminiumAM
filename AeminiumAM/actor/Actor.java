@@ -10,7 +10,7 @@ import actor.AeminiumRuntime;
 
 
 public abstract class Actor{
-	
+	@readOnly
 	public Object object;
 	
 	public Actor() {}
@@ -56,14 +56,13 @@ public abstract class Actor{
 	
 	private boolean canBeParallelized(){
 		
-		for (Field f: this.getClass().getFields()) {
+		for (Field f: this.getClass().getFields()) {			
 			if(f.getAnnotations().length == 0){
 				return false;
 			}
 			else{
 				for (Annotation an : f.getAnnotations()) {
 					if(an instanceof readOnly && ((readOnly) an).isReadOnly() == false){
-						return false;
 					}
 				}
 			}

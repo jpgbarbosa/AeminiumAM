@@ -4,7 +4,7 @@ import aeminium.runtime.implementations.Factory;
 import aeminium.runtime.Runtime;
 
 public class AeminiumRuntime {
-	static Runtime rt;
+	public static Runtime rt;
 	
 	public AeminiumRuntime() {
 		rt = Factory.getRuntime();
