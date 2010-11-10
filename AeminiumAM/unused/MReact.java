@@ -1,24 +1,21 @@
-package actor;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.lang.System;
-
-import aeminium.runtime.Runtime;
-import aeminium.runtime.*;
+package unused;
 
 import actor.AeminiumRuntime;
+import aeminium.runtime.Body;
+import aeminium.runtime.DataGroup;
+import aeminium.runtime.Runtime;
+import aeminium.runtime.Task;
 
-
-public abstract class Actor{
+public abstract class MReact {
 	
-	public Actor() {}
+	public MReact(){
+		sendToAR();
+	};
 
 	public abstract void react(Object obj);
+	
+	public void sendToAR() {
 
-	synchronized public void sendMessage(final Object obj) {
-
-		
 		if(canBeParallelized()){
 			System.out.println("going to be par");
 			
@@ -27,7 +24,7 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(obj);
+					react(null);
 					
 				}}, Runtime.NO_HINTS);
 
@@ -44,26 +41,16 @@ public abstract class Actor{
 				public void execute(Runtime rt, Task current)
 						throws Exception {
 					
-					react(obj);
+					react(null);
 					
 				}},dg, Runtime.NO_HINTS);
 			
 			AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 		}
 	}
-	
-	private boolean canBeParallelized(){
-		
-		if(this.getClass().getFields().length == 0)
-			return true;
-				
-		for (Field f: this.getClass().getDeclaredFields()) {
-			for (Annotation an : f.getAnnotations()) {
-				if(an instanceof writable && ((writable) an).isWritable() == true){
-					return false;
-				}
-			}
-		}
-		return true;
+
+	private boolean canBeParallelized() {
+		// TODO: Mreact canBeParallelized todo
+		return false;
 	}
 }

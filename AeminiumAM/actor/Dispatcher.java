@@ -11,7 +11,7 @@ import aeminium.runtime.Task;
 public class Dispatcher {
 	static Object object;
 
-	public static void dispatcToAM(final Actor actor, final String name,
+	public static void handle(final Actor actor, final String name,
 			final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
@@ -80,6 +80,8 @@ public class Dispatcher {
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
 			}
+		} else {
+			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
 
