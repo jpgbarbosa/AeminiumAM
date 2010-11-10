@@ -1,3 +1,4 @@
+
 package actor;
 
 import java.lang.annotation.Annotation;
@@ -11,7 +12,7 @@ import aeminium.runtime.Task;
 public class Dispatcher {
 	static Object object;
 
-	public static void dispatcToAM(final Actor actor, final String name,
+	public static void handle(final Actor actor, final String name,
 			final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
@@ -80,17 +81,19 @@ public class Dispatcher {
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
 			}
+		} else {
+			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
 
 	private static boolean methodCanBeParallelized(Class<?> c, Method m) {
 
 		if (m.getAnnotations().length == 0) {
-			return false;
+			return true;
 		}
 
 		for (Annotation an : m.getAnnotations()) {
-			if (an instanceof readOnly && ((readOnly) an).isReadOnly() == false) {
+			if (an instanceof writable && ((writable) an).isWritable() == true) {
 				return false;
 			}
 		}

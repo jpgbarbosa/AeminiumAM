@@ -6,10 +6,10 @@ public class Test {
 	static AeminiumRuntime art = new AeminiumRuntime();
 
 	public static class TestActor extends Actor {
-		@readOnly
+		@writable
 		public int val=3;
-		
-		@readOnly
+
+		@writable
 		public int result;
 
 		public TestActor() {
@@ -21,7 +21,9 @@ public class Test {
 			
 			result = 42 + ((Integer)obj) + val;
 			
-			Dispatcher.dispatcToAM(this,"react1",obj);
+			Dispatcher.handle(this,"react1",obj);
+			
+			Dispatcher.handle(this,"react2",obj);
 						
 			/* With this sleep, we are giving time to subActor performs his react*/
 			/*
@@ -35,12 +37,14 @@ public class Test {
 			*/
 		}
 		
-		
-		public void react1(Object m){
+		@SuppressWarnings("unused")
+		@writable
+		private void react1(Object m){
 			System.out.println("react1 em execução!");
 		}
 		
-		public void react2(Object m){
+		@SuppressWarnings("unused")
+		private void react2(Object m){
 			System.out.println("react2 em execução!");
 		}
 
