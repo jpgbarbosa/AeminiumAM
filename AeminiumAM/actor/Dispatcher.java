@@ -86,11 +86,11 @@ public class Dispatcher {
 	private static boolean methodCanBeParallelized(Class<?> c, Method m) {
 
 		if (m.getAnnotations().length == 0) {
-			return false;
+			return true;
 		}
 
 		for (Annotation an : m.getAnnotations()) {
-			if (an instanceof readOnly && ((readOnly) an).isReadOnly() == false) {
+			if (an instanceof writable && ((writable) an).isWritable() == true) {
 				return false;
 			}
 		}

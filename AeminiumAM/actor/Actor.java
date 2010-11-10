@@ -53,19 +53,16 @@ public abstract class Actor{
 	
 	private boolean canBeParallelized(){
 		
+		if(this.getClass().getFields().length == 0)
+			return true;
+				
 		for (Field f: this.getClass().getFields()) {
-			if(f.getAnnotations().length == 0){
-				return false;
-			}
-			else{
-				for (Annotation an : f.getAnnotations()) {
-					if(an instanceof readOnly && ((readOnly) an).isReadOnly() == false){
-						return false;
-					}
+			for (Annotation an : f.getAnnotations()) {
+				if(an instanceof writable && ((writable) an).isWritable() == true){
+					return false;
 				}
 			}
 		}
 		return true;
 	}
-
 }
