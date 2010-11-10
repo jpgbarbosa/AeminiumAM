@@ -11,7 +11,7 @@ import aeminium.runtime.Task;
 
 public class Dispatcher {
 	static Object object;
-
+	
 	public static void handle(final Actor actor, final String name,
 			final Object msg) {
 		final Method m;
