@@ -20,7 +20,7 @@ public abstract class Actor{
 
 		
 		if(canBeParallelized()){
-			System.out.println("going to be par");
+			System.out.println("Actor main is going to be par");
 			
 			Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body(){	
 				@Override
@@ -34,7 +34,7 @@ public abstract class Actor{
 			AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 			
 		} else{
-			System.out.println("is going to be an Atomic task");
+			System.out.println("Actor main is going to be an Atomic task");
 			
 			/* Useless Datagroup created to pass as arg in createAtomicTask */
 			DataGroup dg = AeminiumRuntime.rt.createDataGroup();

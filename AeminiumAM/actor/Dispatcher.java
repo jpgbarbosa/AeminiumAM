@@ -19,8 +19,8 @@ public class Dispatcher {
 
 		if ((m = checkMethod(c, name)) != null) {
 
-			if (methodCanBeParallelized(c, m)) {
-				System.out.println("going to be par from dispatcher");
+			if (methodCanBeParallelized(c, m, actor)) {
+				System.out.println(m.getName()+" is going to be par from dispatcher");
 
 				Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body() {
 					@Override
@@ -49,8 +49,7 @@ public class Dispatcher {
 						Runtime.NO_DEPS);
 
 			} else {
-				System.out
-						.println("is going to be an Atomic task from dispatcher");
+				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
 
 				/* Useless Datagroup created to pass as arg in createAtomicTask */
 				DataGroup dg = AeminiumRuntime.rt.createDataGroup();
@@ -86,18 +85,30 @@ public class Dispatcher {
 		}
 	}
 
-	private static boolean methodCanBeParallelized(Class<?> c, Method m) {
-
-		if (m.getAnnotations().length == 0) {
-			return true;
-		}
+	private static boolean methodCanBeParallelized(Class<?> c, Method m, Actor a) {
 
 		for (Annotation an : m.getAnnotations()) {
-			if (an instanceof writable && ((writable) an).isWritable() == true) {
-				return false;
+			if (an instanceof VarUsed) {
+				String [] vars = ((VarUsed) an).varNames().split(" ");
+				
+				for(int i=0; i<vars.length; i++){
+					try {
+						for(Annotation ca :a.getClass().getDeclaredField(vars[i]).getAnnotations()){
+							if(ca instanceof writable && ((writable) ca).isWritable()){
+								return false;
+							}
+						}
+					} catch (SecurityException e) {
+						System.out.println("In Dispatcher.java, methodCanBeParallelized. Security problem!");
+						e.printStackTrace();
+					} catch (NoSuchFieldException e) {
+						System.out.println("In Dispatcher.java, methodCanBeParallelized. Field not found!");
+						e.printStackTrace();
+					}
+				}
+				return true;
 			}
 		}
-
 		return true;
 	}
 

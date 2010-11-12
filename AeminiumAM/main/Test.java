@@ -9,7 +9,7 @@ public class Test {
 		@writable
 		public int val=3;
 
-		@writable
+
 		public int result;
 
 		public TestActor() {
@@ -23,7 +23,7 @@ public class Test {
 			
 			Dispatcher.handle(this,"react1",obj);
 			
-			Dispatcher.handle(this,"react2",obj);
+			//Dispatcher.handle(this,"react2",obj);
 						
 			/* With this sleep, we are giving time to subActor performs his react*/
 			/*
@@ -38,7 +38,7 @@ public class Test {
 		}
 		
 		@SuppressWarnings("unused")
-		@writable
+		@VarUsed(varNames = "result")
 		private void react1(Object m){
 			System.out.println("react1 em execução!");
 		}
