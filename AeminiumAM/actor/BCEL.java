@@ -41,48 +41,37 @@ public class BCEL {
 		
 		ArrayList<String> usedFieldsName = new ArrayList<String>();
 		System.out.println("aqui2");
-		for(Field f : actor.getClass().getFields())
-		{
-		       // if(f.getType().equals(Type.INT))
-		        //{
-		                System.out.println("Searching int field -> " + f.getName() + " -> extended: "+f);
-		                for(Method m : cGen.getMethods())
-		                {
-		                	if(m.getName().equals(methodName)){
-		                        MethodGen methGen = new MethodGen(m, cGen.getClassName(), cPoolGen);
-		                        InstructionList iList = methGen.getInstructionList();
-		                        
-		                        InstructionHandle[] iHandles = iList.getInstructionHandles();
-		                                        
-		                        for(int i = 0; i < iHandles.length; i++) 
-		                        {
-		                                if((iHandles[i].getInstruction() instanceof GETFIELD)) 
-		                                {
-		                                	 System.out.println(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen) +"||  name: "+f.getName());
-		                                	 
-		                                	 if(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen).equals(f.getName())){
-			                                        System.out.println(iHandles[i]);
-			                                        System.out.println(iHandles[i + 1]);
-			                                        if(iHandles[i + 1].getInstruction() instanceof INVOKEVIRTUAL)
-			                                        {
-			                                                System.out.println("Found INVOKEVIRTUAL");
-			                                                usedFieldsName.add(f.getName());
-			                                             //   chickenStickField = f;
-			                                                break;
-			                                        }
-		                                	 }
-		                                }
-		                        }
-		                      //  if(chickenStickField != null)
-		                        //        break;
-		                	}
-		                }
-		        //}
-		        //if(chickenStickField != null)
-		         //       break;
+		for(Field f : actor.getClass().getFields()){
+            System.out.println("Searching int field -> " + f.getName() + " -> extended: "+f);
+            
+            for(Method m : cGen.getMethods()){
+            	System.out.println(m.getName()+" || "+methodName);
+            	if(m.getName().equals(methodName)){
+                    MethodGen methGen = new MethodGen(m, cGen.getClassName(), cPoolGen);
+                    InstructionList iList = methGen.getInstructionList();
+                    
+                    InstructionHandle[] iHandles = iList.getInstructionHandles();
+                    
+                    System.out.println(iHandles.length);
+                                    
+                    for(int i = 0; i < iHandles.length; i++){
+                        if((iHandles[i].getInstruction() instanceof GETFIELD)){
+                            	 System.out.println(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen) +"||  name: "+f.getName());
+                            	 
+							if(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen).equals(f.getName())){
+								System.out.println(iHandles[i]);
+								System.out.println(iHandles[i + 1]);
+								if(iHandles[i + 1].getInstruction() instanceof INVOKEVIRTUAL){
+									System.out.println("Found INVOKEVIRTUAL");
+									usedFieldsName.add(f.getName());
+									break;
+								}		
+							}
+                        }
+                    }
+            	}
+            }
 		}
-		return usedFieldsName;       
-		//System.out.println("Field found -> " + chickenStickField);
-
+		return usedFieldsName;
 	}
 }

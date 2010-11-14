@@ -41,13 +41,13 @@ public class Test {
 		
 		@SuppressWarnings("unused")
 		//@VarUsed(varNames = "result")
-		private void react1(Object m){
+		public void react1(Object m){
 			val=val+result;
 			System.out.println("react1 em execução!"+val);
 		}
 		
 		@SuppressWarnings("unused")
-		private void react2(Object m){
+		public void react2(Object m){
 			System.out.println("react2 em execução!");
 		}
 
