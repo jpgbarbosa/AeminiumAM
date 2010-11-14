@@ -16,7 +16,7 @@ public abstract class Actor{
 
 	public abstract void react(Object obj);
 
-	synchronized public void sendMessage(final Object obj) {
+	public void sendMessage(final Object obj) {
 
 		
 		if(canBeParallelized()){

@@ -1,4 +1,6 @@
 package main;
+import java.util.ArrayList;
+
 import actor.*;
 
 public class Test {
@@ -55,8 +57,20 @@ public class Test {
 		
 		TestActor a = new TestActor();
 		
-		a.sendMessage(3);
+		//a.sendMessage(3);
 
+		
+		ArrayList<String> c=BCEL.checkFields("TestActor", "react1");
+		
+		if(c==null){
+			System.out.println("BCEL is returning null");
+		} else {
+			for(String s :c){
+				System.out.println(s);
+			}
+		}
+		
+		
 		art.endAeminiumRuntime();
 	
 		System.out.println("Testing result: "+a.result);
