@@ -11,7 +11,7 @@ import actor.AeminiumRuntime;
 
 
 public abstract class Actor{
-	
+
 	public Actor() {}
 
 	public abstract void react(Object obj);

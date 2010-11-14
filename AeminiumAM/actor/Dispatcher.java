@@ -86,7 +86,7 @@ public class Dispatcher {
 	}
 
 	private static boolean methodCanBeParallelized(Class<?> c, Method m, Actor a) {
-
+		/*
 		for (Annotation an : m.getAnnotations()) {
 			if (an instanceof VarUsed) {
 				String [] vars = ((VarUsed) an).varNames().split(" ");
@@ -110,7 +110,9 @@ public class Dispatcher {
 			}
 		}
 		return true;
-	}
+			*/
+		return false;
+		}
 
 	private static Method checkMethod(Class<?> c, String name) {
 
@@ -122,5 +124,6 @@ public class Dispatcher {
 
 		return null;
 	}
+
 
 }

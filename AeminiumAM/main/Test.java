@@ -40,9 +40,10 @@ public class Test {
 		}
 		
 		@SuppressWarnings("unused")
-		@VarUsed(varNames = "result")
+		//@VarUsed(varNames = "result")
 		private void react1(Object m){
-			System.out.println("react1 em execução!");
+			val=val+result;
+			System.out.println("react1 em execução!"+val);
 		}
 		
 		@SuppressWarnings("unused")
@@ -57,14 +58,15 @@ public class Test {
 		
 		TestActor a = new TestActor();
 		
-		//a.sendMessage(3);
+		a.sendMessage(3);
 
 		
-		ArrayList<String> c=BCEL.checkFields("TestActor", "react1");
+		ArrayList<String> c=BCEL.checkFields("Actor", "react1",a);
 		
 		if(c==null){
 			System.out.println("BCEL is returning null");
 		} else {
+			System.out.println("aqui");
 			for(String s :c){
 				System.out.println(s);
 			}

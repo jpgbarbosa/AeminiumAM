@@ -1,12 +1,12 @@
 package actor;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 
 import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
 import com.sun.org.apache.bcel.internal.classfile.ClassParser;
-import com.sun.org.apache.bcel.internal.classfile.Field;
 import com.sun.org.apache.bcel.internal.classfile.Method;
 import com.sun.org.apache.bcel.internal.generic.ClassGen;
 import com.sun.org.apache.bcel.internal.generic.ConstantPoolGen;
@@ -20,12 +20,13 @@ import com.sun.org.apache.bcel.internal.generic.Type;
 
 public class BCEL {
 	
-	static public ArrayList<String> checkFields(String className, String methodName){
+	static public ArrayList<String> checkFields(String className, String methodName, Actor actor){
 
 	
         ClassGen cGen;
 		try {
-			cGen = new ClassGen(new ClassParser(className+".class").parse());
+			
+			cGen = new ClassGen(new ClassParser("bin/actor/"+className+".class").parse());
 		} catch (ClassFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,12 +40,12 @@ public class BCEL {
 		ConstantPoolGen cPoolGen = cGen.getConstantPool();
 		
 		ArrayList<String> usedFieldsName = new ArrayList<String>();
-		
-		for(Field f : cGen.getFields())
+		System.out.println("aqui2");
+		for(Field f : actor.getClass().getFields())
 		{
 		       // if(f.getType().equals(Type.INT))
 		        //{
-		                System.out.println("Searching int field -> " + f);
+		                System.out.println("Searching int field -> " + f.getName() + " -> extended: "+f);
 		                for(Method m : cGen.getMethods())
 		                {
 		                	if(m.getName().equals(methodName)){
@@ -55,18 +56,21 @@ public class BCEL {
 		                                        
 		                        for(int i = 0; i < iHandles.length; i++) 
 		                        {
-		                                if((iHandles[i].getInstruction() instanceof GETFIELD) && 
-		                                        ((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen).equals(f.getName())) 
+		                                if((iHandles[i].getInstruction() instanceof GETFIELD)) 
 		                                {
-		                                        System.out.println(iHandles[i]);
-		                                        System.out.println(iHandles[i + 1]);
-		                                        if(iHandles[i + 1].getInstruction() instanceof INVOKEVIRTUAL)
-		                                        {
-		                                                System.out.println("Found INVOKEVIRTUAL");
-		                                                usedFieldsName.add(f.getName());
-		                                             //   chickenStickField = f;
-		                                                break;
-		                                        }
+		                                	 System.out.println(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen) +"||  name: "+f.getName());
+		                                	 
+		                                	 if(((GETFIELD)iHandles[i].getInstruction()).getFieldName(cPoolGen).equals(f.getName())){
+			                                        System.out.println(iHandles[i]);
+			                                        System.out.println(iHandles[i + 1]);
+			                                        if(iHandles[i + 1].getInstruction() instanceof INVOKEVIRTUAL)
+			                                        {
+			                                                System.out.println("Found INVOKEVIRTUAL");
+			                                                usedFieldsName.add(f.getName());
+			                                             //   chickenStickField = f;
+			                                                break;
+			                                        }
+		                                	 }
 		                                }
 		                        }
 		                      //  if(chickenStickField != null)
