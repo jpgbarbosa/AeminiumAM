@@ -2,8 +2,11 @@
 package actor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import aeminium.runtime.Body;
 import aeminium.runtime.DataGroup;
 import aeminium.runtime.Runtime;
@@ -16,10 +19,10 @@ public class Dispatcher {
 			final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
-
+		
 		if ((m = checkMethod(c, name)) != null) {
-
-			if (methodCanBeParallelized(c, m, actor)) {
+			
+			if (methodCanBeParallelized(actor,name)) {
 				System.out.println(m.getName()+" is going to be par from dispatcher");
 
 				Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body() {
@@ -84,9 +87,9 @@ public class Dispatcher {
 			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
-
+	/*
 	private static boolean methodCanBeParallelized(Class<?> c, Method m, Actor a) {
-		/*
+		
 		for (Annotation an : m.getAnnotations()) {
 			if (an instanceof VarUsed) {
 				String [] vars = ((VarUsed) an).varNames().split(" ");
@@ -109,10 +112,27 @@ public class Dispatcher {
 				return true;
 			}
 		}
-		return true;
-			*/
 		return false;
 		}
+		*/
+	
+	private static boolean methodCanBeParallelized(Actor a, String methodName) {
+		
+		ArrayList<String> varUsed = BCEL.checkFields(methodName, a);
+		
+		for (Field f: a.getClass().getFields()) {
+			for(String s : varUsed){
+				if(f.getName().equals(s)){
+					for (Annotation an : f.getAnnotations()) {
+						if(an instanceof writable && ((writable) an).isWritable() == true){
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 
 	private static Method checkMethod(Class<?> c, String name) {
 
@@ -124,6 +144,5 @@ public class Dispatcher {
 
 		return null;
 	}
-
 
 }

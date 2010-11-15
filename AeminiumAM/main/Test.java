@@ -1,5 +1,4 @@
 package main;
-import java.util.ArrayList;
 
 import actor.*;
 
@@ -10,7 +9,6 @@ public class Test {
 	public static class TestActor extends Actor {
 		@writable
 		public int val=3;
-
 
 		public int result;
 
@@ -39,11 +37,11 @@ public class Test {
 			*/
 		}
 		
-		@SuppressWarnings("unused")
 		//@VarUsed(varNames = "result")
+		@SuppressWarnings("unused")
 		public void react1(Object m){
-			val=val+result;
-			System.out.println("react1 em execução!"+val);
+			result++;
+			System.out.println("react1 em execução!");
 		}
 		
 		@SuppressWarnings("unused")
@@ -54,24 +52,10 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-
 		
 		TestActor a = new TestActor();
 		
 		a.sendMessage(3);
-
-		
-		ArrayList<String> c=BCEL.checkFields("Actor", "react1",a);
-		
-		if(c==null){
-			System.out.println("BCEL is returning null");
-		} else {
-			System.out.println("aqui");
-			for(String s :c){
-				System.out.println(s);
-			}
-		}
-		
 		
 		art.endAeminiumRuntime();
 	
