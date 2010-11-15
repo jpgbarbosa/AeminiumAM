@@ -118,7 +118,7 @@ public class Dispatcher {
 	
 	private static boolean methodCanBeParallelized(Actor a, String methodName) {
 		
-		ArrayList<String> varUsed = BCEL.checkFields(methodName, a);
+		ArrayList<String> varUsed = ByteCodeOp.getFields(methodName, a);
 		
 		for (Field f: a.getClass().getFields()) {
 			for(String s : varUsed){
