@@ -22,8 +22,6 @@ import com.sun.org.apache.bcel.internal.generic.Type;
 public class ByteCodeOp {
 	
 	static public ArrayList<String> getFields(String methodName, Actor actor){
-
-	
         ClassGen cGen;
 		try {
 			

@@ -39,6 +39,7 @@ public class Test {
 		
 		//@VarUsed(varNames = "result")
 		@SuppressWarnings("unused")
+		@VarUsed(varNames = "result")
 		public void react1(Object m){
 			result++;
 			System.out.println("react1 em execução!");

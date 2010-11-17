@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Barbosa/workspace/Aeminium/AeminiumAM/asm-all-3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Barbosa/workspace/Aeminium/AeminiumAM/asm-debug-all-3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
