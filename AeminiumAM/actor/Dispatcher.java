@@ -93,7 +93,7 @@ public class Dispatcher {
 		for (Annotation an : m.getAnnotations()) {
 			if (an instanceof VarUsed) {
 				String [] vars = ((VarUsed) an).varNames().split(" ");
-				
+
 				for(int i=0; i<vars.length; i++){
 					try {
 						for(Annotation ca :a.getClass().getDeclaredField(vars[i]).getAnnotations()){
@@ -118,7 +118,7 @@ public class Dispatcher {
 	
 	private static boolean methodCanBeParallelized(Actor a, String methodName) {
 		
-		ArrayList<String> varUsed = ByteCodeOp.getFields(methodName, a);
+		ArrayList<String> varUsed = ByteCodeOpASM.getWritableFields(methodName);
 		
 		for (Field f: a.getClass().getFields()) {
 			for(String s : varUsed){
