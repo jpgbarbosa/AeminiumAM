@@ -27,7 +27,7 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class ByteCodeOpASM implements Opcodes {
     
     //read 'new' super class for necessary constructor bridge calls
-    public static ArrayList<String> getWritableFields(String methodName){
+    public static ArrayList<TypeVar> getWritableFields(String methodName){
 	    ClassReader cr = null;
 		try {
 			cr = new ClassReader("actor/TestActor");
@@ -40,7 +40,7 @@ public class ByteCodeOpASM implements Opcodes {
 	    
 	    List methods = cn.methods;
 	    
-	    ArrayList<String> usedVars = new ArrayList<String>();
+	    ArrayList<TypeVar> usedVars = new ArrayList<TypeVar>();
 	    
         for (int i = 0; i < methods.size(); ++i) {
 
@@ -72,7 +72,7 @@ public class ByteCodeOpASM implements Opcodes {
 					}
                     
 					if(fieldName!=null && !usedVars.contains(fieldName))
-						usedVars.add(fieldName);
+						usedVars.add(new TypeVar(fieldName,true));
                     //System.out.println(fieldName+" || "+opcode);
         		}
             	break;

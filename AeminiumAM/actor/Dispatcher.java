@@ -1,4 +1,3 @@
-
 package actor;
 
 import java.lang.annotation.Annotation;
@@ -6,6 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 import aeminium.runtime.Body;
 import aeminium.runtime.DataGroup;
@@ -13,16 +14,17 @@ import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
 
 public class Dispatcher {
-	static Object object;
 	
-	public static void handle(final Actor actor, final String name,
-			final Object msg) {
+	public static void handle(final Actor actor, final String name, final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
 		
 		if ((m = checkMethod(c, name)) != null) {
 			
-			if (methodCanBeParallelized(actor,name)) {
+			ArrayList<TypeVar> varUsed = ByteCodeOpASM.getWritableFields(name);
+			
+			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
+			if (!methodIsWritable(actor,name,varUsed)) {
 				System.out.println(m.getName()+" is going to be par from dispatcher");
 
 				Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body() {
@@ -48,6 +50,8 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 
+				getFuncDependencies(actor, varUsed, t1);
+				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
 
@@ -80,6 +84,8 @@ public class Dispatcher {
 					}
 				}, dg, Runtime.NO_HINTS);
 
+				getFuncDependencies(actor, varUsed, t1);
+				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
 			}
@@ -87,6 +93,7 @@ public class Dispatcher {
 			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
+	
 	/*
 	private static boolean methodCanBeParallelized(Class<?> c, Method m, Actor a) {
 		
@@ -114,15 +121,13 @@ public class Dispatcher {
 		}
 		return false;
 		}
-		*/
+	*/
 	
-	private static boolean methodCanBeParallelized(Actor a, String methodName) {
-		
-		ArrayList<String> varUsed = ByteCodeOpASM.getWritableFields(methodName);
-		
+	private static boolean methodIsWritable(Actor a, String methodName, ArrayList<TypeVar> varUsed) {
+				
 		for (Field f: a.getClass().getFields()) {
-			for(String s : varUsed){
-				if(f.getName().equals(s)){
+			for(TypeVar s : varUsed){
+				if(f.getName().equals(s.name)){
 					for (Annotation an : f.getAnnotations()) {
 						if(an instanceof writable && ((writable) an).isWritable() == true){
 							return false;
@@ -144,5 +149,26 @@ public class Dispatcher {
 
 		return null;
 	}
+	
+	/*TODO: must be synchronized*/
+	private static Collection<Task> getFuncDependencies(Actor actor, ArrayList<TypeVar> usedVars, Task task){
 
+		ArrayList<Task> deps = new ArrayList<Task>();
+		
+		for(TypeVar var: usedVars){
+			for(DependencyTask t:actor.varDep.get(var.name)){
+				deps.add(t.task);
+			}
+		}
+		
+		for(TypeVar var: usedVars){
+			refreshVarDeps(actor.varDep.get(var.name), task);
+		}
+	
+		return deps;
+	}
+	
+	private static void refreshVarDeps(Vector<DependencyTask> v, Task task){
+	
+	}
 }

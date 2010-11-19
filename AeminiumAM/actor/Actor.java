@@ -3,6 +3,8 @@ package actor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.lang.System;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import aeminium.runtime.Runtime;
 import aeminium.runtime.*;
@@ -11,7 +13,9 @@ import actor.AeminiumRuntime;
 
 
 public abstract class Actor{
-
+	
+	public Hashtable<String,Vector<DependencyTask>> varDep = null;
+	
 	public Actor() {}
 
 	public abstract void react(Object obj);
@@ -53,7 +57,6 @@ public abstract class Actor{
 	}
 	
 	private boolean canBeParallelized(){
-		
 		for (Field f: this.getClass().getDeclaredFields()) {
 			for (Annotation an : f.getAnnotations()) {
 				if(an instanceof writable && ((writable) an).isWritable() == true){
