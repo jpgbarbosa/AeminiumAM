@@ -1,7 +1,5 @@
 package actor;
 
-import java.util.ArrayList;
-
 public class TestActor extends Actor{
 		@writable
 		public int val=3;
@@ -28,7 +26,8 @@ public class TestActor extends Actor{
 		//@VarUsed(varNames = "result")
 		@SuppressWarnings("unused")
 		public void react1(Object m){
-			System.out.println("react1 em execução!"+result);
+			result++;
+			System.out.println("react1 em execução!");
 		}
 		
 		@SuppressWarnings("unused")

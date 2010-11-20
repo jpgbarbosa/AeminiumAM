@@ -6,6 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import aeminium.runtime.Body;
@@ -21,7 +25,7 @@ public class Dispatcher {
 		
 		if ((m = checkMethod(c, name)) != null) {
 			
-			ArrayList<TypeVar> varUsed = ByteCodeOpASM.getWritableFields(name);
+			HashMap<String,Boolean> varUsed = ByteCodeOpASM.getWritableFields(name);
 			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
@@ -50,7 +54,7 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 
-				getFuncDependencies(actor, varUsed, t1);
+				//getFuncDependencies(actor, varUsed, t1);
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
@@ -84,7 +88,7 @@ public class Dispatcher {
 					}
 				}, dg, Runtime.NO_HINTS);
 
-				getFuncDependencies(actor, varUsed, t1);
+				//getFuncDependencies(actor, varUsed, t1);
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						Runtime.NO_DEPS);
@@ -123,20 +127,15 @@ public class Dispatcher {
 		}
 	*/
 	
-	private static boolean methodIsWritable(Actor a, String methodName, ArrayList<TypeVar> varUsed) {
-				
+	private static boolean methodIsWritable(Actor a, String methodName, HashMap<String,Boolean> varUsed) {
 		for (Field f: a.getClass().getFields()) {
-			for(TypeVar s : varUsed){
-				if(f.getName().equals(s.name)){
-					for (Annotation an : f.getAnnotations()) {
-						if(an instanceof writable && ((writable) an).isWritable() == true){
-							return false;
-						}
-					}
+		    for (Entry<String, Boolean> entry : varUsed.entrySet()) {
+				if(f.getName().equals(entry.getKey()) && entry.getValue() == true){
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	private static Method checkMethod(Class<?> c, String name) {
@@ -151,8 +150,9 @@ public class Dispatcher {
 	}
 	
 	/*TODO: must be synchronized*/
-	private static Collection<Task> getFuncDependencies(Actor actor, ArrayList<TypeVar> usedVars, Task task){
-
+	private static Collection<Task> getFuncDependencies(Actor actor, HashMap<String, Boolean> usedVars, Task task){
+		return null;
+		/*
 		ArrayList<Task> deps = new ArrayList<Task>();
 		
 		for(TypeVar var: usedVars){
@@ -166,6 +166,7 @@ public class Dispatcher {
 		}
 	
 		return deps;
+		*/
 	}
 	
 	private static void refreshVarDeps(Vector<DependencyTask> v, Task task){
