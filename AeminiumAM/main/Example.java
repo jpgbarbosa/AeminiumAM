@@ -37,11 +37,11 @@ public class Example {
 			MessageAction msg = (MessageAction) obj;
 			if(msg.msg.equals("take")){
 				if (available) {
-				    available = false;
+				    available = false;/*
 				    msg.owner.sendMessage(new State(true));
 				} else{ 
 					msg.owner.sendMessage(new State(false));
-				}
+				*/}
 			} else if(msg.equals("finished")){
 				available = true;
 			} else {
@@ -81,7 +81,9 @@ public class Example {
 				}
 			} else {
 				Dispatcher.handle(this, "eat", obj);
-				msg.owner.sendMessage(new MessageAction("finished", this));
+				array[0].sendMessage(new MessageAction("finished", this));
+				array[1].sendMessage(new MessageAction("finished", this));
+				//msg.owner.sendMessage(new MessageAction("finished", this));
 			}
 			
 		}
@@ -127,6 +129,10 @@ public class Example {
 		arrayPhilosopher[2] = new Philosopher("Alice", arrayFork[2], arrayFork[3]);
 		arrayPhilosopher[3] = new Philosopher("James", arrayFork[3], arrayFork[4]);
 		arrayPhilosopher[4] = new Philosopher("Phil", arrayFork[4], arrayFork[0]);
+		
+		for(int i=0; i<arrayPhilosopher.length; i++){
+			arrayPhilosopher[i].sendMessage(null);
+		}
 		
 		art.endAeminiumRuntime();
 
