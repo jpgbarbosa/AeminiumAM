@@ -18,6 +18,10 @@ public abstract class Actor{
 	
 	public Actor() {
 		varDep = new Hashtable<String,Vector<DependencyTask>>();
+		
+		for(Field f :this.getClass().getDeclaredFields()){
+			varDep.put(f.getName(), new Vector<DependencyTask>());
+		}
 	}
 
 	public abstract void react(Object obj);

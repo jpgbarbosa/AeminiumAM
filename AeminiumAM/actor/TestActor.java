@@ -6,7 +6,7 @@ public class TestActor extends Actor{
 		
 		String [] array = new String[5];
 
-		public int result;
+		public int result=0;
 
 		public TestActor() {
 			super();
@@ -26,7 +26,7 @@ public class TestActor extends Actor{
 		//@VarUsed(varNames = "result")
 		@SuppressWarnings("unused")
 		public void react1(Object m){
-			result=result+1;
+			result=result+2;
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {

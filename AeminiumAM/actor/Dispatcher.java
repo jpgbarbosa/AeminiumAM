@@ -56,13 +56,6 @@ public class Dispatcher {
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						getFuncDependencies(actor, varUsed, t1));
-				
-
-				System.out.println("aqui");
-				for (Entry<String, Vector<DependencyTask>> entry : actor.varDep.entrySet()) {
-					System.out.println(entry.getKey()+": "+entry.getValue().get(0).isWritable);
-				}
-
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
@@ -92,8 +85,6 @@ public class Dispatcher {
 						}
 					}
 				}, dg, Runtime.NO_HINTS);
-
-				;
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						getFuncDependencies(actor, varUsed, t1));
@@ -175,12 +166,17 @@ public class Dispatcher {
 		return deps;
 	}
 	
-	private static void refreshVarDeps(Vector<DependencyTask> v, Task task, Boolean isWritable){		
-		if(isWritable || v.get(v.size()-1).isWritable){
-			v.clear();
-			v.add(new DependencyTask(task,isWritable));
-		} else {
+	private static void refreshVarDeps(Vector<DependencyTask> v, Task task, Boolean isWritable){	
+		if(v.isEmpty()){
 			v.add(new DependencyTask(task,isWritable));
 		}
+			else{
+			if(isWritable || v.get(v.size()-1).isWritable){
+				v.clear();
+				v.add(new DependencyTask(task,isWritable));
+			} else {
+				v.add(new DependencyTask(task,isWritable));
+			}
+		}		
 	}
 }
