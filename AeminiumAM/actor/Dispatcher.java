@@ -53,11 +53,16 @@ public class Dispatcher {
 						}
 					}
 				}, Runtime.NO_HINTS);
-
-				//getFuncDependencies(actor, varUsed, t1);
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						Runtime.NO_DEPS);
+						getFuncDependencies(actor, varUsed, t1));
+				
+
+				System.out.println("aqui");
+				for (Entry<String, Vector<DependencyTask>> entry : actor.varDep.entrySet()) {
+					System.out.println(entry.getKey()+": "+entry.getValue().get(0).isWritable);
+				}
+
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
@@ -88,10 +93,10 @@ public class Dispatcher {
 					}
 				}, dg, Runtime.NO_HINTS);
 
-				//getFuncDependencies(actor, varUsed, t1);
+				;
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						Runtime.NO_DEPS);
+						getFuncDependencies(actor, varUsed, t1));
 			}
 		} else {
 			System.out.println("Inexistent method '"+name+"'.");
@@ -151,25 +156,31 @@ public class Dispatcher {
 	
 	/*TODO: must be synchronized*/
 	private static Collection<Task> getFuncDependencies(Actor actor, HashMap<String, Boolean> usedVars, Task task){
-		return null;
-		/*
+				
 		ArrayList<Task> deps = new ArrayList<Task>();
 		
-		for(TypeVar var: usedVars){
-			for(DependencyTask t:actor.varDep.get(var.name)){
-				deps.add(t.task);
+		for (Entry<String, Boolean> entry : usedVars.entrySet()) {
+			String varName = entry.getKey();
+			
+			/* Get all the current tasks that this task is dependent */
+			if(actor.varDep.containsKey(varName)){
+				for(DependencyTask t :actor.varDep.get(varName)){
+					deps.add(t.task);
+				}
+				/* Actualize the variable dependencies according to this new task */
+				refreshVarDeps(actor.varDep.get(varName), task, entry.getValue());
 			}
 		}
 		
-		for(TypeVar var: usedVars){
-			refreshVarDeps(actor.varDep.get(var.name), task);
-		}
-	
 		return deps;
-		*/
 	}
 	
-	private static void refreshVarDeps(Vector<DependencyTask> v, Task task){
-	
+	private static void refreshVarDeps(Vector<DependencyTask> v, Task task, Boolean isWritable){		
+		if(isWritable || v.get(v.size()-1).isWritable){
+			v.clear();
+			v.add(new DependencyTask(task,isWritable));
+		} else {
+			v.add(new DependencyTask(task,isWritable));
+		}
 	}
 }

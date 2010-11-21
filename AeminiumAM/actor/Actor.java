@@ -16,7 +16,9 @@ public abstract class Actor{
 	
 	public Hashtable<String,Vector<DependencyTask>> varDep = null;
 	
-	public Actor() {}
+	public Actor() {
+		varDep = new Hashtable<String,Vector<DependencyTask>>();
+	}
 
 	public abstract void react(Object obj);
 
