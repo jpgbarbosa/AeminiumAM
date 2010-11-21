@@ -10,12 +10,16 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import actor.Actor;
+
 public class ByteCodeOpASM implements Opcodes {
     
-    public static HashMap<String,Boolean> getWritableFields(String methodName){
+    public static HashMap<String,Boolean> getWritableFields(String methodName, Actor actor){
 	    ClassReader cr = null;
 		try {
-			cr = new ClassReader("main/TestActor");
+			/* construct a ClassReader instance by specifying the inputstream */
+			ClassLoader cl = actor.getClass().getClassLoader();
+			cr = new ClassReader(cl.getResourceAsStream(actor.getClass().getName().replace('.', '/') + ".class"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -32,24 +36,24 @@ public class ByteCodeOpASM implements Opcodes {
         	MethodNode method = (MethodNode) methods.get(i);
         	
         	if(method.name.equals(methodName)){
-        		
+        		int opcode, insnType;
+        		String varName;
         		usedVarHash = new HashMap<String,Boolean>();
         		
         		for (int x = 0; x < method.instructions.size(); x++) {
         			
-        			AbstractInsnNode  insn = method.instructions.get(x);
-        			
-    	           int insnType = insn.getType();
-    	           if (insnType == AbstractInsnNode.FIELD_INSN) {
-    	               int opcode = insn.getOpcode();
-    	               String varName = ((FieldInsnNode) insn).name;
-    	               if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
-    	            		   || opcode == ISTORE || opcode == FSTORE || opcode == PUTFIELD) {
-    	            	   usedVarHash.put(varName, true);     	                   
-    	               } else {
-    	            	   usedVarHash.put(varName, false);
-    	               }
-    	           }
+					AbstractInsnNode  insn = method.instructions.get(x);
+					opcode = insn.getOpcode();
+					insnType = insn.getType();
+    	            if (insnType == AbstractInsnNode.FIELD_INSN) {    	            
+    	            	varName = ((FieldInsnNode) insn).name;
+    	            	if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
+    	            			|| opcode == ISTORE || opcode == FSTORE || opcode == PUTFIELD || opcode == PUTSTATIC) {
+    	            		usedVarHash.put(varName, true);     	                   
+    	            	} else {
+    	            		usedVarHash.put(varName, false);
+    	            	}
+    	            }
         		}
             	break;
     		}

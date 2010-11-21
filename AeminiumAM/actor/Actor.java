@@ -15,7 +15,7 @@ import actor.AeminiumRuntime;
 
 public abstract class Actor{
 	
-	public Hashtable<String,Vector<DependencyTask>> varDep = null;
+	private Hashtable<String,Vector<DependencyTask>> varDep = null;
 	
 	public Actor() {
 		varDep = new Hashtable<String,Vector<DependencyTask>>();
@@ -25,7 +25,7 @@ public abstract class Actor{
 		}
 	}
 
-	public abstract void react(Object obj);
+	protected abstract void react(Object obj);
 
 	public void sendMessage(final Object obj) {
 
@@ -72,5 +72,9 @@ public abstract class Actor{
 			}
 		}
 		return true;
+	}
+	
+	protected Hashtable<String,Vector<DependencyTask>> getvarDep(){
+		return varDep;
 	}
 }

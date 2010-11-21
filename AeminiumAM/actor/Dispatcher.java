@@ -18,13 +18,13 @@ import aeminium.runtime.Task;
 
 public class Dispatcher {
 	
-	public static void handle(final Actor actor, final String name, final Object msg) {
+	public static void handle(Actor actor, String name, final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
 		
 		if ((m = checkMethod(c, name)) != null) {
 			
-			HashMap<String,Boolean> varUsed = ByteCodeOpASM.getWritableFields(name);
+			HashMap<String,Boolean> varUsed = ByteCodeOpASM.getWritableFields(name, actor);
 			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
@@ -153,12 +153,12 @@ public class Dispatcher {
 			String varName = entry.getKey();
 			
 			/* Get all the current tasks that this task is dependent */
-			if(actor.varDep.containsKey(varName)){
-				for(DependencyTask t :actor.varDep.get(varName)){
+			if(actor.getvarDep().containsKey(varName)){
+				for(DependencyTask t :actor.getvarDep().get(varName)){
 					deps.add(t.task);
 				}
 				/* Actualize the variable dependencies according to this new task */
-				refreshVarDeps(actor.varDep.get(varName), task, entry.getValue());
+				refreshVarDeps(actor.getvarDep().get(varName), task, entry.getValue());
 			}
 		}
 		
