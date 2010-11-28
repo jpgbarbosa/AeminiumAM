@@ -3,8 +3,10 @@ package actor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.lang.System;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
+
 
 import aeminium.runtime.Runtime;
 import aeminium.runtime.*;
@@ -15,9 +17,23 @@ import actor.AeminiumRuntime;
 
 public abstract class Actor{
 	
+	private ArrayList<String> methods = null;
 	private Hashtable<String,Vector<DependencyTask>> varDep = null;
 	
 	public Actor() {
+		methods = new ArrayList<String>();
+		
+		Method [] m = this.getClass().getDeclaredMethods();
+		
+		for(int i=0; i<m.length ; i++){
+			if(!m[i].getName().equals("react") &&  !m[i].getName().equals("sendMessage")
+					&&  !m[i].getName().equals("canBeParallelized")
+					&&  !m[i].getName().equals("getvarDep")
+					&&  !m[i].getName().equals("getMethodsName")){
+				methods.add(m[i].getName());
+			}
+		}
+		
 		varDep = new Hashtable<String,Vector<DependencyTask>>();
 		
 		for(Field f :this.getClass().getDeclaredFields()){
@@ -76,5 +92,9 @@ public abstract class Actor{
 	
 	protected Hashtable<String,Vector<DependencyTask>> getvarDep(){
 		return varDep;
+	}
+	
+	protected ArrayList<String> getMethodsName(){
+		return methods;
 	}
 }

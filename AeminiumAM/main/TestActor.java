@@ -1,8 +1,8 @@
 package main;
 
+import unused.VarType;
 import actor.Actor;
 import actor.Dispatcher;
-import annotations.VarType;
 import annotations.writable;
 
 public class TestActor extends Actor{
@@ -28,9 +28,9 @@ public class TestActor extends Actor{
 		}
 		
 		@SuppressWarnings("unused")
-		@VarType(isReadOnly="val", isWritable="result val")
+		//@VarType(isReadOnly="val", isWritable="result val")
 		private void react1(Object m){
-			result=result+2;
+			//result=result+2;
 
 			react2(null);
 			
@@ -44,7 +44,7 @@ public class TestActor extends Actor{
 		}
 		
 		@SuppressWarnings("unused")
-		@VarType(isReadOnly="val")
+		//@VarType(isReadOnly="val")
 		private void react2(Object m){
 			System.out.println("react2 em execução! val="+val);
 		}

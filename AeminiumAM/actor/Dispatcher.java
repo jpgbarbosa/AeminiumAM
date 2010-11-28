@@ -9,11 +9,14 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
+import unused.VarType;
+
+import byteCodeOperations.ByteCodeOpASM;
+
 import aeminium.runtime.Body;
 import aeminium.runtime.DataGroup;
 import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
-import annotations.VarType;
 
 public class Dispatcher {
 	
@@ -23,7 +26,12 @@ public class Dispatcher {
 		
 		if ((m = checkMethod(c, name)) != null) {
 			
-			HashMap<String,Boolean> varUsed = getFieldsType(m, actor);
+			HashMap<String,Boolean> varUsed=null;
+			try{
+				varUsed = getAllFieldsTypeByASM(m.getName(), actor);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
@@ -108,7 +116,26 @@ public class Dispatcher {
 		for(i=0; i<readVars.length; i++){
 			hash.put(readVars[i], false);
 		}
-		
+		return hash;
+	}
+	
+	private static HashMap<String, Boolean> getAllFieldsTypeByASM(String name,
+			Actor actor) {
+		HashMap<String, Boolean> hash = null;
+		try{
+			hash = ByteCodeOpASM.getWritableFields(name, actor);
+			ArrayList<String> methodsInThisMethod = ByteCodeOpASM.getUsedMethods(name, actor);
+			
+			System.out.println(methodsInThisMethod);
+			
+			for(String s: methodsInThisMethod){
+				if(actor.getMethodsName().contains(s)){
+					hash.putAll(getAllFieldsTypeByASM(s, actor));
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return hash;
 	}
 	
@@ -134,7 +161,7 @@ public class Dispatcher {
 		return null;
 	}
 	
-	/*TODO: must be synchronized*/
+	/*TODO: check if this methods needs to be synchronized*/
 	private static Collection<Task> getFuncDependencies(Actor actor, HashMap<String, Boolean> usedVars, Task task){
 				
 		ArrayList<Task> deps = new ArrayList<Task>();
@@ -168,4 +195,5 @@ public class Dispatcher {
 			}
 		}		
 	}
+	
 }
