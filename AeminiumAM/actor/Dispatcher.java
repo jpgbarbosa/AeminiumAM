@@ -9,12 +9,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
-import byteCodeOperations.ByteCodeOpASM;
-
 import aeminium.runtime.Body;
 import aeminium.runtime.DataGroup;
 import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
+import annotations.VarType;
 
 public class Dispatcher {
 	
@@ -24,7 +23,7 @@ public class Dispatcher {
 		
 		if ((m = checkMethod(c, name)) != null) {
 			
-			HashMap<String,Boolean> varUsed = ByteCodeOpASM.getWritableFields(name, actor);
+			HashMap<String,Boolean> varUsed = getFieldsType(m, actor);
 			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
@@ -93,34 +92,25 @@ public class Dispatcher {
 		}
 	}
 	
-	/*
-	private static boolean methodCanBeParallelized(Class<?> c, Method m, Actor a) {
+	private static HashMap<String, Boolean> getFieldsType(Method m,
+			Actor actor) {
 		
-		for (Annotation an : m.getAnnotations()) {
-			if (an instanceof VarUsed) {
-				String [] vars = ((VarUsed) an).varNames().split(" ");
-
-				for(int i=0; i<vars.length; i++){
-					try {
-						for(Annotation ca :a.getClass().getDeclaredField(vars[i]).getAnnotations()){
-							if(ca instanceof writable && ((writable) ca).isWritable()){
-								return false;
-							}
-						}
-					} catch (SecurityException e) {
-						System.out.println("In Dispatcher.java, methodCanBeParallelized. Security problem!");
-						e.printStackTrace();
-					} catch (NoSuchFieldException e) {
-						System.out.println("In Dispatcher.java, methodCanBeParallelized. Field not found!");
-						e.printStackTrace();
-					}
-				}
-				return true;
-			}
+		String [] writeVars = m.getAnnotation(VarType.class).isWritable().split(" ");
+		String [] readVars = m.getAnnotation(VarType.class).isReadOnly().split(" ");
+		
+		HashMap<String, Boolean> hash = new HashMap<String, Boolean>();
+		int i;
+		
+		for(i=0; i<writeVars.length; i++){
+			hash.put(writeVars[i], true);
 		}
-		return false;
+		
+		for(i=0; i<readVars.length; i++){
+			hash.put(readVars[i], false);
 		}
-	*/
+		
+		return hash;
+	}
 	
 	private static boolean methodIsWritable(Actor a, String methodName, HashMap<String,Boolean> varUsed) {
 		for (Field f: a.getClass().getFields()) {

@@ -2,6 +2,7 @@ package main;
 
 import actor.Actor;
 import actor.Dispatcher;
+import annotations.VarType;
 import annotations.writable;
 
 public class TestActor extends Actor{
@@ -27,19 +28,24 @@ public class TestActor extends Actor{
 		}
 		
 		@SuppressWarnings("unused")
+		@VarType(isReadOnly="val", isWritable="result val")
 		private void react1(Object m){
 			result=result+2;
+
+			react2(null);
+			
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			System.out.println("react1 em execução!");
 		}
 		
 		@SuppressWarnings("unused")
+		@VarType(isReadOnly="val")
 		private void react2(Object m){
-			System.out.println("react2 em execução! result="+result);
+			System.out.println("react2 em execução! val="+val);
 		}
 }
