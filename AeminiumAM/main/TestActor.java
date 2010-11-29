@@ -6,10 +6,10 @@ import actor.Dispatcher;
 import annotations.writable;
 
 public class TestActor extends Actor{
-		@writable
+		
 		static public int val=3;
 		
-		@writable
+		//@writable
 		static public int result;
 
 		public TestActor() {

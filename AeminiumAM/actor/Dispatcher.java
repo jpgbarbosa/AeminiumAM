@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
-import unused.VarType;
-
 import byteCodeOperations.ByteCodeOpASM;
 
 import aeminium.runtime.Body;
@@ -60,8 +58,11 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 				
+				Collection<Task> bb = getFuncDependencies(actor, varUsed, t1);
+				System.out.println(t1+" deps: "+bb);
+				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						getFuncDependencies(actor, varUsed, t1));
+						bb);
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
@@ -99,7 +100,7 @@ public class Dispatcher {
 			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
-	
+	/*
 	private static HashMap<String, Boolean> getFieldsType(Method m,
 			Actor actor) {
 		
@@ -118,24 +119,19 @@ public class Dispatcher {
 		}
 		return hash;
 	}
-	
+	*/
 	private static HashMap<String, Boolean> getAllFieldsTypeByASM(String name,
 			Actor actor) {
-		HashMap<String, Boolean> hash = null;
-		try{
-			hash = ByteCodeOpASM.getWritableFields(name, actor);
-			ArrayList<String> methodsInThisMethod = ByteCodeOpASM.getUsedMethods(name, actor);
-			
-			System.out.println(methodsInThisMethod);
-			
-			for(String s: methodsInThisMethod){
-				if(actor.getMethodsName().contains(s)){
-					hash.putAll(getAllFieldsTypeByASM(s, actor));
-				}
+		HashMap<String, Boolean> hash = ByteCodeOpASM.getWritableFields(name, actor);
+		
+		ArrayList<String> methodsInThisMethod = ByteCodeOpASM.getUsedMethods(name, actor);
+		
+		for(String s: methodsInThisMethod){
+			if(actor.getMethodsName().contains(s)){
+				hash.putAll(getAllFieldsTypeByASM(s, actor));
 			}
-		}catch(Exception e){
-			e.printStackTrace();
 		}
+	
 		return hash;
 	}
 	
