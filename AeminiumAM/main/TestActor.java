@@ -9,7 +9,7 @@ public class TestActor extends Actor{
 		
 		static public int val=3;
 		
-		//@writable
+		@writable
 		static public int result;
 
 		public TestActor() {
@@ -27,11 +27,7 @@ public class TestActor extends Actor{
 					
 		}
 		
-		@SuppressWarnings("unused")
-		//@VarType(isReadOnly="val", isWritable="result val")
 		private void react1(Object m){
-			//result=result+2;
-
 			react2(null);
 			
 			try {
@@ -41,11 +37,10 @@ public class TestActor extends Actor{
 			}
 			
 			System.out.println("react1 em execução!");
+			result+=2;
 		}
 		
-		@SuppressWarnings("unused")
-		//@VarType(isReadOnly="val")
 		private void react2(Object m){
-			System.out.println("react2 em execução! val="+val);
+			System.out.println("react2 em execução! result="+result);
 		}
 }

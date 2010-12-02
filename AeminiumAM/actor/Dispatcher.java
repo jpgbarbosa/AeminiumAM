@@ -58,11 +58,9 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 				
-				Collection<Task> bb = getFuncDependencies(actor, varUsed, t1);
-				System.out.println(t1+" deps: "+bb);
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						bb);
+						getFuncDependencies(actor, varUsed, t1));
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
@@ -123,12 +121,19 @@ public class Dispatcher {
 	private static HashMap<String, Boolean> getAllFieldsTypeByASM(String name,
 			Actor actor) {
 		HashMap<String, Boolean> hash = ByteCodeOpASM.getWritableFields(name, actor);
+		HashMap<String, Boolean> temp;
 		
 		ArrayList<String> methodsInThisMethod = ByteCodeOpASM.getUsedMethods(name, actor);
 		
 		for(String s: methodsInThisMethod){
 			if(actor.getMethodsName().contains(s)){
-				hash.putAll(getAllFieldsTypeByASM(s, actor));
+				temp = getAllFieldsTypeByASM(s, actor);
+				
+				for(Entry<String,Boolean> entry : temp.entrySet()){
+					if(hash.containsKey(entry.getKey())){
+						hash.put(entry.getKey(), entry.getValue() || hash.get(entry.getKey()));
+					}
+				}
 			}
 		}
 	
@@ -167,8 +172,11 @@ public class Dispatcher {
 			
 			/* Get all the current tasks that this task is dependent */
 			if(actor.getvarDep().containsKey(varName)){
-				deps.add(addLastWritableDep(actor.getvarDep().get(varName)).task);//t.task);
-				/* Actualize the variable dependencies according to this new task */
+				if(entry.getValue() == true){
+					getDepForWritable(actor.getvarDep().get(varName),deps);
+				} else {
+					getDepForReadable(actor.getvarDep().get(varName),deps);
+				}
 				refreshVarDeps(actor.getvarDep().get(varName), task, entry.getValue());
 			}
 		}
@@ -176,18 +184,25 @@ public class Dispatcher {
 		return deps;
 	}
 	
-	/*
-	 * 
-	 * if is writable add all readble tasks
-	 * else add last writable
-	 * 
-	 */
-	private static DependencyTask addLastWritableDep(Vector<DependencyTask> vector){
-		for(int i=vector.size(); i>=0; i--){
-			
+	private static void getDepForWritable(Vector<DependencyTask> vector, ArrayList<Task> deps){
+		if(!vector.isEmpty() && vector.get(vector.size()-1).isWritable){
+			deps.add(vector.get(vector.size()-1).task);
+			return;
+		} else {
+			for(int i=vector.size()-1; i>=0 && !vector.get(i).isWritable; i--){
+				deps.add(vector.get(i).task);
+			}
 		}
-		
-		return null;
+		return;
+	}
+	
+	private static void getDepForReadable(Vector<DependencyTask> vector, ArrayList<Task> deps){
+		for(int i=vector.size()-1; i>=0; i--){
+			if(vector.get(i).isWritable==true){
+				deps.add(vector.get(i).task);
+				return;
+			}
+		}
 	}
 	
 	private static void refreshVarDeps(Vector<DependencyTask> v, Task task, Boolean isWritable){	

@@ -48,11 +48,11 @@ public class ByteCodeOpASM implements Opcodes {
 					opcode = insn.getOpcode();
 					insnType = insn.getType();
 					
-    	            if (insnType == AbstractInsnNode.FIELD_INSN) {    	            
+    	            if (insnType == AbstractInsnNode.FIELD_INSN) { 
     	            	varName = ((FieldInsnNode) insn).name;
     	            	if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
     	            			|| opcode == ISTORE || opcode == FSTORE || opcode == PUTFIELD || opcode == PUTSTATIC) {
-    	            		usedVarHash.put(varName, true);     	                   
+    	            		usedVarHash.put(varName, true);
     	            	} else {
     	            		usedVarHash.put(varName, false);
     	            	}
