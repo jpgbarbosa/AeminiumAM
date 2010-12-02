@@ -167,9 +167,7 @@ public class Dispatcher {
 			
 			/* Get all the current tasks that this task is dependent */
 			if(actor.getvarDep().containsKey(varName)){
-				for(DependencyTask t :actor.getvarDep().get(varName)){
-					deps.add(t.task);
-				}
+				deps.add(addLastWritableDep(actor.getvarDep().get(varName)).task);//t.task);
 				/* Actualize the variable dependencies according to this new task */
 				refreshVarDeps(actor.getvarDep().get(varName), task, entry.getValue());
 			}
@@ -178,18 +176,27 @@ public class Dispatcher {
 		return deps;
 	}
 	
+	/*
+	 * 
+	 * if is writable add all readble tasks
+	 * else add last writable
+	 * 
+	 */
+	private static DependencyTask addLastWritableDep(Vector<DependencyTask> vector){
+		for(int i=vector.size(); i>=0; i--){
+			
+		}
+		
+		return null;
+	}
+	
 	private static void refreshVarDeps(Vector<DependencyTask> v, Task task, Boolean isWritable){	
-		if(v.isEmpty()){
+		if(isWritable){
+			v.clear();
+			v.add(new DependencyTask(task,isWritable));
+		} else {
 			v.add(new DependencyTask(task,isWritable));
 		}
-			else{
-			if(isWritable || v.get(v.size()-1).isWritable){
-				v.clear();
-				v.add(new DependencyTask(task,isWritable));
-			} else {
-				v.add(new DependencyTask(task,isWritable));
-			}
-		}		
 	}
 	
 }
