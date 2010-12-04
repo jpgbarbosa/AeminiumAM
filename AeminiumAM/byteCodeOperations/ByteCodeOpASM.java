@@ -11,6 +11,8 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
+import Constants.Constants;
+
 
 import actor.Actor;
 
@@ -44,12 +46,19 @@ public class ByteCodeOpASM implements Opcodes {
         		
         		for (int x = 0; x < method.instructions.size(); x++) {
         			
-					AbstractInsnNode  insn = method.instructions.get(x);
+					AbstractInsnNode  insn = method..instructions.get(x);
 					opcode = insn.getOpcode();
 					insnType = insn.getType();
 					
-    	            if (insnType == AbstractInsnNode.FIELD_INSN) { 
+					if(Constants.debug_asm){
+						System.out.println("opcode: "+opcode+ "; type: " + insnType);
+					}
+					
+    	            if (insnType == AbstractInsnNode.FIELD_INSN) {
     	            	varName = ((FieldInsnNode) insn).name;
+    	            	if(Constants.debug_asm){
+    						System.out.println("opcode: "+opcode+ "; name: " + varName);
+    					}
     	            	if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
     	            			|| opcode == ISTORE || opcode == FSTORE || opcode == PUTFIELD || opcode == PUTSTATIC) {
     	            		usedVarHash.put(varName, true);
