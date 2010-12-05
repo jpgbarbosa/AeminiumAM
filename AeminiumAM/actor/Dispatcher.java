@@ -18,7 +18,7 @@ import aeminium.runtime.Task;
 
 public class Dispatcher {
 	
-	public static void handle(Actor actor, String name, final Object msg) {
+	public static void handle(final Actor actor, String name, final Object msg) {
 		final Method m;
 		final Class<?> c = actor.getClass();
 		
@@ -31,6 +31,12 @@ public class Dispatcher {
 				e.printStackTrace();
 			}
 			
+			if(Constants.Constants.debug_varUsedInDispatcher){
+				for(Entry<String,Boolean> entry : varUsed.entrySet()){
+					System.out.println("key: "+entry.getKey()+" value: "+entry.getValue());
+				}
+			}
+			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
 				System.out.println(m.getName()+" is going to be par from dispatcher");
@@ -40,12 +46,11 @@ public class Dispatcher {
 					public void execute(Runtime rt, Task current)
 							throws Exception {
 						try {
-							Object t = c.newInstance();
-
+							
 							try {
 								m.setAccessible(true);
 
-								m.invoke(t, msg);
+								m.invoke(actor, msg);
 
 								// Handle any exceptions thrown by method to be
 								// invoked.
@@ -73,12 +78,10 @@ public class Dispatcher {
 					public void execute(Runtime rt, Task current)
 							throws Exception {
 						try {
-							Object t = c.newInstance();
-
 							try {
 								m.setAccessible(true);
 
-								m.invoke(t, msg);
+								m.invoke(actor, msg);
 
 								// Handle any exceptions thrown by method to be
 								// invoked.
@@ -98,26 +101,7 @@ public class Dispatcher {
 			System.out.println("Inexistent method '"+name+"'.");
 		}
 	}
-	/*
-	private static HashMap<String, Boolean> getFieldsType(Method m,
-			Actor actor) {
-		
-		String [] writeVars = m.getAnnotation(VarType.class).isWritable().split(" ");
-		String [] readVars = m.getAnnotation(VarType.class).isReadOnly().split(" ");
-		
-		HashMap<String, Boolean> hash = new HashMap<String, Boolean>();
-		int i;
-		
-		for(i=0; i<writeVars.length; i++){
-			hash.put(writeVars[i], true);
-		}
-		
-		for(i=0; i<readVars.length; i++){
-			hash.put(readVars[i], false);
-		}
-		return hash;
-	}
-	*/
+
 	private static HashMap<String, Boolean> getAllFieldsTypeByASM(String name,
 			Actor actor) {
 		HashMap<String, Boolean> hash = ByteCodeOpASM.getWritableFields(name, actor);
