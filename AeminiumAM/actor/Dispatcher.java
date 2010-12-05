@@ -63,9 +63,15 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 				
+				Collection<Task> bb = getFuncDependencies(actor, varUsed, t1);
+				
+				for(int j=0 ; j<bb.size(); j++){
+					System.out.println(bb);
+				}
 				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						getFuncDependencies(actor, varUsed, t1));
+						bb);
+				System.out.println("after: "+t1);
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
@@ -116,6 +122,8 @@ public class Dispatcher {
 				for(Entry<String,Boolean> entry : temp.entrySet()){
 					if(hash.containsKey(entry.getKey())){
 						hash.put(entry.getKey(), entry.getValue() || hash.get(entry.getKey()));
+					} else {
+						hash.put(entry.getKey(), entry.getValue());
 					}
 				}
 			}

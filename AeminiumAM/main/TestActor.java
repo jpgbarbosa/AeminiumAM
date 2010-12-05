@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 import actor.Actor;
 import actor.Dispatcher;
 import annotations.writable;
@@ -7,7 +9,7 @@ import annotations.writable;
 public class TestActor extends Actor{
 		
 	@writable
-	static public int [] cenas;
+	static public ArrayList<Integer> cenas;
 	
 	static public int val=3;
 	
@@ -16,9 +18,9 @@ public class TestActor extends Actor{
 
 	public TestActor() {
 		super();
-		cenas = new int [10];
-		
-		cenas[0]=0;
+		cenas = new ArrayList<Integer>();
+		cenas.add(0);
+		cenas.set(0, 3);
 	}
 	
 	@Override
@@ -34,21 +36,21 @@ public class TestActor extends Actor{
 	
 	@SuppressWarnings("unused")
 	private void react1(Object m){
-		cenas[0]=2;
+		cenas.set(0,2);
 		
 		react2(null);
 		
-		cenas[0]=3;
+		cenas.set(0,3);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		cenas[0]=4;
+		cenas.set(0,4);
 		System.out.println("react1 em execução!");
 	}
 	
 	private void react2(Object m){
-		System.out.println("react2 em execução! cenas[0]="+cenas[0]);
+		System.out.println("react2 em execução! cenas[0]="+cenas.get(0));
 	}
 }

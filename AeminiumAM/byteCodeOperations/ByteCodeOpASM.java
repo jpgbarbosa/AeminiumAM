@@ -77,7 +77,7 @@ public class ByteCodeOpASM implements Opcodes {
     	            		}
     	            	}
     	            	
-    	            	if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
+    	            	else if (opcode == ASTORE || opcode == DSTORE || opcode == LSTORE
     	            			|| opcode == ISTORE || opcode == FSTORE || opcode == PUTFIELD || opcode == PUTSTATIC) {
     	            		usedVarHash.put(varName, true);
     	            	} else {
