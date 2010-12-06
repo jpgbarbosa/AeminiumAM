@@ -8,11 +8,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 import actor.Actor;
 import actor.AeminiumRuntime;
+import annotations.writable;
 
 public class DictionaryExample {
+	
+	public static int noMsgs = 500;
 	
 	public static Dictionary dictionary;
 	public static Reader reader;
@@ -34,13 +38,13 @@ public class DictionaryExample {
 	}
 	
 	private static class Reader extends Actor{
-
+		@writable
 		static public String [] words;
 		
 		Reader(){
 			super();
 			
-			words = new String[500];
+			words = new String[noMsgs];
 			
 			try {
 				FileInputStream fstream = new FileInputStream("500Word1.txt");
@@ -49,12 +53,24 @@ public class DictionaryExample {
 				
 				int index=0;
 				String word;
-				while ((word = br.readLine()) != null){
+				while (index<noMsgs && (word = br.readLine()) != null){
 					words[index] = word;
 					index++;
 				}
 				
 				in.close();
+				
+				Random random = new Random(System.currentTimeMillis());
+				int rand;
+				String temp;
+				
+		        for (int i = 0; i < words.length; i++) {
+		            rand = (random.nextInt() & 0x7FFFFFFF) % words.length;
+		            temp = words[i];
+		            words[i] = words[rand];
+		            words[rand] = temp;
+		        }
+				
 			
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -67,22 +83,23 @@ public class DictionaryExample {
 		@Override
 		protected void react(Object obj) {
 			for(int i=0; i<words.length; i++ ){
-				dictionary.sendMessage(new Message(this,words[i]));
+				dictionary.sendMessage(words[i]);
 			}
 		}
 		
 	}
 	
 	private static class Dictionary extends Actor{
-
+		@writable
 		static public String [] keyWords;
+		@writable
 		static public String [] valueWords;
 		
 		Dictionary(){
 			super();
 			
-			keyWords = new String[500];
-			valueWords = new String[500];
+			keyWords = new String[noMsgs];
+			valueWords = new String[noMsgs];
 			
 			try {
 				FileInputStream fstream = new FileInputStream("500Word1.txt");
@@ -91,7 +108,8 @@ public class DictionaryExample {
 				
 				int index=0;
 				String word;
-				while ((word = br.readLine()) != null){
+				
+				while (index<noMsgs && (word = br.readLine()) != null){
 					keyWords[index] = word;
 					valueWords[index] = word+"-V";
 					index++;
@@ -109,20 +127,24 @@ public class DictionaryExample {
 		
 		@Override
 		protected void react(Object obj) {
-			
-			String word = ((Message)obj).word;
-			
-			for(int i=0; i<keyWords.length; i++){
-				if(keyWords.equals(word)){
-					receiver.sendMessage(valueWords[i]);
+			try{
+				String word = ((String)obj);
+				
+				for(int i=0; i<keyWords.length; i++){
+					if(keyWords[i].equals(word)){
+						receiver.sendMessage(valueWords[i]);
+					}
 				}
+			}catch(Exception e){
+				System.out.println("react Dictionary");
 			}
-						
 		}
 		
 	}
 	
 	private static class Receiver extends Actor{
+		@writable
+		int x;
 
 		@Override
 		protected void react(Object obj) {
@@ -131,15 +153,29 @@ public class DictionaryExample {
 		
 	}
 	
-	static AeminiumRuntime art = new AeminiumRuntime();
+	static AeminiumRuntime art;
 
 	public static void main(String[] args) {
 		
-		reader = new Reader();
-		receiver = new Receiver();
-		dictionary = new Dictionary();
+		long [] array = new long [10];
 		
-		reader.sendMessage(null);
+		for(int i=0;i<10;i++){
+			art=new AeminiumRuntime();
+			reader = new Reader();
+			receiver = new Receiver();
+			dictionary = new Dictionary();
+			
+			long start = System.nanoTime();
+			
+			reader.sendMessage(null);
+			art.endAeminiumRuntime();
+			
+			array[i]=System.nanoTime()-start;
+		}
+		
+		for(int i=0;i<10;i++){
+			System.out.println(array[i]);
+		}
 
 	}
 
