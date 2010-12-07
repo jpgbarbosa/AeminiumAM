@@ -63,19 +63,12 @@ public class Dispatcher {
 					}
 				}, Runtime.NO_HINTS);
 				
-				Collection<Task> bb = getFuncDependencies(actor, varUsed, t1);
-				
-				for(int j=0 ; j<bb.size(); j++){
-					System.out.println(bb);
-				}
-				
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
-						bb);
-				System.out.println("after: "+t1);
+						getFuncDependencies(actor, varUsed, t1));
 
 			} else {
 				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
-
+				
 				/* Useless Datagroup created to pass as arg in createAtomicTask */
 				DataGroup dg = AeminiumRuntime.rt.createDataGroup();
 
@@ -99,7 +92,7 @@ public class Dispatcher {
 						}
 					}
 				}, dg, Runtime.NO_HINTS);
-				
+
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						getFuncDependencies(actor, varUsed, t1));
 			}
@@ -171,7 +164,7 @@ public class Dispatcher {
 				}
 				refreshVarDeps(actor.getvarDep().get(varName), task, entry.getValue());
 			}
-		}
+		}		
 		
 		return deps;
 	}

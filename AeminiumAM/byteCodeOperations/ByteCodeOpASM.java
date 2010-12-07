@@ -71,7 +71,11 @@ public class ByteCodeOpASM implements Opcodes {
     						System.out.println("opcode: "+opcode+ "; name: " + varName);
     					}
     	            	if(opcode == GETSTATIC || opcode == GETFIELD){
+    	            		if(varName!=null && !usedVarHash.containsKey(varName)){
+    	            			usedVarHash.put(varName, false);
+    	            		}
     	            		loadedVar = varName;
+    	            		
     	            		if(Constants.debug_asm_tracking){
     	            			System.out.println("GET*:"+varName);
     	            		}
