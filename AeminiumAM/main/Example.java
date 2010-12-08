@@ -1,5 +1,12 @@
 package main;
 
+
+/* 
+ * como obter as mensagens no react?
+ * -> loop dentro do react nao as recebe
+ * -> sair do react, como acordamos o filosofo? fork acorda?
+ */
+
 import actor.Actor;
 import actor.AeminiumRuntime;
 import actor.Dispatcher;
@@ -7,9 +14,11 @@ import actor.Dispatcher;
 public class Example {
 	private static class State{
 		boolean accepted;
+		Fork fork;
 		
-		State(boolean accepted){
+		State(boolean accepted, Fork fork){
 			this.accepted = accepted;
+			this.fork = fork;
 		}
 	}
 	
@@ -37,11 +46,11 @@ public class Example {
 			MessageAction msg = (MessageAction) obj;
 			if(msg.msg.equals("take")){
 				if (available) {
-				    available = false;/*
-				    msg.owner.sendMessage(new State(true));
+				    available = false;
+				    msg.owner.sendMessage(new State(true,this));
 				} else{ 
-					msg.owner.sendMessage(new State(false));
-				*/}
+					msg.owner.sendMessage(new State(false,this));
+				}
 			} else if(msg.equals("finished")){
 				available = true;
 			} else {
@@ -54,33 +63,52 @@ public class Example {
 
 		static public String name;
 		static public Fork [] array;
+		static public boolean [] avail;
 		
 		public Philosopher(String name, Fork fork1, Fork fork2) {
 			super();
 			this.name = name;
 			array = new Fork[2];
 			array[0] = fork1;
+			avail[0] = false;
+			
 			array[1] = fork2;
+			avail[1] = false;
 		}
 		
 		@Override
 		protected void react(Object obj) {
-			MessageAction msg = (MessageAction) obj;
+			State msg = (State) obj;
 			
-			Dispatcher.handle(this, "think", obj);
+			if(msg!=null){
+				if(msg.fork == array[0]){
+					if(msg.accepted == true)
+						avail[0] = true;
+					else
+						avail[0] = false;
+				} else if(msg.fork == array[1]){
+					if(msg.accepted == true)
+						avail[1] = true;
+					else
+						avail[1] = false;
+				}
+			}
+			
+			think();
+			
 			array[0].sendMessage(new MessageAction("take", this));
 			array[1].sendMessage(new MessageAction("take", this));
 			
-			if(array[0].available == false || array[1].available == false){
+			if(avail[0] == false || avail[1] == false){
 				System.out.println(name+"Oops, can't get my forks! Giving up.");
-				if(array[0].available == false){
+				if(avail[0] == false){
 					array[0].sendMessage(new MessageAction("finished", this));
 				}
-				if(array[1].available == false){
+				if(avail[1] == false){
 					array[1].sendMessage(new MessageAction("finished", this));
 				}
 			} else {
-				Dispatcher.handle(this, "eat", obj);
+				eat();
 				array[0].sendMessage(new MessageAction("finished", this));
 				array[1].sendMessage(new MessageAction("finished", this));
 				//msg.owner.sendMessage(new MessageAction("finished", this));

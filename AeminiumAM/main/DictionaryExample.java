@@ -16,7 +16,8 @@ import annotations.writable;
 
 public class DictionaryExample {
 	
-	public static int noMsgs = 500;
+	public static int noMsgs = 400;
+	public static int noMsgsRead = 100;
 	
 	public static Dictionary dictionary;
 	public static Reader reader;
@@ -38,7 +39,6 @@ public class DictionaryExample {
 	}
 	
 	private static class Reader extends Actor{
-		@writable
 		static public String [] words;
 		
 		Reader(){
@@ -82,7 +82,7 @@ public class DictionaryExample {
 		
 		@Override
 		protected void react(Object obj) {
-			for(int i=0; i<words.length; i++ ){
+			for(int i=0; i<noMsgsRead; i++ ){
 				dictionary.sendMessage(words[i]);
 			}
 		}
@@ -90,9 +90,7 @@ public class DictionaryExample {
 	}
 	
 	private static class Dictionary extends Actor{
-		@writable
 		static public String [] keyWords;
-		@writable
 		static public String [] valueWords;
 		
 		Dictionary(){
@@ -143,9 +141,6 @@ public class DictionaryExample {
 	}
 	
 	private static class Receiver extends Actor{
-		@writable
-		int x;
-
 		@Override
 		protected void react(Object obj) {
 			System.out.println((String)obj);
@@ -157,9 +152,9 @@ public class DictionaryExample {
 
 	public static void main(String[] args) {
 		
-		long [] array = new long [10];
+		long [] array = new long [30];
 		
-		for(int i=0;i<10;i++){
+		for(int i=0;i<30;i++){
 			art=new AeminiumRuntime();
 			reader = new Reader();
 			receiver = new Receiver();
@@ -173,7 +168,7 @@ public class DictionaryExample {
 			array[i]=System.nanoTime()-start;
 		}
 		
-		for(int i=0;i<10;i++){
+		for(int i=0;i<30;i++){
 			System.out.println(array[i]);
 		}
 
