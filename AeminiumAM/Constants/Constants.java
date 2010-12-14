@@ -1,4 +1,4 @@
-package Constants;
+package constants;
 
 public class Constants {
 	public static boolean debug_asm = false;

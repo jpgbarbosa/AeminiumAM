@@ -31,7 +31,7 @@ public class Dispatcher {
 				e.printStackTrace();
 			}
 			
-			if(Constants.Constants.debug_varUsedInDispatcher){
+			if(constants.Constants.debug_varUsedInDispatcher){
 				for(Entry<String,Boolean> entry : varUsed.entrySet()){
 					System.out.println("key: "+entry.getKey()+" value: "+entry.getValue());
 				}

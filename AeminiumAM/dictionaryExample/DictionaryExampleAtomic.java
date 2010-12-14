@@ -7,27 +7,29 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
-
 import actor.Actor;
 import actor.AeminiumRuntime;
+import annotations.writable;
 
-public class DictionaryExample {
+public class DictionaryExampleAtomic {
 	
-	public static int noMsgs = 500;
+	public static int noMsgs = 400;
 	public static int noMsgsRead = 100;
 	
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
 	
-	public DictionaryExample(){
+	public DictionaryExampleAtomic(){
 		art=new AeminiumRuntime();
 		reader = new Reader();
 		receiver = new Receiver();
 		dictionary = new Dictionary();
 	}
 	
+	
 	public static class Reader extends Actor{
+		@writable
 		static public String [] words;
 		
 		public Reader(){
@@ -79,7 +81,9 @@ public class DictionaryExample {
 	}
 	
 	public static class Dictionary extends Actor{
+		@writable
 		static public String [] keyWords;
+		@writable
 		static public String [] valueWords;
 		
 		public Dictionary(){
@@ -130,6 +134,8 @@ public class DictionaryExample {
 	}
 	
 	public static class Receiver extends Actor{
+		@writable
+		int x;
 		@Override
 		protected void react(Object obj) {
 			System.out.println((String)obj);
@@ -144,7 +150,7 @@ public class DictionaryExample {
 		long [] array = new long [30];
 		
 		for(int i=0;i<30;i++){
-			DictionaryExample de = new DictionaryExample();
+			DictionaryExampleAtomic de = new DictionaryExampleAtomic();
 			
 			long start = System.nanoTime();
 			de.reader.sendMessage(null);
