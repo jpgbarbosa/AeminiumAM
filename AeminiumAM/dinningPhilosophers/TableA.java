@@ -1,12 +1,15 @@
 package dinningPhilosophers;
 
 import actor.Actor;
+import annotations.writable;
 
-class Table extends Actor{
-	public static Fork [] forks;
-	public static Philosopher [] phils;
+class TableA extends Actor{
+	@writable
+	static Fork [] forks;
+	@writable
+	static PhilosopherA [] phils;
 	
-	Table(Philosopher [] phils,Fork [] forks){
+	TableA(PhilosopherA [] phils,Fork [] forks){
 		super();
 		this.phils = phils;
 		this.forks = forks;
@@ -16,7 +19,7 @@ class Table extends Actor{
 	protected void react(Object obj) {
 		
 		try{
-			MessageAction msgA = (MessageAction)obj;
+			MessageActionA msgA = (MessageActionA)obj;
 			if(msgA.msg.equals("take")){
 				for(int i=1; i< phils.length+1; i++){
 					if(msgA.owner==phils[i%forks.length]){

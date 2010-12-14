@@ -1,14 +1,16 @@
 package dinningPhilosophers;
 import actor.Actor;
-class Philosopher extends Actor{
+import annotations.writable;
+class PhilosopherA extends Actor{
 
 	public String name;
-	static public Table table;
+	@writable
+	static public TableA table;
 	
-	public Philosopher(String name, Table table) {
+	public PhilosopherA(String name, TableA table2) {
 		super();
 		this.name = name;
-		Philosopher.table = table;
+		PhilosopherA.table = table2;
 	}
 	
 	@Override
@@ -18,15 +20,15 @@ class Philosopher extends Actor{
 		
 		if(msg!=null && msg.accepted){
 			eat();
-			table.sendMessage(new MessageAction("finished",this));
+			table.sendMessage(new MessageActionA("finished",this));
 		} else if((msg!=null && !msg.accepted)){
 			think();
-			table.sendMessage(new MessageAction("take", this));
+			table.sendMessage(new MessageActionA("take", this));
 		}
 	}
 	
     public void think() {
-       // System.out.println(name+" I'm thinking");
+//        System.out.println(name+" I'm thinking");
 		try {
 			Thread.sleep(1);
 		} catch (InterruptedException e) {
@@ -37,13 +39,13 @@ class Philosopher extends Actor{
     }
 
     public void eat() {
-    	//System.out.println(name+" I'm EATING");
+  //  	System.out.println(name+" I'm EATING");
 		try {
 			Thread.sleep(2);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		System.out.println(name+" I'm done EATING");
+	//	System.out.println(name+" I'm done EATING");
     }
 }
