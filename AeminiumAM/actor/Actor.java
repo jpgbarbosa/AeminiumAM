@@ -34,7 +34,12 @@ public abstract class Actor{
 			}
 		}
 		
-		varDep = new Hashtable<String,Vector<DependencyTask>>();
+		int counter =0;
+		for(Field f :this.getClass().getDeclaredFields()){
+			counter++;
+		}
+		
+		varDep = new Hashtable<String,Vector<DependencyTask>>(counter*2);
 		
 		for(Field f :this.getClass().getDeclaredFields()){
 			varDep.put(f.getName(), new Vector<DependencyTask>());

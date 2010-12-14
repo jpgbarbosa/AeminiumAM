@@ -9,9 +9,9 @@ import annotations.writable;
 public class TestActor extends Actor{
 		
 	@writable
-	static public ArrayList<Integer> cenas;
+	public ArrayList<Integer> cenas;
 	
-	static public int val=3;
+	public int val=3;
 	
 	@writable
 	static public int result;
