@@ -1,40 +1,58 @@
 package examples.gameoflife;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import actor.Actor;
 import actor.Dispatcher;
 
 public class Quadrante extends Actor{
 
-	HashMap<Integer, Vector<Boolean>> hash;
-	boolean own;
-	
+	Hashtable<Integer, Vector<Boolean>> hash;
+	Hashtable<Actor, Integer> neighbourds;
+	Actor gameControler;
+		
 	boolean [][] cells;
+	boolean [][] cellsBackup;
 	int [][] cellsBuffer;
 	
-	Actor [] neighbourActors;
-	
-	int neighboursNum;
+	boolean [] boundariesDone;
+		
 	int cellCols;
 	int cellRows;
 	int done;
 	
 	Quadrante(){
-		neighbourActors = null;
-		own = false;
+		hash = new Hashtable<Integer, Vector<Boolean>>(5);
+		boundariesDone = new boolean[4];
+		for(int i=0; i<4; i++){
+			boundariesDone[i] = false;
+		}
 	}
 	
 	@Override
 	protected void react(Object obj) {
 		if( obj instanceof MeetMessage){
 			cells = ((MeetMessage)obj).matrix.clone();
+			cellsBackup = cells.clone();
 			cellRows = cells.length;
 			cellCols = cells[0].length;
-			neighboursNum = ((MeetMessage)obj).neigh.length;
-			neighbourActors = ((MeetMessage)obj).neigh;
+			neighbourds = ((MeetMessage)obj).neighbourds;
+			
+			//inicializamos a informação das fronteiras existentes a null
+			for(Entry<Actor,Integer> entry : neighbourds.entrySet()){
+				hash.put(entry.getValue(), null);
+			}
+			
+			this.gameControler = ((MeetMessage)obj).gameControler;
+			
+			//Processamos o interior da matriz
 			Dispatcher.handle(this, "Refresh", null);
+			
+			//as fronteiras são chamadas
+			Dispatcher.handle(this, "callBoundaries", null);
 		}
 	}
 	
@@ -139,29 +157,198 @@ public class Quadrante extends Actor{
 		}
 	}
 	
-	public void ProcessBoudary(){
-		
-		
+	public void RefreshBoundary(int boundarySide){
+		switch (boundarySide){
+			case 0:
+				for(int i=0; i<cellCols;i++){
+					cellsBuffer[0][i]=getAlives(0,i);
+					switch( cellsBuffer[0][i] ) {
+						case 2:
+							// no change
+							break;
+						case 3:
+							cells[0][i] = true;
+							break;
+						default:
+							cells[0][i] = false;
+							break;
+					}
+				}
+				break;
+			case 2:
+				for(int i=0; i<cellRows;i++){
+					cellsBuffer[i][0]=getAlives(i,0);
+					
+					switch( cellsBuffer[i][0] ) {
+						case 2:
+							// no change
+							break;
+						case 3:
+							cells[i][0] = true;
+							break;
+						default:
+							cells[i][0] = false;
+							break;
+					}
+				}
+				break;
+			case 4:
+				for(int i=0; i<cellCols;i++){
+					cellsBuffer[cellRows-1][i]=getAlives(cellRows-1,i);
+					
+					switch( cellsBuffer[cellRows-1][i] ) {
+						case 2:
+							// no change
+							break;
+						case 3:
+							cells[cellRows-1][i] = true;
+							break;
+						default:
+							cells[cellRows-1][i] = false;
+							break;
+					}
+				}
+				break;
+			case 6:
+				for(int i=0; i<cellRows;i++){
+					cellsBuffer[i][cellCols-1]=getAlives(i,cellCols-1);
+					
+					switch( cellsBuffer[i][cellCols-1] ) {
+						case 2:
+							// no change
+							break;
+						case 3:
+							cells[i][cellCols-1] = true;
+							break;
+						default:
+							cells[i][cellCols-1] = false;
+							break;
+					}
+				}
+			break;
+		}
 	}
 	
-	public void Boundary(Actor actor){
+	private int getAlives(int x, int y) {
+		int ctr=0;
 		
+		if(x==0 && y==0){
+			if(hash.contains(1) && hash.get(1).get(0)){
+				ctr++;
+			}
+			if(hash.contains(0) && hash.get(0).get(0)){
+				ctr++;
+			}
+			if(hash.contains(0) && hash.get(0).get(1)){
+				ctr++;
+			}
+			if(hash.contains(2) && hash.get(2).get(0)){
+				ctr++;
+			}
+			if(hash.contains(2) && hash.get(2).get(1)){
+				ctr++;
+			}
+			for(int i=0; i<2; i++){
+				for( int j=0; j<2; j++){
+					if(i==0 && j==0)
+						continue;
+					
+					if(cellsBackup[i][j]){
+						ctr++;
+					}
+				}
+			}
+		}
+		
+		return ctr;
+	}
+
+	public void ProcessBoundary(Object obj){
+		Boundary b = (Boundary)obj;
+		
+		hash.put(b.type, b.vector);
+		
+		if(b.type%2==1){
+			b.type-=1;
+			ProcessBoundary(b);
+			b.type=(b.type+2)%8;
+			ProcessBoundary(b);
+			return;
+		}
+		
+		if(b.type==2){
+			for(int i=0;i<=4;i++){
+				if(hash.contains(i) && hash.get(i)==null){
+					return;
+				}
+			}
+			RefreshBoundary(2);
+		}
+		else if(b.type==4){
+			for(int i=2;i<=6;i++){
+				if(hash.contains(i) && hash.get(i)==null){
+					return;
+				}
+			}
+			RefreshBoundary(4);
+		}
+		else if(b.type==6){
+			for(int i=4;i<=6 || i==1;i=(i++)%8){
+				if(hash.contains(i) && hash.get(i)==null){
+					return;
+				}
+			}
+			RefreshBoundary(6);
+		}
+		else if(b.type==0){
+			for(int i=0;i<=7;i++){
+				if(i==3){ i=6; }
+				
+				if(hash.contains(i) && hash.get(i)==null){
+					return;
+				}
+			}
+			RefreshBoundary(0);
+		}
 	}
 	
-	public void CallBackF(){
-		ProcessBoudary();
+	public void Boundary(Object obj){
+		Boundary boundary=null;
+		AskBoundary ab = ((AskBoundary)obj);
+		
+		switch (ab.value){
+			case 0: boundary = new Boundary(ab.value,cells,4,cellCols,cellRows); break;
+			case 1: boundary = new Boundary(ab.value,cells,5,cellCols,cellRows); break;
+			case 2: boundary = new Boundary(ab.value,cells,6,cellCols,cellRows); break;
+			case 3: boundary = new Boundary(ab.value,cells,7,cellCols,cellRows); break;
+			case 4: boundary = new Boundary(ab.value,cells,0,cellCols,cellRows); break;
+			case 5: boundary = new Boundary(ab.value,cells,1,cellCols,cellRows); break;
+			case 6: boundary = new Boundary(ab.value,cells,2,cellCols,cellRows); break;
+			case 7: boundary = new Boundary(ab.value,cells,3,cellCols,cellRows); break;
+		}
+				
+		ab.actor.sendMessage(boundary);
+	}
+	
+	public void CallBackF(Object obj){
+		
+		ProcessBoundary(obj);
 		
 		if(CheckCompleted()){
-			//envia ao GameControler q esta terminado
+			gameControler.sendMessage(new Finished(this));
 		}
 	}
 	
 	public boolean CheckCompleted(){
-		if(done == neighboursNum+1)
+		//only checks if boundaries are completed
+		if(done == neighbourds.size())
 			return true;
 		return false;
 	}
-
 	
-	
+	public void callBoundaries(){
+		for(Entry<Actor,Integer> entry : neighbourds.entrySet()){
+			entry.getKey().sendMessage(new AskBoundary(entry.getKey(),entry.getValue()));
+		}
+	}
 }
