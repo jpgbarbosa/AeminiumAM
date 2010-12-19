@@ -236,18 +236,15 @@ public class Quadrante extends Actor{
 			if(hash.contains(1) && hash.get(1).get(0)){
 				ctr++;
 			}
-			if(hash.contains(0) && hash.get(0).get(0)){
-				ctr++;
+			for(int i=0;i<2;i++){
+				if(hash.contains(2) && hash.get(2).get(i)){
+					ctr++;
+				}
+				if(hash.contains(0) && hash.get(0).get(i)){
+					ctr++;
+				}
 			}
-			if(hash.contains(0) && hash.get(0).get(1)){
-				ctr++;
-			}
-			if(hash.contains(2) && hash.get(2).get(0)){
-				ctr++;
-			}
-			if(hash.contains(2) && hash.get(2).get(1)){
-				ctr++;
-			}
+			
 			for(int i=0; i<2; i++){
 				for( int j=0; j<2; j++){
 					if(i==0 && j==0)
