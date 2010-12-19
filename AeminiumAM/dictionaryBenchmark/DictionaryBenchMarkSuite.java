@@ -1,7 +1,7 @@
 package dictionaryBenchmark;
 
-import dictionaryExample.DictionaryExample;
-import dictionaryExample.DictionaryExampleAtomic;
+import examples.dictionaryExample.DictionaryExample;
+import examples.dictionaryExample.DictionaryExampleAtomic;
 import aeminium.runtime.tools.benchmark.forkjoin.Benchmark;
 import aeminium.runtime.tools.benchmark.forkjoin.BenchmarkExecutor;
 
