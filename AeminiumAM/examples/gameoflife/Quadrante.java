@@ -25,10 +25,6 @@ public class Quadrante extends Actor{
 	
 	Quadrante(){
 		hash = new Hashtable<Integer, Vector<Boolean>>(5);
-		boundariesDone = new boolean[4];
-		for(int i=0; i<4; i++){
-			boundariesDone[i] = false;
-		}
 	}
 	
 	@Override
@@ -231,6 +227,7 @@ public class Quadrante extends Actor{
 	private int getAlives(int x, int y) {
 		int ctr=0;
 		
+		//cantos
 		if(x==0 && y==0){
 			if(hash.contains(1) && hash.get(1).get(0)){
 				ctr++;
@@ -246,11 +243,138 @@ public class Quadrante extends Actor{
 			
 			for(int i=0; i<2; i++){
 				for( int j=0; j<2; j++){
-					if(i==0 && j==0)
-						continue;
-					
 					if(cellsBackup[i][j]){
 						ctr++;
+					}
+				}
+			}
+		}
+		else if(x==cellRows-1 && y==0){
+			if(hash.contains(3) && hash.get(3).get(0)){
+				ctr++;
+			}
+			for(int i=cellRows-2;i<cellRows;i++){
+				if(hash.contains(2) && hash.get(2).get(i)){
+					ctr++;
+				}
+				if(hash.contains(4) && hash.get(4).get(i-(cellRows-2))){
+					ctr++;
+				}
+			}
+			
+			for(int i=cellRows-2; i<cellRows; i++){
+				for( int j=0; j<2; j++){
+					if(cellsBackup[i][j]){
+						ctr++;
+					}
+				}
+			}
+		}
+		else if(x==cellRows-1 && y==cellCols-1){
+			if(hash.contains(5) && hash.get(5).get(0)){
+				ctr++;
+			}
+			for(int i=cellCols-2;i<cellCols;i++){
+				if(hash.contains(4) && hash.get(4).get(i)){
+					ctr++;
+				}
+				if(hash.contains(6) && hash.get(6).get(i)){
+					ctr++;
+				}
+			}
+			
+			for(int i=cellRows-2; i<cellRows; i++){
+				for( int j=cellCols-2; j<cellCols; j++){
+					if(cellsBackup[i][j]){
+						ctr++;
+					}
+				}
+			}
+		}
+		else if(x==0 && y==cellCols-1){
+			if(hash.contains(7) && hash.get(7).get(0)){
+				ctr++;
+			}
+			for(int i=cellCols-2;i<cellCols;i++){
+				if(hash.contains(0) && hash.get(0).get(i)){
+					ctr++;
+				}
+				if(hash.contains(6) && hash.get(6).get(i-(cellCols-2))){
+					ctr++;
+				}
+			}
+			
+			for(int i=0; i<2; i++){
+				for( int j=cellCols-2; j<cellCols; j++){
+					if(cellsBackup[i][j]){
+						ctr++;
+					}
+				}
+			}
+		} 
+		//Fronteiras normais
+		else{
+			if(x==0){
+				if(hash.contains(0) && hash.get(0)!=null){
+					for(int j=y-1; j<y+2;j++){
+						if(hash.get(0).get(j)){
+							ctr++;
+						}
+					}
+				}
+				for(int i=0; i<2; i++){
+					for( int j=y-1; j<y+2 ;j++){
+						if(cellsBackup[i][j]){
+							ctr++;
+						}
+					}
+				}
+			}
+			else if(y==0){
+				if(hash.contains(2) && hash.get(2)!=null){
+					for(int j=x-1; j<x+2;j++){
+						if(hash.get(2).get(j)){
+							ctr++;
+						}
+					}
+				}
+				for(int i=x-1; i<x+2; i++){
+					for( int j=y; j<y+2 ;j++){
+						if(cellsBackup[i][j]){
+							ctr++;
+						}
+					}
+				}
+			}
+			else if(x==cellRows-1){
+				if(hash.contains(4) && hash.get(4)!=null){
+					for(int j=y-1; j<y+2;j++){
+						if(hash.get(4).get(j)){
+							ctr++;
+						}
+					}
+				}
+				for(int i=cellRows-2; i<cellRows; i++){
+					for( int j=y-1; j<y+2 ;j++){
+						if(cellsBackup[i][j]){
+							ctr++;
+						}
+					}
+				}
+			}
+			else if(y==cellCols-1){
+				if(hash.contains(6) && hash.get(6)!=null){
+					for(int j=x-1; j<x+2;j++){
+						if(hash.get(6).get(j)){
+							ctr++;
+						}
+					}
+				}
+				for(int i=x-1; i<x+2; i++){
+					for( int j=y-1; j<cellCols ;j++){
+						if(cellsBackup[i][j]){
+							ctr++;
+						}
 					}
 				}
 			}

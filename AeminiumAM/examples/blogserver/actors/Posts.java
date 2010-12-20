@@ -45,13 +45,20 @@ public class Posts extends Actor{
 			
 			//System.out.println("Posts ln 38");
 		} else if( obj instanceof ReadPost){
-			Dispatcher.handle(this, "sendNotification", (ReadPost)obj);
+			//Dispatcher.handle(this, "sendNotification", (ReadPost)obj);
+			sendNotification((ReadPost)obj);
 		}
 	}
 	
 	public void sendNotification(ReadPost rp){
-		receiver.sendMessage("User "+rp.user+" requested post "+rp.id+" by "+
-				hashUsersID.get(rp.id) + ": "+hashPosts.get(rp.id));
+		if(rp.id>=lastIndex){
+			receiver.sendMessage("User "+rp.user+" requested post "+(lastIndex-1)+" by "+
+					hashUsersID.get(lastIndex-1) + ": "+hashPosts.get(lastIndex-1));
+		} else {
+			receiver.sendMessage("User "+rp.user+" requested post "+rp.id+" by "+
+					hashUsersID.get(rp.id) + ": "+hashPosts.get(rp.id));
+		}
+		
 	}
 	
 }

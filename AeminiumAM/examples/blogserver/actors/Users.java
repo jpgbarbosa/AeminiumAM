@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import examples.blogserver.AskPermission;
 import examples.blogserver.PermissionResponse;
 import actor.Actor;
+import annotations.writable;
 
 public class Users extends Actor{
-	
+
+	@writable
+	int x;
+	@writable
 	int numNames = 100;
 
+	@writable
 	ArrayList<String> users;
+	
 	public Add addActor;
 	
 	public Users(Add addActor){

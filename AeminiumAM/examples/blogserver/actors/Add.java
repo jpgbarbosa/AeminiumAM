@@ -4,14 +4,18 @@ import examples.blogserver.AddPost;
 import examples.blogserver.AskPermission;
 import examples.blogserver.PermissionResponse;
 import examples.blogserver.PutRequest;
-import examples.blogserver.Response;
 import actor.Actor;
+import annotations.writable;
 
 public class Add extends Actor{
 
 	Users users;
 	Posts post;
 	Receiver receiver;
+	
+
+	@writable
+	int x;
 	
 	public Add(Users users, Posts post, Receiver receiver){
 		super();
@@ -31,7 +35,7 @@ public class Add extends Actor{
 			if(((PermissionResponse)obj).accepted){
 				post.sendMessage(new AddPost(((PermissionResponse)obj).req.post,((PermissionResponse)obj).req.user));
 			} else {
-				receiver.sendMessage(new Response("Invalid User"));
+				receiver.sendMessage("Invalid User");
 			}
 		}
 	}

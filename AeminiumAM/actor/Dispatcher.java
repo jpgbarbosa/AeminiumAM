@@ -26,7 +26,12 @@ public class Dispatcher {
 			
 			HashMap<String,Boolean> varUsed=null;
 			try{
-				varUsed = getAllFieldsTypeByASM(m.getName(), actor);
+				if(actor.getMethodsName().contains(m.getName()) && actor.getMethodsWrites().get(m.getName())!=null){
+					varUsed = actor.getMethodsWrites().get(m.getName());
+				} else {
+					varUsed = getAllFieldsTypeByASM(m.getName(), actor);
+					actor.getMethodsWrites().put(m.getName(),varUsed);
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}

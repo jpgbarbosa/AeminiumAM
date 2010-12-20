@@ -8,12 +8,12 @@ public class Web {
 	public static AeminiumRuntime art;
 	
 	Receiver receiver;
-	Add adder;
+	public Add adder;
 	Posts posts;
 	Users users;
-	Reader reader;
+	public Reader reader;
 	
-	Web(int postsNum){
+	public Web(int postsNum){
 		receiver = new Receiver();
 		users = new Users(adder);
 		posts = new Posts(receiver,postsNum);
