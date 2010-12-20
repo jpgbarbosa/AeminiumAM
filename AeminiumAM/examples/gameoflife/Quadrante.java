@@ -1,6 +1,5 @@
 package examples.gameoflife;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Map.Entry;

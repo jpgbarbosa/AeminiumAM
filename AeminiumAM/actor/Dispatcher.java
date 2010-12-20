@@ -39,7 +39,7 @@ public class Dispatcher {
 			
 			//temos as variaveis escritas e temos a lista, é só obter as deps e passar
 			if (!methodIsWritable(actor,name,varUsed)) {
-				System.out.println(m.getName()+" is going to be par from dispatcher");
+				//System.out.println(m.getName()+" is going to be par from dispatcher");
 
 				Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body() {
 					@Override
@@ -67,7 +67,7 @@ public class Dispatcher {
 						getFuncDependencies(actor, varUsed, t1));
 
 			} else {
-				System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
+				//System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
 				
 				/* Useless Datagroup created to pass as arg in createAtomicTask */
 				DataGroup dg = AeminiumRuntime.rt.createDataGroup();

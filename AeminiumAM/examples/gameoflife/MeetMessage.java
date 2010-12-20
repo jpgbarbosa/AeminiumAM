@@ -1,5 +1,4 @@
 package examples.gameoflife;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import actor.Actor;
