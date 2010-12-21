@@ -12,10 +12,7 @@ public class Add extends Actor{
 	Users users;
 	Posts post;
 	Receiver receiver;
-	
 
-	@writable
-	int x;
 	
 	public Add(Users users, Posts post, Receiver receiver){
 		super();

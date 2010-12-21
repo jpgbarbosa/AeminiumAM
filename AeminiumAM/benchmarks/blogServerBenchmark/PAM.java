@@ -12,10 +12,10 @@ public class PAM {
 	
 	public static void main(String[] args) {
 		
-		for(int num=500; num<=5000; num+=500){
+		for(int num=500; num<=7000; num+=500){
 			long total=0;
 			
-			for(int x=0; x<15; x++){
+			for(int x=0; x<20; x++){
 				Web.art = new AeminiumRuntime();
 				
 				Web web = new Web(1000);

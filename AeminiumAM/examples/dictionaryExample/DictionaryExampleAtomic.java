@@ -13,14 +13,16 @@ import annotations.writable;
 
 public class DictionaryExampleAtomic {
 	
-	public static int noMsgs = 500;
-	public static int noMsgsRead = 100;
+	public static int noMsgs;
+	public static int noMsgsRead;
 	
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
 	
-	public DictionaryExampleAtomic(){
+	public DictionaryExampleAtomic(int num, int num2){
+		noMsgsRead = num;
+		noMsgs = num2;
 		art=new AeminiumRuntime();
 		reader = new Reader();
 		receiver = new Receiver();

@@ -21,7 +21,7 @@ public abstract class Actor{
 	private Hashtable<String,Vector<DependencyTask>> varDep = null;
 	private Hashtable<String,HashMap<String,Boolean>> methodsWrites = null;
 	
-	private DataGroup myDataGroup;
+	//private DataGroup myDataGroup;
 	
 	public Actor() {
 		methods = new ArrayList<String>();
@@ -42,7 +42,7 @@ public abstract class Actor{
 		}
 		
 		int counter =0;
-		for(Field f :this.getClass().getDeclaredFields()){
+		for(@SuppressWarnings("unused") Field f :this.getClass().getDeclaredFields()){
 			counter++;
 		}
 		

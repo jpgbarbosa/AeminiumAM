@@ -1,6 +1,6 @@
 package examples.dinningPhilosophers;
 import actor.Actor;
-class Philosopher extends Actor{
+public class Philosopher extends Actor{
 
 	public String name;
 	static public Table table;

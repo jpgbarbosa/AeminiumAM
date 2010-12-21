@@ -1,12 +1,12 @@
 package examples.dinningPhilosophers;
 
-class Fork{
+public class Fork{
 	
     public String name;
     
     public boolean available = true;	    
     
-    Fork(String name){
+    public Fork(String name){
     	this.name = name;
     }
     

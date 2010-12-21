@@ -15,12 +15,9 @@ import annotations.writable;
 
 public class Users extends Actor{
 
-	@writable
 	int x;
-	@writable
 	int numNames = 100;
 
-	@writable
 	ArrayList<String> users;
 	
 	public Add addActor;

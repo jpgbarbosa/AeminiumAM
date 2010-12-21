@@ -22,11 +22,11 @@ public class DictionaryBenchMarkSuite {
 
 			@Override
 			public long run() {
-				DictionaryExample de = new DictionaryExample();
+				new DictionaryExample(100,500);
 				
 				long start = System.nanoTime();
-				de.reader.sendMessage(null);
-				de.art.endAeminiumRuntime();				
+				DictionaryExample.reader.sendMessage(null);
+				DictionaryExample.art.endAeminiumRuntime();				
 				
 				return System.nanoTime()-start;
 			}
@@ -42,11 +42,11 @@ public class DictionaryBenchMarkSuite {
 
 			@Override
 			public long run() {
-				DictionaryExampleAtomic de = new DictionaryExampleAtomic();
+				new DictionaryExampleAtomic(100,500);
 				
 				long start = System.nanoTime();
-				de.reader.sendMessage(null);
-				de.art.endAeminiumRuntime();				
+				DictionaryExampleAtomic.reader.sendMessage(null);
+				DictionaryExampleAtomic.art.endAeminiumRuntime();				
 				
 				return System.nanoTime()-start;
 			}

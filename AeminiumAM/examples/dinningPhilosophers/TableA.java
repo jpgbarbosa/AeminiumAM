@@ -3,13 +3,13 @@ package examples.dinningPhilosophers;
 import actor.Actor;
 import annotations.writable;
 
-class TableA extends Actor{
+public class TableA extends Actor{
 	@writable
 	static Fork [] forks;
 	@writable
 	static PhilosopherA [] phils;
 	
-	TableA(PhilosopherA [] phils,Fork [] forks){
+	public TableA(PhilosopherA [] phils,Fork [] forks){
 		super();
 		this.phils = phils;
 		this.forks = forks;

@@ -1,7 +1,7 @@
 package examples.dinningPhilosophers;
 import actor.Actor;
 import annotations.writable;
-class PhilosopherA extends Actor{
+public class PhilosopherA extends Actor{
 
 	public String name;
 	@writable

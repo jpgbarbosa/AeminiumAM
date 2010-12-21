@@ -13,14 +13,16 @@ import actor.AeminiumRuntime;
 
 public class DictionaryExample {
 	
-	public static int noMsgs = 500;
-	public static int noMsgsRead = 100;
+	public static int noMsgs;
+	public static int noMsgsRead;
 	
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
 	
-	public DictionaryExample(){
+	public DictionaryExample(int num, int num2){
+		noMsgsRead = num;
+		noMsgs = num2;
 		art=new AeminiumRuntime();
 		reader = new Reader();
 		receiver = new Receiver();

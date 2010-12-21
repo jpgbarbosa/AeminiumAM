@@ -2,11 +2,11 @@ package examples.dinningPhilosophers;
 
 import actor.Actor;
 
-class Table extends Actor{
+public class Table extends Actor{
 	public static Fork [] forks;
 	public static Philosopher [] phils;
 	
-	Table(Philosopher [] phils,Fork [] forks){
+	public Table(Philosopher [] phils,Fork [] forks){
 		super();
 		this.phils = phils;
 		this.forks = forks;
