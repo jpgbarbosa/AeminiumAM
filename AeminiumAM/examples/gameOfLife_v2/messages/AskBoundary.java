@@ -1,8 +1,16 @@
 package examples.gameOfLife_v2.messages;
 
-import actor.Actor;
+import examples.gameOfLife_v2.Quadrant;
 
 public class AskBoundary {
-	public Actor actor;
+	public Quadrant actor;
 	public int borderIndex;
+	public int round;
+	
+	public AskBoundary(Quadrant quadrant, int i, int round) {
+		 actor = quadrant;
+		 borderIndex = i;
+		 this.round = round;
+	}
+
 }

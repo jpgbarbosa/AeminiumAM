@@ -1,37 +1,67 @@
 package examples.gameOfLife_v2;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import examples.gameOfLife_v2.messages.AskBoundary;
 import examples.gameOfLife_v2.messages.Boundary;
 import examples.gameOfLife_v2.messages.Process;
 import examples.gameOfLife_v2.messages.StartMessage;
+import examples.gameOfLife_v2.messages.Terminate;
 import examples.gameOfLife_v2.messages.TryNewRound;
 import actor.Actor;
 import actor.Dispatcher;
+import annotations.writable;
 
 public class Quadrant extends Actor{
-	boolean useDisp;
+	public boolean useDisp;
 	
-	int round;
-	boolean isProcessed;
+	public int round;
+	@writable
+	public boolean isProcessed;
+	@writable
+	public boolean [][] tempMatrix;
+	@writable
+	public boolean [][] matrix;
+	@writable
+	public int [][] bufferMatrix;
 	
-	boolean [][] tempMatrix;
-	boolean [][] matrix;
-	int [][] bufferMatrix;
+	public Actor [] neighbourds;
+	public int [][] boundaries;
 	
-	Actor [] neighbourds;
-	int [][] boundaries;
+	public int rows,cols;
 	
-	int myRowNo, maxRowNo,rows;
-	int myColNo, maxColNo,cols;
+	int maxRounds;
 	
-	public Quadrant(int [][] matrix, Actor [] actors,int myRowNo, boolean useDisp){
-		/*
-		 * TODO: build a nice constructor that call a function Initialize;
-		 */
+	String ind;
+	
+	public Queue<AskBoundary> queue;
+	
+	public Quadrant(boolean [][] matrix, Actor [] actors,int rows, int cols, boolean useDisp, int maxRounds, String ind){
+		int i;
+		
+		this.ind = ind;
+		
 		this.useDisp = useDisp;
+		
+		this.rows = rows;
+		this.cols = cols;
+		
+		this.maxRounds = maxRounds;
+		
 		round = 1;
 		tempMatrix = new boolean[matrix.length+2][matrix[0].length+2];
 		bufferMatrix = new int[matrix.length+2][matrix[0].length+2];
+		
+		
+		this.matrix = matrix;
+		
+		for(i=1;i<tempMatrix.length-1;i++){
+			for(int j=1;j<tempMatrix[0].length-1;j++){
+				tempMatrix[i][j]=matrix[i-1][j-1];
+			}
+		}
+		queue = new LinkedList<AskBoundary>();
 	}
 
 	@Override
@@ -43,31 +73,127 @@ public class Quadrant extends Actor{
 				borderIncorporator((Boundary)obj);
 			}
 		} else if ( obj instanceof AskBoundary){
+
 			if(useDisp){
-				Dispatcher.handle(this, "sendBorder", (AskBoundary)obj);
+				if(((AskBoundary)obj).round == round){
+					Dispatcher.handle(this, "sendBorder", (AskBoundary)obj);
+				} else {
+					queue.add((AskBoundary)obj);
+				}
 			} else {
-				sendBorder((AskBoundary)obj);
+				if(((AskBoundary)obj).round == round){
+					sendBorder((AskBoundary)obj);
+				} else {
+					queue.add((AskBoundary)obj);
+				}
 			}
 		} else if (obj instanceof Process){
 			processQuadrant();
 			isProcessed=true;
 			this.sendMessage(new TryNewRound());
 		} else if (obj instanceof TryNewRound){
-			/*
-			 * TODO: check if we sent and receive all the borders and if we processed all info
-			 * if yes:
-			 * 		copy tempMatrix to matrix, reset to boundaries[][], clean buffers and temps, round++, and StartMEssage
-			 * -> function Initialize
-			 * if no: 
-			 * 		do nothing
-			 */
-			
+
+			System.out.println(ind+"  "+ round+"  "+maxRounds);
+			if(canGoToNextRound()){
+				initialize(false);
+				if(round==maxRounds){
+					this.sendMessage(new Terminate());
+				}else {
+					this.sendMessage(new StartMessage());
+				}
+			}
 		} else if(obj instanceof StartMessage){
-			/*
-			 * TODO: ask for boundaries again!
-			 */
+			
+			while(!queue.isEmpty() && queue.peek().round==round){
+				if(useDisp){
+					Dispatcher.handle(this, "sendBorder", queue.peek());
+				} else {
+					sendBorder(queue.peek());
+				}
+			}
+
+			
+			for(int i = 0;i<neighbourds.length;i++){
+
+				if(neighbourds[i]!=null){
+					neighbourds[i].sendMessage(new AskBoundary(this,i,round));
+				}
+			}
+			
+		} else if (obj instanceof Terminate){
+			String temp="";
+			
+			for(int i=0;i<matrix.length; i++){
+				for( int j=0;j<matrix[0].length; j++){
+					temp+=matrix[i][j]+" ";
+				}
+				temp+="/n";
+			}
+			
+			System.out.println("-----------");
+			System.out.println(ind);
+			System.out.println(temp);
+			System.out.println("-----------");
+			
+			return;
+		}
+	}
+	
+	public void setActors(Actor [] actors){
+		neighbourds = actors.clone();
+				
+		boundaries = new int[actors.length][3];
+		
+		for(int i=0;i<actors.length;i++){
+			if(actors[i]==null){
+				boundaries[i][0] = 0;
+				boundaries[i][1] = -1;
+				boundaries[i][2] = -1;
+			} else {
+				boundaries[i][0] = 1;
+				boundaries[i][1] = 0;
+				boundaries[i][2] = 0;
+			}
 		}
 		
+		initialize(true);
+	}
+	
+	private void initialize(boolean isFirst){
+		int i=0,j=0;
+		
+		for(i=0;i<boundaries.length;i++){
+			boundaries[i][1] = 0;
+			boundaries[i][2] = 0;
+		}
+		isProcessed=false;
+		
+		//copy from temp to Matrix
+		if(!isFirst){
+			for(i=1;i<tempMatrix.length-1;i++){
+				for(j=1;j<tempMatrix[0].length-1;j++){
+					matrix[i-1][j-1]=tempMatrix[i][j];
+				}
+			}
+		}
+		
+		round++;
+	}
+	
+	private boolean canGoToNextRound(){
+		
+		if(!isProcessed)
+			return false;
+		
+		for(int i=0; i<boundaries.length;i++){
+			if(boundaries[i][0]==1){
+				if(boundaries[i][1]!=1 && boundaries[i][2]!=1 ){
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	private void sendBorder(AskBoundary obj) {
