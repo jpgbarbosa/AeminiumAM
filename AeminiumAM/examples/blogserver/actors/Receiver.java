@@ -1,7 +1,7 @@
 package examples.blogserver.actors;
 
 import actor.Actor;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class Receiver extends Actor{
 	@writable

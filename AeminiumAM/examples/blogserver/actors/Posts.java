@@ -8,7 +8,7 @@ import examples.blogserver.ReadPost;
 
 import actor.Actor;
 import actor.Dispatcher;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class Posts extends Actor{
 	Receiver receiver;

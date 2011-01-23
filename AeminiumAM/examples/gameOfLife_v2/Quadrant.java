@@ -11,7 +11,7 @@ import examples.gameOfLife_v2.messages.Terminate;
 import examples.gameOfLife_v2.messages.TryNewRound;
 import actor.Actor;
 import actor.Dispatcher;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class Quadrant extends Actor{
 	public boolean useDisp;

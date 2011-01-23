@@ -1,6 +1,6 @@
 package examples.dinningPhilosophers;
 import actor.Actor;
-import annotations.writable;
+import annotationsVar.writable;
 public class PhilosopherA extends Actor{
 
 	public String name;

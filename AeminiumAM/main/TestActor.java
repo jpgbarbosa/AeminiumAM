@@ -3,17 +3,15 @@ package main;
 import java.util.ArrayList;
 
 import actor.Actor;
-import actor.Dispatcher;
-import annotations.writable;
+import actor.annotations.Read;
+import actor.annotations.Write;
 
 public class TestActor extends Actor{
 		
-	@writable
 	public ArrayList<Integer> cenas;
 	
-	public int val=3;
+	public int val;
 	
-	@writable
 	static public int result;
 
 	public TestActor() {
@@ -24,35 +22,47 @@ public class TestActor extends Actor{
 	}
 	
 	@Override
-	protected void react(Object obj){
+	@Write
+	public void react(Object obj){
 		
-		result = 42 + ((Integer)obj) + val;
+		int x;
 		
-		Dispatcher.handle(this,"react2",obj);
+		react2(obj);
 		
-		Dispatcher.handle(this,"react1",obj);
+		//Dispatcher.handle(this,"react2",obj);
 		
-		Dispatcher.handle(this,"react2",obj);
+	//	Dispatcher.handle(this,"react1",obj);
+		
+	//	Dispatcher.handle(this,"react2",obj);
 				
 	}
 	
-	@SuppressWarnings("unused")
-	private void react1(Object m){
-		cenas.set(0,2);
+	@Write
+	public void react1(Object m){
+		//cenas.set(0,2);
 		
 		react2(null);
 		
-		cenas.set(0,3);
+		//cenas.set(0,3);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		cenas.set(0,4);
+		//cenas.set(0,4);
 		System.out.println("react1 em execução!");
 	}
 	
-	private void react2(Object m){
-		System.out.println("react2 em execução! cenas[0]="+cenas.get(0));
+	@Read
+	public void react2(Object m){
+		System.out.println("react2 em execução! cenas[0]=");
+	}
+	
+
+	public static void main(String[] args) {
+		
+		TestActor a = new TestActor();
+			
+		a.sendMessage(3);
 	}
 }

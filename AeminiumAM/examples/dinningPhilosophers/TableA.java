@@ -1,7 +1,7 @@
 package examples.dinningPhilosophers;
 
 import actor.Actor;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class TableA extends Actor{
 	@writable

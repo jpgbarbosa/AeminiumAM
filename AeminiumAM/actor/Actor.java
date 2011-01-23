@@ -3,20 +3,28 @@ package actor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Vector;
 
 
 import aeminium.runtime.Runtime;
 import aeminium.runtime.*;
-import annotations.writable;
+import annotationsVar.writable;
 
 import actor.AeminiumRuntime;
+import actor.annotations.Read;
 
 
 public abstract class Actor{
 	
+	/* AspectJ vars*/
+	protected Collection<Task> previousTasks;
+	protected Collection<Task> latestWriters;
+	protected boolean previousTasksAreWriters;
+		
 	private ArrayList<String> methods = null;
 	private Hashtable<String,Vector<DependencyTask>> varDep = null;
 	private Hashtable<String,HashMap<String,Boolean>> methodsWrites = null;
@@ -25,6 +33,10 @@ public abstract class Actor{
 	private DataGroup myDataGroup;
 	
 	public Actor() {
+		previousTasks           = new LinkedList<Task>();
+		latestWriters           = previousTasks;
+		previousTasksAreWriters = true;
+		
 		methods = new ArrayList<String>();
 		
 		methodsWrites = new Hashtable<String, HashMap<String,Boolean>>(4);
@@ -60,12 +72,9 @@ public abstract class Actor{
 
 	protected abstract void react(Object obj);
 
+	@Read
 	public void sendMessage(final Object obj) {
-
-		
 		if(!hasWrites){
-			
-			//System.out.println("Actor main is going to be par");
 			
 			Task t1 = AeminiumRuntime.rt.createNonBlockingTask(new Body(){	
 				@Override
@@ -78,12 +87,7 @@ public abstract class Actor{
 
 			AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 			
-		} else{
-			//System.out.println("Actor main is going to be an Atomic task");
-			
-			/* Useless Datagroup created to pass as arg in createAtomicTask */
-			//DataGroup dg = AeminiumRuntime.rt.createDataGroup();
-			
+		} else{	
 			Task t1 = AeminiumRuntime.rt.createAtomicTask(new Body(){		
 				@Override
 				public void execute(Runtime rt, Task current)
@@ -97,26 +101,18 @@ public abstract class Actor{
 		}
 	}
 	
-	private boolean canBeParallelized(){
-		for (Field f: this.getClass().getDeclaredFields()) {
-			for (Annotation an : f.getAnnotations()) {
-				if(an instanceof writable && ((writable) an).isWritable() == true){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	protected Hashtable<String,Vector<DependencyTask>> getvarDep(){
+	@Read
+	public Hashtable<String,Vector<DependencyTask>> getvarDep(){
 		return varDep;
 	}
 	
-	protected ArrayList<String> getMethodsName(){
+	@Read
+	public ArrayList<String> getMethodsName(){
 		return methods;
 	}
 	
-	protected Hashtable<String,HashMap<String,Boolean>> getMethodsWrites(){
+	@Read
+	public Hashtable<String,HashMap<String,Boolean>> getMethodsWrites(){
 		return methodsWrites;
 	}
 }

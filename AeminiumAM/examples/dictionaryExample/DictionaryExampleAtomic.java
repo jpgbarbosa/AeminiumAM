@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import actor.Actor;
 import actor.AeminiumRuntime;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class DictionaryExampleAtomic {
 	

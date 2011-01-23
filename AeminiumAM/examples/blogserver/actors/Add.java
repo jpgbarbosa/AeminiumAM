@@ -5,7 +5,7 @@ import examples.blogserver.AskPermission;
 import examples.blogserver.PermissionResponse;
 import examples.blogserver.PutRequest;
 import actor.Actor;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class Add extends Actor{
 	Users users;

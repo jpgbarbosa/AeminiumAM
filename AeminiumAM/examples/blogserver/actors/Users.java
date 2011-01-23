@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import examples.blogserver.AskPermission;
 import examples.blogserver.PermissionResponse;
 import actor.Actor;
-import annotations.writable;
+import annotationsVar.writable;
 
 public class Users extends Actor{
 	

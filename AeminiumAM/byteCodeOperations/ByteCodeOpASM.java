@@ -21,6 +21,7 @@ public class ByteCodeOpASM implements Opcodes {
 	
 	static int [] opcodes = {AASTORE, ASTORE,BASTORE, CASTORE, DASTORE, DSTORE, FASTORE, FSTORE, IASTORE, ISTORE, LASTORE, LSTORE, SASTORE};
     
+	//Get used fields specifications (writable or not) inside methodName 
     public static HashMap<String,Boolean> getWritableFields(String methodName, Actor actor){
 	    ClassReader cr = null;
 		try {
@@ -33,11 +34,13 @@ public class ByteCodeOpASM implements Opcodes {
 	    ClassNode cn = new ClassNode();
 	    cr.accept(cn,ClassReader.SKIP_DEBUG);
 	    
-	    @SuppressWarnings("rawtypes")
+	    
+		@SuppressWarnings("rawtypes")
 		List methods = cn.methods;
 	    
 	    HashMap<String,Boolean> usedVarHash = null;
 	    
+	    //Search methodName
         for (int i = 0; i < methods.size(); ++i) {
 
         	MethodNode method = (MethodNode) methods.get(i);
@@ -48,6 +51,7 @@ public class ByteCodeOpASM implements Opcodes {
         		usedVarHash = new HashMap<String,Boolean>();
         		String loadedVar=null;
         		
+        		//Iterate over all the instructions
         		for (int x = 0; x < method.instructions.size(); x++) {
         			
 					AbstractInsnNode  insn = method.instructions.get(x);
@@ -58,6 +62,9 @@ public class ByteCodeOpASM implements Opcodes {
 						System.out.println("opcode: "+opcode+ "; type: " + insnType);
 					}
 					
+					/* If we found a variable after tracking another one,
+					 * that's because it wasn't writable
+					 */
 					if(loadedVar!=null && isStoreInsn(opcode)){
 						if(Constants.debug_asm_tracking){
 							System.out.println("was catch as W: "+loadedVar);
@@ -71,6 +78,7 @@ public class ByteCodeOpASM implements Opcodes {
     	            	if(Constants.debug_asm){
     						System.out.println("opcode: "+opcode+ "; name: " + varName);
     					}
+    	            	//Track variable to check if after loaded they are written
     	            	if(opcode == GETSTATIC || opcode == GETFIELD){
     	            		if(varName!=null && !usedVarHash.containsKey(varName)){
     	            			usedVarHash.put(varName, false);
@@ -96,6 +104,7 @@ public class ByteCodeOpASM implements Opcodes {
         return usedVarHash;
     }
     
+    //get methods name if they are used inside thisMethodName
     public static ArrayList<String> getUsedMethods(String thisMethodName, Actor actor){
     	
 	    ClassReader cr = null;
@@ -132,27 +141,12 @@ public class ByteCodeOpASM implements Opcodes {
     	return usedMethods;
     }
     
+    //TODO: check if worth to improve this search
     static boolean isStoreInsn(int opcode){
-    	
     	for(int i =0 ; i< opcodes.length; i++){
     		if(opcodes[i]==opcode)
     			return true;
     	}
     	return false;
-    	/*int min = 0;
-    	int max = opcodes.length-1;
-    	int mid;
-    	
-    	do{
-	      mid = min + (max-min)/2;
-	      if( opcode > opcodes[mid])
-	        min = mid + 1;
-	      else 
-	        max = mid - 1;
-    	}while ((opcodes[mid] == opcode) || (min > max));
-    	
-    	if(min>max)
-    		return false;
-    	return true;*/
     }
 }

@@ -2,6 +2,8 @@ package main;
 
 import actor.Actor;
 import actor.AeminiumRuntime;
+import actor.annotations.Read;
+import actor.annotations.Write;
 public class Example {
 	
 	private static class MessageAction{
@@ -33,7 +35,8 @@ public class Example {
 		}
 		
 		@Override
-		protected void react(Object obj) {
+		@Write
+		public void react(Object obj) {
 			try{
 			MessageAction msgA = (MessageAction)obj;
 			if(msgA.msg.equals("take")){
@@ -98,7 +101,8 @@ public class Example {
 		}
 		
 		@Override
-		protected void react(Object obj) {
+		@Read
+		public void react(Object obj) {
 			
 			Reply msg = (Reply) obj;
 			
@@ -111,6 +115,7 @@ public class Example {
 			}
 		}
 		
+		@Read
 	    public void think() {
 	        System.out.println(name+" I'm thinking");
 			try {
@@ -122,6 +127,7 @@ public class Example {
 			System.out.println(name+" I'm done thinking");
 	    }
 
+		@Read
 	    public void eat() {
 	    	System.out.println(name+" I'm EATING");
 			try {
