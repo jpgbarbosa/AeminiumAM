@@ -20,15 +20,16 @@ public abstract class Actor{
 	private ArrayList<String> methods = null;
 	private Hashtable<String,Vector<DependencyTask>> varDep = null;
 	private Hashtable<String,HashMap<String,Boolean>> methodsWrites = null;
+	private boolean hasWrites = false;
 	
-	//private DataGroup myDataGroup;
+	private DataGroup myDataGroup;
 	
 	public Actor() {
 		methods = new ArrayList<String>();
 		
 		methodsWrites = new Hashtable<String, HashMap<String,Boolean>>(4);
 		
-		//myDataGroup = AeminiumRuntime.rt.createDataGroup();
+		myDataGroup = AeminiumRuntime.rt.createDataGroup();
 		
 		Method [] m = this.getClass().getDeclaredMethods();
 		
@@ -41,15 +42,19 @@ public abstract class Actor{
 			}
 		}
 		
-		int counter =0;
-		for(@SuppressWarnings("unused") Field f :this.getClass().getDeclaredFields()){
-			counter++;
-		}
+		int counter = this.getClass().getDeclaredFields().length;
 		
 		varDep = new Hashtable<String,Vector<DependencyTask>>(counter*2);
 		
 		for(Field f :this.getClass().getDeclaredFields()){
 			varDep.put(f.getName(), new Vector<DependencyTask>());
+			
+			for (Annotation an : f.getAnnotations()) {
+				if(an instanceof writable && ((writable) an).isWritable() == true){
+					hasWrites = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -58,7 +63,7 @@ public abstract class Actor{
 	public void sendMessage(final Object obj) {
 
 		
-		if(canBeParallelized()){
+		if(!hasWrites){
 			
 			//System.out.println("Actor main is going to be par");
 			
@@ -77,7 +82,7 @@ public abstract class Actor{
 			//System.out.println("Actor main is going to be an Atomic task");
 			
 			/* Useless Datagroup created to pass as arg in createAtomicTask */
-			DataGroup dg = AeminiumRuntime.rt.createDataGroup();
+			//DataGroup dg = AeminiumRuntime.rt.createDataGroup();
 			
 			Task t1 = AeminiumRuntime.rt.createAtomicTask(new Body(){		
 				@Override
@@ -86,7 +91,7 @@ public abstract class Actor{
 					
 					react(obj);
 					
-				}},dg, Runtime.NO_HINTS);
+				}},myDataGroup, Runtime.NO_HINTS);
 			
 			AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT, Runtime.NO_DEPS);
 		}

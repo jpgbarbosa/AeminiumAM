@@ -26,7 +26,9 @@ public class TestActor extends Actor{
 	@Override
 	protected void react(Object obj){
 		
-		result = 42 + ((Integer)obj) + val;			
+		result = 42 + ((Integer)obj) + val;
+		
+		Dispatcher.handle(this,"react2",obj);
 		
 		Dispatcher.handle(this,"react1",obj);
 		

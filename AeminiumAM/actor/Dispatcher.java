@@ -71,9 +71,7 @@ public class Dispatcher {
 				AeminiumRuntime.rt.schedule(t1, Runtime.NO_PARENT,
 						getFuncDependencies(actor, varUsed, t1));
 
-			} else {
-				//System.out.println(m.getName()+" is going to be an Atomic task from dispatcher");
-				
+			} else {				
 				/* Useless Datagroup created to pass as arg in createAtomicTask */
 				DataGroup dg = AeminiumRuntime.rt.createDataGroup();
 

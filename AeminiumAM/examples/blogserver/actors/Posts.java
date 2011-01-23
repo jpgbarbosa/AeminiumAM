@@ -19,8 +19,12 @@ public class Posts extends Actor{
 	Hashtable<Integer,String> hashPosts;
 	Hashtable<Integer,String> hashUsersID;
 	
-	public Posts(Receiver receiver, int postsNum){
+	long workTime;
+	
+	public Posts(Receiver receiver, int postsNum, long workTime){
 		super();
+		
+		this.workTime = workTime;
 		
 		hashPosts = new Hashtable<Integer, String>();
 		hashUsersID = new Hashtable<Integer, String>();
@@ -43,7 +47,6 @@ public class Posts extends Actor{
 			hashPosts.put(++lastIndex, ((AddPost)obj).post);
 			hashUsersID.put(lastIndex, ((AddPost)obj).user);
 			
-			//System.out.println("Posts ln 38");
 		} else if( obj instanceof ReadPost){
 			//Dispatcher.handle(this, "sendNotification", (ReadPost)obj);
 			sendNotification((ReadPost)obj);
@@ -59,6 +62,12 @@ public class Posts extends Actor{
 					hashUsersID.get(rp.id) + ": "+hashPosts.get(rp.id));
 		}
 		
+	}
+	
+	private void work(){
+		long sleepTime = workTime; // convert to nanoseconds
+	    long startTime = System.nanoTime();
+	    while ((System.nanoTime() - startTime) < sleepTime) {}
 	}
 	
 }

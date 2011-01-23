@@ -7,6 +7,8 @@ public class Web {
 
 	public static AeminiumRuntime art;
 	
+	long workTime = 250000;
+	
 	Receiver receiver;
 	public Add adder;
 	Posts posts;
@@ -15,10 +17,10 @@ public class Web {
 	
 	public Web(int postsNum){
 		receiver = new Receiver();
-		users = new Users(adder);
-		posts = new Posts(receiver,postsNum);
-		adder = new Add(users, posts, receiver);
-		reader = new Reader(posts);
+		users = new Users(adder,workTime);
+		posts = new Posts(receiver,postsNum,workTime);
+		adder = new Add(users, posts, receiver,workTime);
+		reader = new Reader(posts,workTime);
 		
 		users.addActor = adder;
 	}

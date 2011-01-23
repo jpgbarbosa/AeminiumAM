@@ -84,15 +84,19 @@ public class Controler {
 				Index ind = new Index(xI,yI);
 				
 				tablesDic.put(ind, tempTable);
-				actorsDic.put(""+xI+yI, new Quadrant(tempTable, null, blockDim, blockDim, false, noRounds,""+xI+yI));
+				actorsDic.put(""+xI+yI, new Quadrant(tempTable, new Actor[0], blockDim, blockDim, false, noRounds,""+xI+yI));
 			}
 		}
 
 		Actor [] actorsTemp;
 		int x,y;
 		
+		int i=0;
+		
 		for(Entry<String, Quadrant> entry : actorsDic.entrySet()){
-			actorsTemp = new Actor[8];
+			actorsTemp = new Quadrant[8];
+			
+			
 			
 			String temp = entry.getKey();
 			
@@ -108,7 +112,21 @@ public class Controler {
 			actorsTemp[6] = actorsDic.get((x)+""+(y+1));
 			actorsTemp[7] = actorsDic.get((x-1)+""+(y+1));
 						
-			entry.getValue().setActors(actorsTemp);
+			entry.getValue().setActors((Quadrant[]) actorsTemp);
+			
+			if(i==4){
+				System.out.println(x+""+y);
+				for(int l=0; l<8; l++){
+					System.out.println(actorsTemp[l]);
+				}
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			i++;
 		}
 	}
 	
@@ -121,7 +139,6 @@ public class Controler {
 	static AeminiumRuntime art = new AeminiumRuntime();
 	
 	public static void main(String[] args) {
-		
 		
 		Controler c = new Controler(5, 4);
 		

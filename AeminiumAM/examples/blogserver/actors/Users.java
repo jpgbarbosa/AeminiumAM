@@ -14,19 +14,26 @@ import actor.Actor;
 import annotations.writable;
 
 public class Users extends Actor{
-
+	
 	int x;
 	int numNames = 100;
-
+	@writable
+	long workTime = 0;
+	@writable
 	ArrayList<String> users;
 	
 	public Add addActor;
 	
-	public Users(Add addActor){
+	public Users(Add addActor, long workTime){
 		this.addActor = addActor;
+		this.workTime = workTime;
 		
 		users = new ArrayList<String>();
 		
+		for(int i=0; i<500; i++){
+			users.add("auto-gen user");
+		}
+		/*
 		try {
 			
 			FileInputStream fstream = new FileInputStream("Names.txt");
@@ -46,15 +53,16 @@ public class Users extends Actor{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}	*/
+		users.add("Ace");
 		
 	}
 	
 	@Override
 	protected void react(Object obj) {
 		if( obj instanceof AskPermission){
+			work();
 			if(users.contains(((AskPermission)obj).req.user)){
-
 				if(addActor==null){
 					System.out.println("addActor is null");
 				}
@@ -64,6 +72,12 @@ public class Users extends Actor{
 				addActor.sendMessage(new PermissionResponse(((AskPermission)obj).req, false));
 			}
 		}
+	}
+	
+	private void work(){
+		long sleepTime = workTime; // convert to nanoseconds
+	    long startTime = System.nanoTime();
+	    while ((System.nanoTime() - startTime) < sleepTime) {}
 	}
 
 }

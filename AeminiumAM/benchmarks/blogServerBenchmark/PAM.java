@@ -12,10 +12,12 @@ public class PAM {
 	
 	public static void main(String[] args) {
 		
-		for(int num=500; num<=7000; num+=500){
+		for(int num=10000; num<=100000; num+=10000){
 			long total=0;
 			
-			for(int x=0; x<20; x++){
+			System.out.println();
+			System.out.println(num);
+			for(int x=0; x<10; x++){
 				Web.art = new AeminiumRuntime();
 				
 				Web web = new Web(1000);
@@ -32,10 +34,9 @@ public class PAM {
 					}
 				}
 				Web.art.endAeminiumRuntime();
-				total+=(System.nanoTime()-start);
+				total=(System.nanoTime()-start);
+				System.out.println(total);
 			}
-			
-			System.out.println(total/20);
 		}
 	}
 }

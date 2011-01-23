@@ -51,7 +51,7 @@ public class MatrixGen {
 	
 	public static void main(String[] args) {
 		
-		MatrixGen mg = new MatrixGen(4);
+		MatrixGen mg = new MatrixGen(3);
 		
 	}
 	

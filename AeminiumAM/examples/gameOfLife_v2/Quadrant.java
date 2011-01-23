@@ -25,8 +25,9 @@ public class Quadrant extends Actor{
 	public boolean [][] matrix;
 	@writable
 	public int [][] bufferMatrix;
-	
-	public Actor [] neighbourds;
+	@writable
+	public Quadrant [] neighbourds;
+	@writable
 	public int [][] boundaries;
 	
 	public int rows,cols;
@@ -49,7 +50,7 @@ public class Quadrant extends Actor{
 		
 		this.maxRounds = maxRounds;
 		
-		round = 1;
+		round = 0;
 		tempMatrix = new boolean[matrix.length+2][matrix[0].length+2];
 		bufferMatrix = new int[matrix.length+2][matrix[0].length+2];
 		
@@ -67,13 +68,14 @@ public class Quadrant extends Actor{
 	@Override
 	protected void react(Object obj) {
 		if( obj instanceof Boundary){
+			//System.out.println(""+((Boundary)obj).index);
 			if(useDisp){
 				Dispatcher.handle(this, "borderIncorporator", (Boundary)obj);
 			} else {
 				borderIncorporator((Boundary)obj);
 			}
 		} else if ( obj instanceof AskBoundary){
-
+			System.out.println("AB round: "+((AskBoundary)obj).round);
 			if(useDisp){
 				if(((AskBoundary)obj).round == round){
 					Dispatcher.handle(this, "sendBorder", (AskBoundary)obj);
@@ -92,7 +94,6 @@ public class Quadrant extends Actor{
 			isProcessed=true;
 			this.sendMessage(new TryNewRound());
 		} else if (obj instanceof TryNewRound){
-
 			System.out.println(ind+"  "+ round+"  "+maxRounds);
 			if(canGoToNextRound()){
 				initialize(false);
@@ -104,22 +105,31 @@ public class Quadrant extends Actor{
 			}
 		} else if(obj instanceof StartMessage){
 			
-			while(!queue.isEmpty() && queue.peek().round==round){
-				if(useDisp){
-					Dispatcher.handle(this, "sendBorder", queue.peek());
-				} else {
-					sendBorder(queue.peek());
+			if(!queue.isEmpty()){
+				while(!queue.isEmpty() && queue.peek().round==round){
+					if(useDisp){
+						Dispatcher.handle(this, "sendBorder", queue.peek());
+					} else {
+						sendBorder(queue.peek());
+					}
 				}
-			}
-
-			
-			for(int i = 0;i<neighbourds.length;i++){
-
-				if(neighbourds[i]!=null){
-					neighbourds[i].sendMessage(new AskBoundary(this,i,round));
+			} else {
+				int counter=0;
+				for(int i = 0;i<neighbourds.length;i++){
+					if(neighbourds[i]!=null){
+						System.out.println(ind+" : "+i);
+						neighbourds[i].sendMessage(new AskBoundary(this,i,round));
+						counter++;
+					}
 				}
-			}
-			
+				/*System.out.println("ctr: "+counter+"..."+ind);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+			}			
 		} else if (obj instanceof Terminate){
 			String temp="";
 			
@@ -139,7 +149,7 @@ public class Quadrant extends Actor{
 		}
 	}
 	
-	public void setActors(Actor [] actors){
+	public void setActors(Quadrant [] actors){
 		neighbourds = actors.clone();
 				
 		boundaries = new int[actors.length][3];
@@ -147,9 +157,10 @@ public class Quadrant extends Actor{
 		for(int i=0;i<actors.length;i++){
 			if(actors[i]==null){
 				boundaries[i][0] = 0;
-				boundaries[i][1] = -1;
-				boundaries[i][2] = -1;
+				boundaries[i][1] = 0;
+				boundaries[i][2] = 0;
 			} else {
+				//System.out.println(ind+" : "+i);
 				boundaries[i][0] = 1;
 				boundaries[i][1] = 0;
 				boundaries[i][2] = 0;
@@ -187,7 +198,8 @@ public class Quadrant extends Actor{
 		
 		for(int i=0; i<boundaries.length;i++){
 			if(boundaries[i][0]==1){
-				if(boundaries[i][1]!=1 && boundaries[i][2]!=1 ){
+				if(boundaries[i][1]!=1 || boundaries[i][2]!=1 ){
+					System.out.println("cant go bc: "+ind+":"+i+" || "+boundaries[i][1]+" || "+boundaries[i][2]);
 					return false;
 				}
 			}
@@ -260,12 +272,21 @@ public class Quadrant extends Actor{
 				index=3;
 				break;
 		}
-		
+
 		boundaries[index][2]=1;
 		
-		if(isProcessed){
-			this.sendMessage(new TryNewRound());
+		
+		if(boundaries[index][0]==0){
+			System.out.println("border a zero-> "+ind+" : "+index);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+			this.sendMessage(new TryNewRound());
 		
 	}
 
@@ -309,7 +330,7 @@ public class Quadrant extends Actor{
 		boundaries[b.index][1] = 1;
 		
 		for(int i=0; i<8;i++){
-			if(boundaries[i][0]==1 && boundaries[i][0]==0){
+			if(boundaries[i][0]==1 && boundaries[i][1]==0){
 				return;
 			}
 		}
