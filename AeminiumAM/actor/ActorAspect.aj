@@ -12,8 +12,10 @@ public aspect ActorAspect {
 	private aeminium.runtime.Runtime rt;
 	
 	// don't access to public fields => public fields get unusable
-	declare warning: (   get(public * actor.Actor+.*) 
-	               || set(public * actor.Actor+.*) ) : "Cannot access public fields on an Actor.";
+	declare error: (   get(public * actor.Actor+.*) 
+	               || set(public * actor.Actor+.*) ) 
+	               && !withincode(new(..))
+	               : "Cannot access public fields on an Actor.";
     // don't access to public fields => public fields get unusable
 	declare error: (   get(protected * actor.Actor+.*) 
 				    || set(protected * actor.Actor+.*))
@@ -44,9 +46,11 @@ public aspect ActorAspect {
 
 	
 	// All public read methods of actors
-	pointcut PublicReadActorMethods() : (execution (@annotations.Read public void  actor.Actor+.*(..)) && !(execution (static * actor.Actor+.*(..))));
+	pointcut PublicReadActorMethods() :	(execution (@annotations.Read public void  actor.Actor+.*(..)) 
+											&& !(execution (static * actor.Actor+.*(..))));
 	// All public write methods of actors
-	pointcut PublicWriteActorMethods() : (execution (@annotations.Write public void  actor.Actor+.*(..)) && !(execution (static * actor.Actor+.*(..))));
+	pointcut PublicWriteActorMethods() : (execution (@annotations.Write public void  actor.Actor+.*(..)) 
+											&& !(execution (static * actor.Actor+.*(..))));
     // the main methods
 	pointcut MainMethod(): (execution(public static void *.main(String[])));
 	

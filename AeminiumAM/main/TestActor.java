@@ -1,61 +1,50 @@
 package main;
 
-import java.util.ArrayList;
-
 import actor.Actor;
 import actor.annotations.Read;
 import actor.annotations.Write;
 
 public class TestActor extends Actor{
-		
-	public ArrayList<Integer> cenas;
 	
-	public int val;
+	static private int val;
 	
 	static public int result;
 
 	public TestActor() {
 		super();
-		cenas = new ArrayList<Integer>();
-		cenas.add(0);
-		cenas.set(0, 3);
-	}
-	
-	@Override
-	@Write
-	public void react(Object obj){
-		
-		int x;
-		
-		react2(obj);
-		
-		//Dispatcher.handle(this,"react2",obj);
-		
-	//	Dispatcher.handle(this,"react1",obj);
-		
-	//	Dispatcher.handle(this,"react2",obj);
-				
+		val=1;
 	}
 	
 	@Write
-	public void react1(Object m){
-		//cenas.set(0,2);
+	public void doSomethingX(Object m){
+		setVal(2);
 		
-		react2(null);
+		doSomethingY(null);
 		
-		//cenas.set(0,3);
+		setVal(3);
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//cenas.set(0,4);
-		System.out.println("react1 em execução!");
+		
+		setVal(4);
+		System.out.println("foo1 is going to finish! val="+(getVal()+1));
 	}
 	
 	@Read
-	public void react2(Object m){
-		System.out.println("react2 em execução! cenas[0]=");
+	public void doSomethingY(Object m){
+		System.out.println("foo2 is executing with val="+getVal());
+	}
+	
+	@Write
+	public void setVal(int x){
+		val=x;
+	}
+	
+	@Read
+	public int getVal(){
+		return val;
 	}
 	
 
@@ -63,6 +52,6 @@ public class TestActor extends Actor{
 		
 		TestActor a = new TestActor();
 			
-		a.sendMessage(3);
+		a.doSomethingX(null);
 	}
 }
