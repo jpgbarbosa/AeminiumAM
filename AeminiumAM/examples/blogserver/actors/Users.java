@@ -1,16 +1,10 @@
 package examples.blogserver.actors;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import examples.blogserver.AskPermission;
-import examples.blogserver.PermissionResponse;
 import actor.Actor;
+import actor.annotations.Read;
+import actor.annotations.Write;
 import annotationsVar.writable;
 
 public class Users extends Actor{
@@ -22,10 +16,10 @@ public class Users extends Actor{
 	@writable
 	ArrayList<String> users;
 	
-	public Add addActor;
+	private Add addActor;
 	
 	public Users(Add addActor, long workTime){
-		this.addActor = addActor;
+		this.setAddActor(addActor);
 		this.workTime = workTime;
 		
 		users = new ArrayList<String>();
@@ -33,51 +27,37 @@ public class Users extends Actor{
 		for(int i=0; i<500; i++){
 			users.add("auto-gen user");
 		}
-		/*
-		try {
-			
-			FileInputStream fstream = new FileInputStream("Names.txt");
-		    DataInputStream in = new DataInputStream(fstream);
-		    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			
-			int index=0;
-			String word;
-			
-			while (index<numNames && (word = br.readLine()) != null){
-				users.add(word);
-			}
-			
-			in.close();
-		
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	*/
 		users.add("Ace");
 		
 	}
 	
-	@Override
-	protected void react(Object obj) {
-		if( obj instanceof AskPermission){
-			work();
-			if(users.contains(((AskPermission)obj).req.user)){
-				if(addActor==null){
-					System.out.println("addActor is null");
-				}
-				addActor.sendMessage(new PermissionResponse(((AskPermission)obj).req, true));
-				
-			} else {
-				addActor.sendMessage(new PermissionResponse(((AskPermission)obj).req, false));
-			}
-		}
-	}
-	
-	private void work(){
+	@Write
+	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
 	    while ((System.nanoTime() - startTime) < sleepTime) {}
+	}
+
+	@Read
+	public void requestPermission(String user, String msg) {
+		if(users.contains(user)){
+			if(getAddActor()==null){
+				System.out.println("addActor is null");
+			}
+			getAddActor().confirmReq(user,msg, true);
+		} else {
+			getAddActor().confirmReq(user,msg, false);
+		}		
+	}
+	
+	@Read
+	private Add getAddActor(){
+		return addActor;
+	}
+
+	@Write
+	public void setAddActor(Add addActor) {
+		this.addActor = addActor;
 	}
 
 }

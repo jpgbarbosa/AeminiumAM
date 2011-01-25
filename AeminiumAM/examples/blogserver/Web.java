@@ -22,18 +22,15 @@ public class Web {
 		adder = new Add(users, posts, receiver,workTime);
 		reader = new Reader(posts,workTime);
 		
-		users.addActor = adder;
+		users.setAddActor(adder);
 	}
 	
 	public static void main(String[] args) {
-		art = new AeminiumRuntime();
-		
 		Web web = new Web(100);
 		
-		web.adder.sendMessage(new PutRequest("Ace","[Vamos lá por isto a funcionar]"));
+		web.adder.addMessage("Ace","[Vamos lá por isto a funcionar]");
 		
-		web.reader.sendMessage(new ReadPost(6,"USER1"));
-		art.endAeminiumRuntime();
+		web.reader.reqReadPost(6,"USER1");
 		
 	}
 	

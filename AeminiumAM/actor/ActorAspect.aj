@@ -28,7 +28,7 @@ public aspect ActorAspect {
 	declare error:    withincode(@annotations.Read * actor.Actor+.*(..)) 
 	               && set(* actor.Actor+.*) : "Cannot write fields in read only methods,";
 	// check that Read methods do not contain method calls to write methods
-	declare error:    withincode(@annotations.Read * actor.Actor+.*(..)) 
+	declare warning:    withincode(@annotations.Read * actor.Actor+.*(..)) 
 	               && call(@annotations.Write * actor.Actor+.*(..)) : "Cannot call field writing methods in read only methods,";
 	// check that all methods of Actors have Read|Write annotations
 	declare error:    within(actor.Actor+) 

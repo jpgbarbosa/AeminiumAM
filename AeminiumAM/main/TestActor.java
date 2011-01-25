@@ -33,7 +33,7 @@ public class TestActor extends Actor{
 	}
 	
 	@Read
-	public void doSomethingY(Object m){
+	private void doSomethingY(Object m){
 		System.out.println("foo2 is executing with val="+getVal());
 	}
 	
@@ -43,7 +43,7 @@ public class TestActor extends Actor{
 	}
 	
 	@Read
-	public int getVal(){
+	private int getVal(){
 		return val;
 	}
 	
