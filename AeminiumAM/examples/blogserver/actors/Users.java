@@ -2,10 +2,11 @@ package examples.blogserver.actors;
 
 import java.util.ArrayList;
 
+import unused.annotationsVar.writable;
+
 import actor.Actor;
 import actor.annotations.Read;
 import actor.annotations.Write;
-import annotationsVar.writable;
 
 public class Users extends Actor{
 	

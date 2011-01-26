@@ -2,7 +2,8 @@ package benchmarks.blogServerBenchmark;
 
 import java.util.Random;
 
-import actor.AeminiumRuntime;
+import unused.AeminiumRuntime;
+
 
 import examples.blogserver.PutRequest;
 import examples.blogserver.ReadPost;
