@@ -2,8 +2,6 @@ package examples.blogserver.normal.pam.actors;
 
 import java.util.ArrayList;
 
-import unused.annotationsVar.writable;
-
 import actor.Actor;
 import actor.annotations.Read;
 import actor.annotations.Write;
@@ -12,9 +10,7 @@ public class Users extends Actor{
 	
 	int x;
 	int numNames = 100;
-	@writable
 	long workTime = 0;
-	@writable
 	ArrayList<String> users;
 	
 	private Add addActor;

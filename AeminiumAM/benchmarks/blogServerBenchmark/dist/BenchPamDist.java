@@ -16,7 +16,7 @@ public class BenchPamDist {
 			System.out.println();
 			System.out.println(num);
 			for(int x=0; x<10; x++){
-				WebPam.art = new AeminiumRuntime();
+				//WebPam.art = new AeminiumRuntime();
 				
 				WebPam web = new WebPam(1000);
 				
@@ -31,7 +31,7 @@ public class BenchPamDist {
 						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
-				WebPam.art.endAeminiumRuntime();
+				//WebPam.art.endAeminiumRuntime();
 				total=(System.nanoTime()-start);
 				System.out.println(total);
 			}

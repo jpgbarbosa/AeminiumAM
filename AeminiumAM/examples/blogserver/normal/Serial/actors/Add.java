@@ -27,7 +27,7 @@ public class Add extends Actor{
 	    while ((System.nanoTime() - startTime) < sleepTime) {}
 	}
 
-	@Read
+	@Write
 	public void addMessage(String user, String msg) {
 		users.requestPermission(user, msg);		
 	}

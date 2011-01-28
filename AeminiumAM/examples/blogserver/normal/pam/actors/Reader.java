@@ -12,7 +12,7 @@ public class Reader extends Actor{
 		this.workTime = workTime;
 	}
 	
-	@Write
+	@Read
 	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();

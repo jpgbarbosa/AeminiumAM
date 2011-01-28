@@ -9,15 +9,15 @@ import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
 
 public aspect ActorAspect {
-	private aeminium.runtime.Runtime rt;
+	//private aeminium.runtime.Runtime rt;
 	
 	// don't access to public fields => public fields get unusable
-	declare error: (   get(public * actor.Actor+.*) 
+	declare warning: (   get(public * actor.Actor+.*) 
 	               || set(public * actor.Actor+.*) ) 
 	               && !withincode(new(..))
 	               : "Cannot access public fields on an Actor.";
     // don't access to public fields => public fields get unusable
-	declare error: (   get(protected * actor.Actor+.*) 
+	declare warning: (   get(protected * actor.Actor+.*) 
 				    || set(protected * actor.Actor+.*))
 				   && !within(actor.Actor) 
 				   && !within(actor.ActorAspect)  : "Cannot access protected fields on an Actor.";
@@ -59,7 +59,7 @@ public aspect ActorAspect {
 	void around (): PublicReadActorMethods() {
 		Actor actor = (Actor)thisJoinPoint.getTarget();
 		synchronized (actor) {
-			Task task = rt.createNonBlockingTask(new Body() {
+			Task task = actor.rt.createNonBlockingTask(new Body() {
 				@Override
 				public void execute(Runtime rt, Task current) throws Exception {
 					proceed();				
@@ -80,7 +80,7 @@ public aspect ActorAspect {
 				actor.previousTasks.add(task);
 				deps = actor.latestWriters;
 			}
-			rt.schedule(task, Runtime.NO_PARENT, deps);
+			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 		}
 	}
 	
@@ -88,7 +88,7 @@ public aspect ActorAspect {
 	void around (): PublicWriteActorMethods() {
 		Actor actor = (Actor)thisJoinPoint.getTarget();
 		synchronized (actor) {
-			Task task = rt.createNonBlockingTask(new Body() {
+			Task task = actor.rt.createNonBlockingTask(new Body() {
 				@Override
 				public void execute(Runtime rt, Task current) throws Exception {
 					proceed();				
@@ -104,11 +104,12 @@ public aspect ActorAspect {
 			actor.previousTasks.add(task);
 			actor.latestWriters = actor.previousTasks;
 			actor.previousTasksAreWriters = true;
-			rt.schedule(task, Runtime.NO_PARENT, deps);
+			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 		}
 	}
 	
-	/* TODO: remove comment after benchmarks! 
+	// TODO: remove comment after benchmarks! 
+	/*
 	// setup before we start
 	before(): MainMethod() {
 		rt = aeminium.runtime.implementations.Factory.getRuntime();

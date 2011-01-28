@@ -16,22 +16,24 @@ public class BenchSerialDist {
 			System.out.println();
 			System.out.println(num);
 			for(int x=0; x<10; x++){
-				WebSerial.art = new AeminiumRuntime();
+				WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
+				WebSerial.rt.init();
 				
 				WebSerial web = new WebSerial(1000);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
+				Random ran = new Random (2);
 			
 				long start = System.nanoTime();
 				for(int i = 0; i<num; i++){
 					if(randP.nextInt(10)<2){
-						web.adder.addMessage("Ace","Post gerado na "+i+"iteracao.");
+						web.addActorArray[ran.nextInt(web.numCopies)].addMessage("Ace","Post gerado na "+i+"iteracao.");
 					} else {
-						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
+						web.readersArray[ran.nextInt(web.numCopies)].reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
-				WebSerial.art.endAeminiumRuntime();
+				WebSerial.rt.shutdown();
 				total=(System.nanoTime()-start);
 				System.out.println(total);
 			}

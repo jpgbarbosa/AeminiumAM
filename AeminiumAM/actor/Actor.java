@@ -2,7 +2,10 @@ package actor;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
+import unused.AeminiumRuntime;
 import aeminium.runtime.Task;
+import aeminium.runtime.examples.fjtests.AeminiumLCS;
 
 public abstract class Actor{
 	
@@ -10,6 +13,8 @@ public abstract class Actor{
 	protected Collection<Task> previousTasks;
 	protected Collection<Task> latestWriters;
 	protected boolean previousTasksAreWriters;
+	
+	protected aeminium.runtime.Runtime rt;
 	
 	public Actor() {
 		previousTasks           = new LinkedList<Task>();
