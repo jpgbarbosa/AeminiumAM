@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
-import constants.Constants;
+import constants.*;
 
 
 
@@ -54,12 +54,12 @@ public class ByteCodeOpASM implements Opcodes {
 					opcode = insn.getOpcode();
 					insnType = insn.getType();
 					
-					if(Constants.debug_asm){
+					if(constants.Constants.debug_asm){
 						System.out.println("opcode: "+opcode+ "; type: " + insnType);
 					}
 					
 					if(loadedVar!=null && isStoreInsn(opcode)){
-						if(Constants.debug_asm_tracking){
+						if(constants.Constants.debug_asm_tracking){
 							System.out.println("was catch as W: "+loadedVar);
 						}
 						usedVarHash.put(loadedVar, true);
@@ -68,7 +68,7 @@ public class ByteCodeOpASM implements Opcodes {
 					
     	            if (insnType == AbstractInsnNode.FIELD_INSN) {
     	            	varName = ((FieldInsnNode) insn).name;
-    	            	if(Constants.debug_asm){
+    	            	if(constants.Constants.debug_asm){
     						System.out.println("opcode: "+opcode+ "; name: " + varName);
     					}
     	            	if(opcode == GETSTATIC || opcode == GETFIELD){
@@ -77,7 +77,7 @@ public class ByteCodeOpASM implements Opcodes {
     	            		}
     	            		loadedVar = varName;
     	            		
-    	            		if(Constants.debug_asm_tracking){
+    	            		if(constants.Constants.debug_asm_tracking){
     	            			System.out.println("GET*:"+varName);
     	            		}
     	            	}
