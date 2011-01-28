@@ -108,6 +108,7 @@ public aspect ActorAspect {
 		}
 	}
 	
+	/* TODO: remove comment after benchmarks! 
 	// setup before we start
 	before(): MainMethod() {
 		rt = aeminium.runtime.implementations.Factory.getRuntime();
@@ -118,4 +119,5 @@ public aspect ActorAspect {
 	after(): MainMethod() {
 		rt.shutdown();
 	}
+	*/
 }
