@@ -2,7 +2,6 @@ package examples.blogserver.PAM.normal;
 
 import actor.AeminiumRuntime;
 
-import examples.blogserver.PAM.normal.*;
 import examples.blogserver.PAM.normal.actors.*;
 
 public class WebPamNormal {

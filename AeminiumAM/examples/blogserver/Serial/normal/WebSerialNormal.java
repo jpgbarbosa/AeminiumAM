@@ -1,7 +1,6 @@
 package examples.blogserver.Serial.normal;
 
 import actor.AeminiumRuntime;
-import examples.blogserver.Serial.*;
 import examples.blogserver.Serial.normal.actors.*;
 
 public class WebSerialNormal {

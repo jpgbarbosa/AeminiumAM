@@ -4,11 +4,7 @@ import java.util.Random;
 
 import actor.AeminiumRuntime;
 
-import examples.blogserver.PAM.dist.actors.Add;
-import examples.blogserver.PAM.dist.actors.Posts;
-import examples.blogserver.PAM.dist.actors.Reader;
-import examples.blogserver.PAM.dist.actors.Receiver;
-import examples.blogserver.PAM.dist.actors.Users;
+import examples.blogserver.Serial.dist.actors.*;
 
 public class WebSerialDist {
 	public int numCopies=20;
