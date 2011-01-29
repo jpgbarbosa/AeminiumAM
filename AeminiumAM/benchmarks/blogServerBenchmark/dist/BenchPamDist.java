@@ -13,7 +13,7 @@ public class BenchPamDist {
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<10; x++){
+			for(int x=0; x<30; x++){
 				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebPam.rt.init();
 				
