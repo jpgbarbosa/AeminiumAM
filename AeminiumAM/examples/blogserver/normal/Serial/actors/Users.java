@@ -2,24 +2,22 @@ package examples.blogserver.normal.Serial.actors;
 
 import java.util.ArrayList;
 
-import unused.annotationsVar.writable;
-
 import actor.Actor;
-import actor.annotations.Read;
 import actor.annotations.Write;
+import aeminium.runtime.Runtime;
 
 public class Users extends Actor{
 	
 	int x;
 	int numNames = 100;
-	@writable
 	long workTime = 0;
-	@writable
 	ArrayList<String> users;
 	
 	private Add addActor;
 	
-	public Users(Add addActor, long workTime){
+	public Users(Add addActor, long workTime, Runtime rt){
+		this.rt = rt;
+		
 		this.setAddActor(addActor);
 		this.workTime = workTime;
 		
@@ -29,7 +27,6 @@ public class Users extends Actor{
 			users.add("auto-gen user");
 		}
 		users.add("Ace");
-		
 	}
 	
 	@Write

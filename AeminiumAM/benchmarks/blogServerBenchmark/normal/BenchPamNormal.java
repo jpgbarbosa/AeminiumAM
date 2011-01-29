@@ -4,7 +4,6 @@ import java.util.Random;
 
 import examples.blogserver.normal.pam.WebPam;
 
-import unused.AeminiumRuntime;
 
 
 public class BenchPamNormal {
@@ -17,7 +16,8 @@ public class BenchPamNormal {
 			System.out.println();
 			System.out.println(num);
 			for(int x=0; x<10; x++){
-				WebPam.art = new AeminiumRuntime();
+				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
+				WebPam.rt.init();
 				
 				WebPam web = new WebPam(1000);
 				
@@ -32,7 +32,7 @@ public class BenchPamNormal {
 						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
-				WebPam.art.endAeminiumRuntime();
+				WebPam.rt.shutdown();
 				total=(System.nanoTime()-start);
 				System.out.println(total);
 			}

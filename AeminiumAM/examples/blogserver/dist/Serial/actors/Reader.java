@@ -1,6 +1,5 @@
 package examples.blogserver.dist.Serial.actors;
 
-import unused.AeminiumRuntime;
 import actor.Actor;
 import actor.annotations.*;
 import aeminium.runtime.Runtime;

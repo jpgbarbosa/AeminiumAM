@@ -2,6 +2,7 @@ package examples.blogserver.normal.Serial.actors;
 
 import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Runtime;
 
 public class Add extends Actor{
 	private Users users;
@@ -9,8 +10,10 @@ public class Add extends Actor{
 	private Receiver receiver;
 	private long workTime;
 	
-	public Add(Users users, Posts post, Receiver receiver, long workTime){
+	public Add(Users users, Posts post, Receiver receiver, long workTime, Runtime rt){
 		super();
+		
+		this.rt = rt;
 		
 		this.users = users;
 		this.post = post;
@@ -18,6 +21,7 @@ public class Add extends Actor{
 		
 		this.workTime = workTime;
 				
+		
 	}
 	
 	@Write

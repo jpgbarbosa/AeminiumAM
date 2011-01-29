@@ -6,6 +6,7 @@ import examples.blogserver.normal.pam.Gen;
 
 import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Runtime;
 
 public class Posts extends Actor{
 	private Receiver receiver;
@@ -17,9 +18,9 @@ public class Posts extends Actor{
 	
 	private long workTime;
 	
-	public Posts(Receiver receiver, int postsNum, long workTime){
+	public Posts(Receiver receiver, int postsNum, long workTime, Runtime rt){
 		super();
-		
+		this.rt = rt;
 		this.workTime = workTime;
 		
 		hashPosts = new Hashtable<Integer, String>();

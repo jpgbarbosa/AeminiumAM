@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import actor.Actor;
 import actor.annotations.Read;
 import actor.annotations.Write;
+import aeminium.runtime.Runtime;
 
 public class Users extends Actor{
 	
@@ -15,8 +16,9 @@ public class Users extends Actor{
 	
 	private Add addActor;
 	
-	public Users(Add addActor, long workTime){
-		this.setAddActor(addActor);
+	public Users(Add addActor, long workTime, Runtime rt){
+		this.rt = rt;
+		this.addActor = addActor;
 		this.workTime = workTime;
 		
 		users = new ArrayList<String>();

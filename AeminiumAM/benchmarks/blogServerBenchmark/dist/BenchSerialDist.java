@@ -1,9 +1,6 @@
 package benchmarks.blogServerBenchmark.dist;
 
 import java.util.Random;
-
-import unused.AeminiumRuntime;
-
 import examples.blogserver.dist.Serial.WebSerial;
 
 public class BenchSerialDist {

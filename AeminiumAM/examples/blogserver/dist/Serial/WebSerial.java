@@ -2,10 +2,7 @@ package examples.blogserver.dist.Serial;
 
 import java.util.Random;
 
-import aeminium.runtime.Runtime;
-
 import examples.blogserver.dist.Serial.actors.*;
-import unused.AeminiumRuntime;
 
 public class WebSerial {
 	public int numCopies=20;

@@ -2,8 +2,6 @@ package benchmarks.blogServerBenchmark.normal;
 
 import java.util.Random;
 
-import unused.AeminiumRuntime;
-
 import examples.blogserver.normal.Serial.WebSerial;
 
 public class BenchSerialNormal {
@@ -16,7 +14,8 @@ public class BenchSerialNormal {
 			System.out.println();
 			System.out.println(num);
 			for(int x=0; x<10; x++){
-				WebSerial.art = new AeminiumRuntime();
+				WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
+				WebSerial.rt.init();
 				
 				WebSerial web = new WebSerial(1000);
 				
@@ -31,7 +30,7 @@ public class BenchSerialNormal {
 						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
-				WebSerial.art.endAeminiumRuntime();
+				WebSerial.rt.shutdown();
 				total=(System.nanoTime()-start);
 				System.out.println(total);
 			}

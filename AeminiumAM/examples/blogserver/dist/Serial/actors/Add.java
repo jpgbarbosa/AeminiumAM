@@ -30,7 +30,7 @@ public class Add extends Actor{
 
 		ran = new Random(5);
 		
-		this.rt = (Runtime) rt2; 
+		this.rt =  rt2; 
 
 	}
 	
