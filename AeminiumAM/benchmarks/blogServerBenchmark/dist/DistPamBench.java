@@ -17,7 +17,7 @@ public class DistPamBench {
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<10; x++){
+			for(int x=0; x<30; x++){
 				WebPamDist.art = new AeminiumRuntime();
 				
 				WebPamDist web = new WebPamDist(1000);

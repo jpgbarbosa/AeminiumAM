@@ -6,8 +6,7 @@ import actor.AeminiumRuntime;
 
 import examples.blogserver.PAM.dist.PutRequest;
 import examples.blogserver.PAM.dist.ReadPost;
-import examples.blogserver.PAM.dist.WebPamDist;
-import examples.blogserver.Serial.normal.WebSerialNormal;
+import examples.blogserver.Serial.dist.WebSerialDist;
 
 public class DistSerialBench {
 	
@@ -18,11 +17,10 @@ public class DistSerialBench {
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<10; x++){
-				WebPamDist.art = new AeminiumRuntime();
+			for(int x=0; x<30; x++){
+				WebSerialDist.art = new AeminiumRuntime();
 				
-				WebPamDist web = new WebPamDist(1000);
-				//WebSerial web = new WebSerial(1000);
+				WebSerialDist web = new WebSerialDist(1000);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
@@ -36,7 +34,7 @@ public class DistSerialBench {
 						web.readersArray[ran.nextInt(web.numCopies)].sendMessage(new ReadPost(randMID.nextInt(110),"BenchUser"+i));
 					}
 				}
-				WebPamDist.art.endAeminiumRuntime();
+				WebSerialDist.art.endAeminiumRuntime();
 				total=(System.nanoTime()-start);
 				System.out.println(total);
 			}
