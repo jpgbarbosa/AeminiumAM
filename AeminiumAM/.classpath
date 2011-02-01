@@ -5,6 +5,6 @@
 	<classpathentry kind="lib" path="asm-all-3.3.jar"/>
 	<classpathentry kind="lib" path="asm-debug-all-3.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Aeminium"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
