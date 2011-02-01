@@ -1,10 +1,8 @@
 package benchmarks.dictionaryBenchmark;
 
-import examples.dictionaryExample.DictionaryExample;
-import examples.dictionaryExample.DictionaryExampleAtomic;
+import examples.dictionaryExample.*;
 
 public class SimpleDictBench {
-
 	
 	public static void main(String[] args) {
 		for(int j=100; j<=500; j+=100){
@@ -17,8 +15,7 @@ public class SimpleDictBench {
 				new DictionaryExample(100,j);
 				
 				long start = System.nanoTime();
-				DictionaryExample.reader.sendMessage(null);
-				DictionaryExample.art.endAeminiumRuntime();				
+				DictionaryExample.reader.startAsking(null);			
 				
 				subtotal = System.nanoTime()-start;
 				System.out.println(subtotal);

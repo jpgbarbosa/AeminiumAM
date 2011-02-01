@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
+
 import actor.Actor;
-import actor.AeminiumRuntime;
-import annotations.writable;
+import actor.annotations.*;
 
 public class DictionaryExampleAtomic {
 	
@@ -23,16 +23,13 @@ public class DictionaryExampleAtomic {
 	public DictionaryExampleAtomic(int num, int num2){
 		noMsgsRead = num;
 		noMsgs = num2;
-		art=new AeminiumRuntime();
 		reader = new Reader();
 		receiver = new Receiver();
 		dictionary = new Dictionary();
 	}
 	
-	
 	public static class Reader extends Actor{
-		@writable
-		static public String [] words;
+		private String [] words;
 		
 		public Reader(){
 			super();
@@ -73,20 +70,18 @@ public class DictionaryExampleAtomic {
 			
 		}
 		
-		@Override
-		protected void react(Object obj) {
+		@Write
+		public void startAsking(Object obj) {
 			for(int i=0; i<noMsgsRead; i++ ){
-				dictionary.sendMessage(words[i]);
+				dictionary.getVal(words[i]);
 			}
 		}
 		
 	}
 	
 	public static class Dictionary extends Actor{
-		@writable
-		static public String [] keyWords;
-		@writable
-		static public String [] valueWords;
+		private String [] keyWords;
+		private String [] valueWords;
 		
 		public Dictionary(){
 			super();
@@ -118,33 +113,24 @@ public class DictionaryExampleAtomic {
 			
 		}
 		
-		@Override
-		protected void react(Object obj) {
-			try{
-				String word = ((String)obj);
-				
-				for(int i=0; i<keyWords.length; i++){
-					if(keyWords[i].equals(word)){
-						receiver.sendMessage(valueWords[i]);
-					}
+		@Write
+		public void getVal(String word) {
+			for(int i=0; i<keyWords.length; i++){
+				if(keyWords[i].equals(word)){
+					receiver.sendMessage(valueWords[i]);
 				}
-			}catch(Exception e){
-				System.out.println("react Dictionary");
-			}
+			}			
 		}
 		
 	}
 	
 	public static class Receiver extends Actor{
-		@writable
-		int x;
-		@Override
-		protected void react(Object obj) {
-			//System.out.println((String)obj);
+		
+		@Write
+		public void sendMessage(String value) {
+			// System.out.println(value);	
 		}
 		
 	}
-	
-	public static AeminiumRuntime art;
 
 }

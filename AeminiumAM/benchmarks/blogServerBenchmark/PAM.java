@@ -2,10 +2,8 @@ package benchmarks.blogServerBenchmark;
 
 import java.util.Random;
 
-import actor.AeminiumRuntime;
+import unused.AeminiumRuntime;
 
-import examples.blogserver.PutRequest;
-import examples.blogserver.ReadPost;
 import examples.blogserver.Web;
 
 public class PAM {
@@ -28,9 +26,9 @@ public class PAM {
 				long start = System.nanoTime();
 				for(int i = 0; i<num; i++){
 					if(randP.nextInt(10)<2){
-						web.adder.sendMessage(new PutRequest("Ace","Post gerado na "+i+"iteracao."));
+						web.adder.addMessage("Ace","Post gerado na "+i+"iteracao.");
 					} else {
-						web.reader.sendMessage(new ReadPost(randMID.nextInt(110),"BenchUser"+i));
+						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
 				Web.art.endAeminiumRuntime();

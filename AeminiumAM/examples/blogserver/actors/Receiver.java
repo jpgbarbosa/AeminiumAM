@@ -1,23 +1,22 @@
 package examples.blogserver.actors;
 
 import actor.Actor;
-import annotations.writable;
+import actor.annotations.*;
 
 public class Receiver extends Actor{
-	@writable
-	int x;
-	
+
 	long workTime;
 	
-	@Override
-	protected void react(Object obj) {
-		//System.out.println(obj);
-	}
-	
-	private void work(){
+	@Write
+	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
 	    while ((System.nanoTime() - startTime) < sleepTime) {}
+	}
+
+	@Read
+	public void sendMessage(String msg) {
+		//System.out.println(msg);
 	}
 
 }

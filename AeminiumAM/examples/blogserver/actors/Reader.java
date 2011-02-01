@@ -1,12 +1,10 @@
 package examples.blogserver.actors;
 
 import actor.Actor;
-import annotations.writable;
+import actor.annotations.*;
 
 public class Reader extends Actor{
-	@writable
 	Posts posts;
-	@writable
 	long workTime=0;
 
 	public Reader(Posts posts, long workTime){
@@ -14,15 +12,16 @@ public class Reader extends Actor{
 		this.workTime = workTime;
 	}
 	
-	@Override
-	protected void react(Object obj) {
-		posts.sendMessage(obj);
-	}
-	
-	private void work(){
+	@Write
+	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
 	    while ((System.nanoTime() - startTime) < sleepTime) {}
+	}
+
+	@Read
+	public void reqReadPost(int id, String user) {
+		posts.readPost(id,user);
 	}
 
 }
