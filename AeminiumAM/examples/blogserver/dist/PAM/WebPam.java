@@ -22,7 +22,8 @@ public class WebPam {
 
 	public Reader [] readersArray = new Reader[numCopies];
 
-	public WebPam(int postsNum){
+	public WebPam(int postsNum, boolean useSpin){
+		this.useSpin = useSpin;
 		int i;
 
 		for(i=0;i<numCopies;i++){
@@ -53,7 +54,7 @@ public class WebPam {
 		WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 		WebPam.rt.init();
 
-		WebPam web = new WebPam(100);
+		WebPam web = new WebPam(100, false);
 		
 		Random ran = new Random(20);
 

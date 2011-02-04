@@ -3,9 +3,7 @@ package actor;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import unused.AeminiumRuntime;
 import aeminium.runtime.Task;
-import aeminium.runtime.examples.fjtests.AeminiumLCS;
 
 public abstract class Actor{
 	

@@ -16,7 +16,8 @@ public class WebPam {
 	Users users;
 	public Reader reader;
 	
-	public WebPam(int postsNum){
+	public WebPam(int postsNum, boolean useSpin){
+		this.useSpin = useSpin;
 		receiver = new Receiver(useSpin);
 		users = new Users(adder,workTime,rt,useSpin);
 		posts = new Posts(receiver,postsNum,workTime,rt,useSpin);
@@ -30,7 +31,7 @@ public class WebPam {
 		WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 		WebPam.rt.init();
 		
-		WebPam web = new WebPam(100);
+		WebPam web = new WebPam(100,false);
 		
 		web.adder.addMessage("Ace","[Vamos lá por isto a funcionar]");
 		

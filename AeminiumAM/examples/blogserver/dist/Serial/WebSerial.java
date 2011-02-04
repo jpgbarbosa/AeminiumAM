@@ -22,7 +22,8 @@ public class WebSerial {
 
 	public Reader [] readersArray = new Reader[numCopies];
 
-	public WebSerial(int postsNum){
+	public WebSerial(int postsNum, boolean useSpin){
+		this.useSpin = useSpin;
 		int i;
 
 		for(i=0;i<numCopies;i++){
@@ -53,7 +54,7 @@ public class WebSerial {
 		WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
 		WebSerial.rt.init();
 
-		WebSerial web = new WebSerial(100);
+		WebSerial web = new WebSerial(100,false);
 		
 		Random ran = new Random(20);
 

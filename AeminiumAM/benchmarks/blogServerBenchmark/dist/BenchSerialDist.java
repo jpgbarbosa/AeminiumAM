@@ -16,7 +16,7 @@ public class BenchSerialDist {
 				WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebSerial.rt.init();
 				
-				WebSerial web = new WebSerial(1000);
+				WebSerial web = new WebSerial(1000,false);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
