@@ -7,7 +7,6 @@ import examples.blogserver.PAM.dist.AskPermission;
 import examples.blogserver.PAM.dist.PermissionResponse;
 import examples.blogserver.PAM.dist.PutRequest;
 import actor.Actor;
-import annotations.writable;
 
 public class Add extends Actor{
 
@@ -18,11 +17,13 @@ public class Add extends Actor{
 	long workTime;
 	int numCopies;
 	
+	boolean useSpin;
+	
 	Random ran;
 	
-	public Add(Users[] usersArray, Posts post, Receiver[] receiverArray, long workTime, int numCopies){
+	public Add(Users[] usersArray, Posts post, Receiver[] receiverArray, long workTime, int numCopies, boolean useSpin){
 		super();
-		
+		this.useSpin = useSpin;		
 		this.usersArray = usersArray;
 		this.post = post;
 		this.receiverArray = receiverArray;
@@ -36,6 +37,9 @@ public class Add extends Actor{
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if( obj instanceof PutRequest){
 			usersArray[ran.nextInt(numCopies)].sendMessage(new AskPermission(new PutRequest(((PutRequest)obj).user,((PutRequest)obj).post)));
 		}
@@ -50,10 +54,16 @@ public class Add extends Actor{
 	
 	/* nao estao a ser usadas visto que serao igualmente NB tasks */
 	public void sendNotification(Object obj){
+		if(useSpin){
+			work();
+		}
 		receiverArray[ran.nextInt(numCopies)].sendMessage("Invalid User: "+((PermissionResponse)obj).req.user);
 	}
 	
 	public void putPost(Object obj){
+		if(useSpin){
+			work();
+		}
 		post.sendMessage(new AddPost(((PermissionResponse)obj).req.post,((PermissionResponse)obj).req.user));
 	}
 	

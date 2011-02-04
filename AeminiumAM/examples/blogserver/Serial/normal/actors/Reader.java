@@ -8,14 +8,20 @@ public class Reader extends Actor{
 	Posts posts;
 	@writable
 	long workTime=0;
+	
+	boolean useSpin;
 
-	public Reader(Posts posts, long workTime){
+	public Reader(Posts posts, long workTime, boolean useSpin){
+		this.useSpin = useSpin;
 		this.posts = posts;
 		this.workTime = workTime;
 	}
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		posts.sendMessage(obj);
 	}
 	

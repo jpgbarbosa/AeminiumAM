@@ -1,14 +1,24 @@
 package examples.blogserver.PAM.dist.actors;
 
 import actor.Actor;
-import annotations.writable;
 
 public class Receiver extends Actor{
 	
 	long workTime;
 	
+	boolean useSpin = false;
+
+	public Receiver(){};
+	
+	public Receiver(boolean useSpin) {
+		this.useSpin = useSpin;
+	}
+
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		//System.out.println(obj);
 	}
 	

@@ -1,7 +1,6 @@
 package examples.blogserver.PAM.normal.actors;
 
 import actor.Actor;
-import annotations.writable;
 
 public class Receiver extends Actor{
 	

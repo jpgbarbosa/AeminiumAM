@@ -1,9 +1,9 @@
 package examples.blogserver.Serial.normal.actors;
 
-import examples.blogserver.PAM.dist.AddPost;
-import examples.blogserver.PAM.dist.AskPermission;
-import examples.blogserver.PAM.dist.PermissionResponse;
-import examples.blogserver.PAM.dist.PutRequest;
+import examples.blogserver.Serial.normal.AddPost;
+import examples.blogserver.Serial.normal.AskPermission;
+import examples.blogserver.Serial.normal.PermissionResponse;
+import examples.blogserver.Serial.normal.PutRequest;
 import actor.Actor;
 import annotations.writable;
 
@@ -15,9 +15,12 @@ public class Add extends Actor{
 	@writable
 	long workTime;
 	
-	public Add(Users users, Posts post, Receiver receiver, long workTime){
+	boolean useSpin;
+	
+	public Add(Users users, Posts post, Receiver receiver, long workTime, boolean useSpin){
 		super();
 		
+		this.useSpin = useSpin;
 		this.users = users;
 		this.post = post;
 		this.receiver = receiver;
@@ -28,6 +31,9 @@ public class Add extends Actor{
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if( obj instanceof PutRequest){
 			users.sendMessage(new AskPermission(new PutRequest(((PutRequest)obj).user,((PutRequest)obj).post)));
 		}
@@ -42,10 +48,16 @@ public class Add extends Actor{
 	
 	/* nao estao a ser usadas visto que serao igualmente NB tasks */
 	public void sendNotification(Object obj){
+		if(useSpin){
+			work();
+		}
 		receiver.sendMessage("Invalid User: "+((PermissionResponse)obj).req.user);
 	}
 	
 	public void putPost(Object obj){
+		if(useSpin){
+			work();
+		}
 		post.sendMessage(new AddPost(((PermissionResponse)obj).req.post,((PermissionResponse)obj).req.user));
 	}
 	

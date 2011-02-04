@@ -1,31 +1,28 @@
 package examples.blogserver.Serial.normal.actors;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import examples.blogserver.PAM.dist.AskPermission;
-import examples.blogserver.PAM.dist.PermissionResponse;
+import examples.blogserver.Serial.normal.AskPermission;
+import examples.blogserver.Serial.normal.PermissionResponse;
 
 import actor.Actor;
 import annotations.writable;
 
 public class Users extends Actor{
 	
-	int x;
 	int numNames = 100;
 	@writable
 	long workTime = 0;
 	@writable
 	ArrayList<String> users;
 	
+	boolean useSpin;
+	
 	public Add addActor;
 	
-	public Users(Add addActor, long workTime){
+	public Users(Add addActor, long workTime, boolean useSpin){
+		super();
+		this.useSpin = useSpin;
 		this.addActor = addActor;
 		this.workTime = workTime;
 		
@@ -34,33 +31,15 @@ public class Users extends Actor{
 		for(int i=0; i<500; i++){
 			users.add("auto-gen user");
 		}
-		/*
-		try {
-			
-			FileInputStream fstream = new FileInputStream("Names.txt");
-		    DataInputStream in = new DataInputStream(fstream);
-		    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			
-			int index=0;
-			String word;
-			
-			while (index<numNames && (word = br.readLine()) != null){
-				users.add(word);
-			}
-			
-			in.close();
-		
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	*/
 		users.add("Ace");
 		
 	}
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if( obj instanceof AskPermission){
 			work();
 			if(users.contains(((AskPermission)obj).req.user)){

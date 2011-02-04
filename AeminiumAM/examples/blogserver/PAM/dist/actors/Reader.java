@@ -1,19 +1,23 @@
 package examples.blogserver.PAM.dist.actors;
 
 import actor.Actor;
-import annotations.writable;
 
 public class Reader extends Actor{
 	Posts posts;
 	long workTime=0;
+	boolean useSpin;
 
-	public Reader(Posts posts, long workTime, int numCopies){
+	public Reader(Posts posts, long workTime, int numCopies, boolean useSpin){
+		this.useSpin = useSpin;
 		this.posts = posts;
 		this.workTime = workTime;
 	}
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		posts.sendMessage(obj);
 	}
 	

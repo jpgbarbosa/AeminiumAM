@@ -8,7 +8,7 @@ import examples.blogserver.Serial.dist.actors.*;
 
 public class WebSerialDist {
 	public int numCopies=20;
-	
+	boolean useSpin = false;
 	public static AeminiumRuntime art;
 	
 	long workTime = 250000;
@@ -23,7 +23,8 @@ public class WebSerialDist {
 	
 	public Reader [] readersArray = new Reader[numCopies];
 	
-	public WebSerialDist(int postsNum){
+	public WebSerialDist(int postsNum, boolean useSpin){
+		this.useSpin = useSpin;
 		int i;
 
 		for(i=0;i<numCopies;i++){
@@ -31,17 +32,17 @@ public class WebSerialDist {
 		}
 		
 		for(i=0;i<numCopies;i++){
-			usersArray[i] = new Users(addActorArray,workTime, numCopies);
+			usersArray[i] = new Users(addActorArray,workTime, numCopies, useSpin);
 		}
 		
-		posts = new Posts(receiverArray,postsNum,workTime, numCopies);
+		posts = new Posts(receiverArray,postsNum,workTime, numCopies, useSpin);
 		
 		for(i=0;i<numCopies;i++){
-			addActorArray[i] = new Add(usersArray, posts, receiverArray,workTime, numCopies);
+			addActorArray[i] = new Add(usersArray, posts, receiverArray,workTime, numCopies, useSpin);
 		}
 		
 		for(i=0;i<numCopies;i++){
-			readersArray[i] = new Reader(posts ,workTime, numCopies);
+			readersArray[i] = new Reader(posts ,workTime, numCopies, useSpin);
 		}
 		
 		for(i=0;i<numCopies;i++){
@@ -57,7 +58,7 @@ public class WebSerialDist {
 	public static void main(String[] args) {
 		art = new AeminiumRuntime();
 		
-		WebSerialDist web = new WebSerialDist(100);
+		WebSerialDist web = new WebSerialDist(100,false);
 		
 		Random ran = new Random(20);
 		

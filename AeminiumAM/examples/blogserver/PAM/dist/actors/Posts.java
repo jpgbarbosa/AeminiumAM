@@ -8,7 +8,6 @@ import examples.blogserver.PAM.dist.Gen;
 import examples.blogserver.PAM.dist.ReadPost;
 
 import actor.Actor;
-import actor.Dispatcher;
 import annotations.writable;
 
 public class Posts extends Actor{
@@ -23,11 +22,15 @@ public class Posts extends Actor{
 	long workTime;
 	int numCopies;
 	
+	boolean useSpin;
+
+	
 	Random ran;
 	
-	public Posts(Receiver[] receiverArray, int postsNum, long workTime, int numCopies){
+	public Posts(Receiver[] receiverArray, int postsNum, long workTime, int numCopies, boolean useSpin){
 		super();
-		
+		this.useSpin = useSpin;
+
 		this.workTime = workTime;
 		this.numCopies = numCopies;
 		ran = new Random(10);
@@ -49,6 +52,9 @@ public class Posts extends Actor{
 
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if(obj instanceof AddPost){
 			hashPosts.put(++lastIndex, ((AddPost)obj).post);
 			hashUsersID.put(lastIndex, ((AddPost)obj).user);
@@ -60,6 +66,9 @@ public class Posts extends Actor{
 	}
 	
 	public void sendNotification(ReadPost rp){
+		if(useSpin){
+			work();
+		}
 		if(rp.id>=lastIndex){
 			receivers[ran.nextInt(numCopies)].sendMessage("User "+rp.user+" requested post "+(lastIndex-1)+" by "+
 					hashUsersID.get(lastIndex-1) + ": "+hashPosts.get(lastIndex-1));

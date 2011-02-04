@@ -20,7 +20,7 @@ public class DistPamBench {
 			for(int x=0; x<10; x++){
 				WebPamNormal.art = new AeminiumRuntime();
 				
-				WebPamNormal web = new WebPamNormal(1000);
+				WebPamNormal web = new WebPamNormal(1000,false);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

@@ -3,11 +3,10 @@ package examples.blogserver.Serial.normal.actors;
 import java.util.Hashtable;
 
 import examples.blogserver.Serial.normal.Gen;
-import examples.blogserver.PAM.dist.AddPost;
-import examples.blogserver.PAM.dist.ReadPost;
+import examples.blogserver.Serial.normal.AddPost;
+import examples.blogserver.Serial.normal.ReadPost;
 
 import actor.Actor;
-import actor.Dispatcher;
 import annotations.writable;
 
 public class Posts extends Actor{
@@ -21,9 +20,11 @@ public class Posts extends Actor{
 	
 	long workTime;
 	
-	public Posts(Receiver receiver, int postsNum, long workTime){
+	boolean useSpin;
+	
+	public Posts(Receiver receiver, int postsNum, long workTime, boolean useSpin){
 		super();
-		
+		this.useSpin = useSpin;
 		this.workTime = workTime;
 		
 		hashPosts = new Hashtable<Integer, String>();
@@ -43,6 +44,9 @@ public class Posts extends Actor{
 
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if(obj instanceof AddPost){
 			hashPosts.put(++lastIndex, ((AddPost)obj).post);
 			hashUsersID.put(lastIndex, ((AddPost)obj).user);
@@ -54,6 +58,9 @@ public class Posts extends Actor{
 	}
 	
 	public void sendNotification(ReadPost rp){
+		if(useSpin){
+			work();
+		}
 		if(rp.id>=lastIndex){
 			receiver.sendMessage("User "+rp.user+" requested post "+(lastIndex-1)+" by "+
 					hashUsersID.get(lastIndex-1) + ": "+hashPosts.get(lastIndex-1));

@@ -18,11 +18,15 @@ public class Users extends Actor{
 	
 	public Add[] addActorArray;
 	
+	boolean useSpin;
+	
 	int numCopies;
 	
 	Random ran;
 	
-	public Users(Add[] addActorArray, long workTime, int numCopies){
+	public Users(Add[] addActorArray, long workTime, int numCopies, boolean useSpin){
+		this.useSpin = useSpin;
+
 		this.addActorArray = addActorArray;
 		this.workTime = workTime;
 		this.numCopies = numCopies;
@@ -39,6 +43,9 @@ public class Users extends Actor{
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if( obj instanceof AskPermission){
 			if(users.contains(((AskPermission)obj).req.user)){
 				if(addActorArray==null){

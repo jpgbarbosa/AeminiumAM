@@ -3,15 +3,14 @@ package examples.blogserver.Serial.dist.actors;
 import java.util.ArrayList;
 import java.util.Random;
 
-import examples.blogserver.PAM.dist.AskPermission;
-import examples.blogserver.PAM.dist.PermissionResponse;
+import examples.blogserver.Serial.dist.AskPermission;
+import examples.blogserver.Serial.dist.PermissionResponse;
 
 import actor.Actor;
 import annotations.writable;
 
 public class Users extends Actor{
 	
-	int x;
 	int numNames = 100;
 	long workTime = 0;
 	@writable
@@ -19,11 +18,15 @@ public class Users extends Actor{
 	@writable
 	public Add[] addActorArray;
 	
+	boolean useSpin;
+	
 	int numCopies;
 	
 	Random ran;
 	
-	public Users(Add[] addActorArray, long workTime, int numCopies){
+	public Users(Add[] addActorArray, long workTime, int numCopies, boolean useSpin){
+		super();
+		this.useSpin = useSpin;
 		this.addActorArray = addActorArray;
 		this.workTime = workTime;
 		this.numCopies = numCopies;
@@ -40,6 +43,9 @@ public class Users extends Actor{
 	
 	@Override
 	protected void react(Object obj) {
+		if(useSpin){
+			work();
+		}
 		if( obj instanceof AskPermission){
 			if(users.contains(((AskPermission)obj).req.user)){
 				if(addActorArray==null){
