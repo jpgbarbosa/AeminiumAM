@@ -11,8 +11,12 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
+<<<<<<< HEAD:AeminiumAM/byteCodeOperations/ByteCodeOpASM.java
+import constants.*;
+=======
 import unused.constants.Constants;
 
+>>>>>>> 7f239224b33f6559dfb5c69ea485b478f97ebd43:AeminiumAM/unused/byteCodeOperations/ByteCodeOpASM.java
 
 
 
@@ -59,7 +63,7 @@ public class ByteCodeOpASM implements Opcodes {
 					opcode = insn.getOpcode();
 					insnType = insn.getType();
 					
-					if(Constants.debug_asm){
+					if(constants.Constants.debug_asm){
 						System.out.println("opcode: "+opcode+ "; type: " + insnType);
 					}
 					
@@ -67,7 +71,7 @@ public class ByteCodeOpASM implements Opcodes {
 					 * that's because it wasn't writable
 					 */
 					if(loadedVar!=null && isStoreInsn(opcode)){
-						if(Constants.debug_asm_tracking){
+						if(constants.Constants.debug_asm_tracking){
 							System.out.println("was catch as W: "+loadedVar);
 						}
 						usedVarHash.put(loadedVar, true);
@@ -76,7 +80,7 @@ public class ByteCodeOpASM implements Opcodes {
 					
     	            if (insnType == AbstractInsnNode.FIELD_INSN) {
     	            	varName = ((FieldInsnNode) insn).name;
-    	            	if(Constants.debug_asm){
+    	            	if(constants.Constants.debug_asm){
     						System.out.println("opcode: "+opcode+ "; name: " + varName);
     					}
     	            	//Track variable to check if after loaded they are written
@@ -86,7 +90,7 @@ public class ByteCodeOpASM implements Opcodes {
     	            		}
     	            		loadedVar = varName;
     	            		
-    	            		if(Constants.debug_asm_tracking){
+    	            		if(constants.Constants.debug_asm_tracking){
     	            			System.out.println("GET*:"+varName);
     	            		}
     	            	}

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path=""/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="asm-all-3.3.jar"/>
 	<classpathentry kind="lib" path="asm-debug-all-3.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/AeminiumRuntime"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
