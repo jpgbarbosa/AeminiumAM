@@ -3,27 +3,25 @@ package examples.blogserver.dist.Serial.actors;
 import java.util.ArrayList;
 import java.util.Random;
 
-import unused.AeminiumRuntime;
-import unused.annotationsVar.writable;
-
 import actor.Actor;
-import actor.annotations.Read;
 import actor.annotations.Write;
 import aeminium.runtime.Runtime;
 
 public class Users extends Actor{
-
-	int x;
+	
 	int numNames = 100;
 	long workTime = 0;
 	ArrayList<String> users;
 	public Add[] addActorArray;
+	boolean useSpin = false;
 
 	int numCopies;
 
 	Random ran;
 
-	public Users(Add[] addActorArray, long workTime, int numCopies, Runtime rt2){
+	public Users(Add[] addActorArray, long workTime, int numCopies, Runtime rt2, boolean useSpin){
+		this.useSpin = useSpin;
+		
 		this.addActorArray = addActorArray;
 		this.workTime = workTime;
 		this.numCopies = numCopies;

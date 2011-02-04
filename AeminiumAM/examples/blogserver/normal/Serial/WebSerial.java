@@ -5,6 +5,9 @@ import examples.blogserver.normal.Serial.actors.*;
 public class WebSerial {
 
 	public int numCopies=20;
+	
+	boolean useSpin = false;
+
 
 	public static aeminium.runtime.Runtime rt;
 	
@@ -17,11 +20,11 @@ public class WebSerial {
 	public Reader reader;
 	
 	public WebSerial(int postsNum){
-		receiver = new Receiver();
-		users = new Users(adder,workTime,rt);
-		posts = new Posts(receiver,postsNum,workTime,rt);
-		adder = new Add(users, posts, receiver,workTime,rt);
-		reader = new Reader(posts,workTime,rt);
+		receiver = new Receiver(useSpin);
+		users = new Users(adder,workTime,rt,useSpin);
+		posts = new Posts(receiver,postsNum,workTime,rt,useSpin);
+		adder = new Add(users, posts, receiver,workTime,rt,useSpin);
+		reader = new Reader(posts,workTime,rt,useSpin);
 		
 		users.setAddActor(adder);
 	}

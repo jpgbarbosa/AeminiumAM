@@ -7,6 +7,8 @@ import actor.annotations.*;
 import aeminium.runtime.Runtime;
 
 public class Add extends Actor{
+	boolean useSpin = false;
+	
 	Posts post;
 	Users [] usersArray;
 	Receiver [] receiverArray;
@@ -16,8 +18,10 @@ public class Add extends Actor{
 
 	Random ran;
 
-	public Add(Users[] usersArray, Posts post, Receiver[] receiverArray, long workTime, int numCopies, Runtime rt2){
+	public Add(Users[] usersArray, Posts post, Receiver[] receiverArray, long workTime, int numCopies, Runtime rt2, boolean useSpin){
 		super();
+		
+		this.useSpin = useSpin;
 
 		this.usersArray = usersArray;
 		this.post = post;
@@ -41,6 +45,11 @@ public class Add extends Actor{
 
 	@Read
 	public void addMessage(String user, String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		int x = ran.nextInt(numCopies);
 		if(usersArray[x]==null)
 			System.out.println("here");
@@ -49,6 +58,11 @@ public class Add extends Actor{
 
 	@Read
 	public void confirmReq(String user, String msg, boolean b) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		if(b){
 			/*TODO: declare of error was changed to warning. 
 			 * Does not make sense set this method as a Write

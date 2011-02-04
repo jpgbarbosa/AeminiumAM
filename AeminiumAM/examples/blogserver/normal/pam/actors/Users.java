@@ -8,7 +8,7 @@ import actor.annotations.Write;
 import aeminium.runtime.Runtime;
 
 public class Users extends Actor{
-	
+	boolean useSpin;
 	int x;
 	int numNames = 100;
 	long workTime = 0;
@@ -16,7 +16,8 @@ public class Users extends Actor{
 	
 	private Add addActor;
 	
-	public Users(Add addActor, long workTime, Runtime rt){
+	public Users(Add addActor, long workTime, Runtime rt, boolean useSpin){
+		this.useSpin = useSpin;
 		this.rt = rt;
 		this.addActor = addActor;
 		this.workTime = workTime;
@@ -39,6 +40,11 @@ public class Users extends Actor{
 
 	@Read
 	public void requestPermission(String user, String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		if(users.contains(user)){
 			if(getAddActor()==null){
 				System.out.println("addActor is null");

@@ -6,9 +6,16 @@ import actor.annotations.*;
 public class Receiver extends Actor{
 
 	long workTime;
+	boolean useSpin = false;
+
+	public Receiver( boolean useSpin){
+
+		this.useSpin = useSpin;
+
+	}
 	
-	@Write
-	public void work(){
+	@Read
+	private void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
 	    while ((System.nanoTime() - startTime) < sleepTime) {}
@@ -16,6 +23,11 @@ public class Receiver extends Actor{
 
 	@Read
 	public void sendMessage(String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		//System.out.println(msg);
 	}
 

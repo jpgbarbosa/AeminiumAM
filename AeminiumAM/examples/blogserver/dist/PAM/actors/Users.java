@@ -16,12 +16,15 @@ public class Users extends Actor{
 	long workTime = 0;
 	ArrayList<String> users;
 	public Add[] addActorArray;
+	boolean useSpin = false;
 
 	int numCopies;
 
 	Random ran;
 
-	public Users(Add[] addActorArray, long workTime, int numCopies, Runtime rt2){
+	public Users(Add[] addActorArray, long workTime, int numCopies, Runtime rt2, boolean useSpin){
+		this.useSpin = useSpin;
+		
 		this.addActorArray = addActorArray;
 		this.workTime = workTime;
 		this.numCopies = numCopies;
@@ -38,7 +41,7 @@ public class Users extends Actor{
 
 	}
 	
-	@Write
+	@Read
 	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
@@ -47,6 +50,11 @@ public class Users extends Actor{
 
 	@Read
 	public void requestPermission(String user, String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		if(users.contains(user)){
 			if(getAddActor()==null){
 				System.out.println("addActor is null");

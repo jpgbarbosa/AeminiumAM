@@ -6,6 +6,7 @@ import examples.blogserver.dist.PAM.actors.*;
 
 public class WebPam {
 	public int numCopies=20;
+	public boolean useSpin = false;
 
 	public static aeminium.runtime.Runtime rt;
 
@@ -25,21 +26,21 @@ public class WebPam {
 		int i;
 
 		for(i=0;i<numCopies;i++){
-			receiverArray[i] = new Receiver();
+			receiverArray[i] = new Receiver(useSpin);
 		}
 
 		for(i=0;i<numCopies;i++){
-			usersArray[i] = new Users(addActorArray,workTime, numCopies, rt);
+			usersArray[i] = new Users(addActorArray,workTime, numCopies, rt, useSpin);
 		}
 
-		posts = new Posts(receiverArray,postsNum,workTime, numCopies, rt);
+		posts = new Posts(receiverArray,postsNum,workTime, numCopies, rt, useSpin);
 
 		for(i=0;i<numCopies;i++){
-			addActorArray[i] = new Add(usersArray, posts, receiverArray,workTime, numCopies, rt);
+			addActorArray[i] = new Add(usersArray, posts, receiverArray,workTime, numCopies, rt, useSpin);
 		}
 
 		for(i=0;i<numCopies;i++){
-			readersArray[i] = new Reader(posts ,workTime, numCopies, rt);
+			readersArray[i] = new Reader(posts ,workTime, numCopies, rt, useSpin);
 		}
 
 		for(i=0;i<numCopies;i++){

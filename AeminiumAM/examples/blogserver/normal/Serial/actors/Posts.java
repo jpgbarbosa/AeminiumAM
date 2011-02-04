@@ -10,17 +10,19 @@ public class Posts extends Actor{
 	private Receiver receiver;
 	
 	private int lastIndex;
+	boolean useSpin;
+
 	
 	private Hashtable<Integer,String> hashPosts;
 	private Hashtable<Integer,String> hashUsersID;
 	
 	private long workTime;
 	
-	public Posts(Receiver receiver, int postsNum, long workTime, Runtime rt){
+	public Posts(Receiver receiver, int postsNum, long workTime, Runtime rt, boolean useSpin){
 		super();
 		this.rt = rt;
 		this.workTime = workTime;
-		
+		this.useSpin = useSpin;
 		hashPosts = new Hashtable<Integer, String>();
 		hashUsersID = new Hashtable<Integer, String>();
 		
@@ -47,12 +49,22 @@ public class Posts extends Actor{
 
 	@Write
 	public void addPost(String user, String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		hashPosts.put(++lastIndex, msg);
 		hashUsersID.put(lastIndex, user);		
 	}
 
 	@Write
 	public void readPost(int id, String user) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		if(id>=lastIndex){
 			receiver.sendMessage("User "+user+" requested post "+(lastIndex-1)+" by "+
 					hashUsersID.get(lastIndex-1) + ": "+hashPosts.get(lastIndex-1));

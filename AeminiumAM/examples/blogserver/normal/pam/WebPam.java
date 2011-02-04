@@ -1,11 +1,11 @@
 package examples.blogserver.normal.pam;
 
-import examples.blogserver.normal.Serial.WebSerial;
 import examples.blogserver.normal.pam.actors.*;
-import unused.AeminiumRuntime;
 
 public class WebPam {
-
+	
+	boolean useSpin = false;
+	
 	public static aeminium.runtime.Runtime rt;
 	
 	long workTime = 250000;
@@ -17,18 +17,18 @@ public class WebPam {
 	public Reader reader;
 	
 	public WebPam(int postsNum){
-		receiver = new Receiver();
-		users = new Users(adder,workTime,rt);
-		posts = new Posts(receiver,postsNum,workTime,rt);
-		adder = new Add(users, posts, receiver,workTime,rt);
-		reader = new Reader(posts,workTime,rt);
+		receiver = new Receiver(useSpin);
+		users = new Users(adder,workTime,rt,useSpin);
+		posts = new Posts(receiver,postsNum,workTime,rt,useSpin);
+		adder = new Add(users, posts, receiver,workTime,rt,useSpin);
+		reader = new Reader(posts,workTime,rt,useSpin);
 		
 		users.setAddActor(adder);
 	}
 	
 	public static void main(String[] args) {
-		WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
-		WebSerial.rt.init();
+		WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
+		WebPam.rt.init();
 		
 		WebPam web = new WebPam(100);
 		
@@ -36,7 +36,7 @@ public class WebPam {
 		
 		web.reader.reqReadPost(6,"USER1");
 		
-		WebSerial.rt.shutdown();
+		WebPam.rt.shutdown();
 		
 	}
 	

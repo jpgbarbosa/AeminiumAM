@@ -11,6 +11,7 @@ import aeminium.runtime.Runtime;
 
 public class Posts extends Actor{
 	Receiver[] receivers;
+	boolean useSpin = false;
 
 	int lastIndex;
 
@@ -22,8 +23,10 @@ public class Posts extends Actor{
 
 	Random ran;
 
-	public Posts(Receiver[] receiverArray, int postsNum, long workTime, int numCopies, Runtime rt2){
+	public Posts(Receiver[] receiverArray, int postsNum, long workTime, int numCopies, Runtime rt2, boolean useSpin){
 		super();
+		
+		this.useSpin = useSpin;
 
 		this.workTime = workTime;
 		this.numCopies = numCopies;
@@ -46,7 +49,7 @@ public class Posts extends Actor{
 		this. rt = (Runtime) rt2;
 	}
 
-	@Write
+	@Read
 	public void work(){
 		long sleepTime = workTime; // convert to nanoseconds
 	    long startTime = System.nanoTime();
@@ -55,12 +58,22 @@ public class Posts extends Actor{
 
 	@Write
 	public void addPost(String user, String msg) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		hashPosts.put(++lastIndex, msg);
 		hashUsersID.put(lastIndex, user);		
 	}
 
 	@Read
 	public void readPost(int id, String user) {
+		if(useSpin){
+			long sleepTime = workTime; // convert to nanoseconds
+		    long startTime = System.nanoTime();
+		    while ((System.nanoTime() - startTime) < sleepTime) {}
+		}
 		if(id>=lastIndex){
 			receivers[ran.nextInt(numCopies)].sendMessage("User "+user+" requested post "+(lastIndex-1)+" by "+
 					hashUsersID.get(lastIndex-1) + ": "+hashPosts.get(lastIndex-1));
