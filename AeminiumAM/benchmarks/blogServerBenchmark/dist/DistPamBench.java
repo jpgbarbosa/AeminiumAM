@@ -12,15 +12,15 @@ public class DistPamBench {
 	
 	public static void main(String[] args) {
 		
-		for(int num=10000; num<=100000; num+=10000){
+		for(int num=100000; num<=100000; num+=10000){
 			long total=0;
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<30; x++){
+			for(int x=0; x<15; x++){
 				WebPamDist.art = new AeminiumRuntime();
 				
-				WebPamDist web = new WebPamDist(1000,false);
+				WebPamDist web = new WebPamDist(3,200000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

@@ -9,11 +9,11 @@ import examples.blogserver.PAM.dist.actors.*;
 public class WebPamDist {
 	boolean useSpin = false;
 	
-	public int numCopies=20;
+	public int numCopies=3;
 	
 	public static AeminiumRuntime art;
 	
-	long workTime = 250000;
+	long workTime = 200000;
 	
 	Receiver [] receiverArray = new Receiver[numCopies];
 	
@@ -25,7 +25,9 @@ public class WebPamDist {
 	
 	public Reader [] readersArray = new Reader[numCopies];
 	
-	public WebPamDist(int postsNum, boolean useSpin){
+	public WebPamDist(int numCopies, int workTime,int postsNum, boolean useSpin){
+		this.numCopies = numCopies;
+		this.workTime = workTime;
 		int i;
 
 		this.useSpin =  useSpin;
@@ -61,7 +63,7 @@ public class WebPamDist {
 	public static void main(String[] args) {
 		art = new AeminiumRuntime();
 		
-		WebPamDist web = new WebPamDist(100,false);
+		WebPamDist web = new WebPamDist(3,200000,100,false);
 		
 		Random ran = new Random(20);
 		

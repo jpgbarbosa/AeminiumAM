@@ -16,7 +16,8 @@ public class WebPamNormal {
 	Users users;
 	public Reader reader;
 	
-	public WebPamNormal(int postsNum, boolean useSpin){
+	public WebPamNormal(int workTime, int postsNum, boolean useSpin){
+		this.workTime = workTime;
 		this.useSpin = useSpin;
 		receiver = new Receiver();
 		users = new Users(adder,workTime,useSpin);
@@ -30,7 +31,7 @@ public class WebPamNormal {
 	public static void main(String[] args) {
 		art = new AeminiumRuntime();
 		
-		WebPamNormal web = new WebPamNormal(100,false);
+		WebPamNormal web = new WebPamNormal(200000,100,false);
 		
 		web.adder.sendMessage(new PutRequest("Ace","[Vamos lá por isto a funcionar]"));
 		

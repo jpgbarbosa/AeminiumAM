@@ -23,7 +23,9 @@ public class WebSerialDist {
 	
 	public Reader [] readersArray = new Reader[numCopies];
 	
-	public WebSerialDist(int postsNum, boolean useSpin){
+	public WebSerialDist(int numCopies, int workTime,int postsNum, boolean useSpin){
+		this.numCopies = numCopies;
+		this.workTime = workTime;
 		this.useSpin = useSpin;
 		int i;
 
@@ -58,7 +60,7 @@ public class WebSerialDist {
 	public static void main(String[] args) {
 		art = new AeminiumRuntime();
 		
-		WebSerialDist web = new WebSerialDist(100,false);
+		WebSerialDist web = new WebSerialDist(3,200000,100,false);
 		
 		Random ran = new Random(20);
 		

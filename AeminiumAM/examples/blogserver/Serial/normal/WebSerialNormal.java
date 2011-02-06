@@ -15,7 +15,8 @@ public class WebSerialNormal {
 	Users users;
 	public Reader reader;
 	
-	public WebSerialNormal(int postsNum, boolean useSpin){
+	public WebSerialNormal(int workTime, int postsNum, boolean useSpin){
+		this.workTime = workTime;
 		this.useSpin = useSpin;
 		receiver = new Receiver();
 		users = new Users(adder, workTime, useSpin);
@@ -29,7 +30,7 @@ public class WebSerialNormal {
 	public static void main(String[] args) {
 		art = new AeminiumRuntime();
 		
-		WebSerialNormal web = new WebSerialNormal(100,false);
+		WebSerialNormal web = new WebSerialNormal(200000,100,false);
 		
 		web.adder.sendMessage(new PutRequest("Ace","[Vamos lá por isto a funcionar]"));
 		
