@@ -13,12 +13,12 @@ public class SimpleDictBench {
 			System.out.println();
 			System.out.println(j);
 			for(int i=0; i<30;i++){
-				//new DictionaryExampleAtomic(100,j);
-				new DictionaryExample(100,j);
+				new DictionaryExampleAtomic(j,500);
+				//new DictionaryExample(j,500);
 				
 				long start = System.nanoTime();
-				DictionaryExample.reader.sendMessage(null);
-				DictionaryExample.art.endAeminiumRuntime();				
+				DictionaryExampleAtomic.reader.sendMessage(null);
+				DictionaryExampleAtomic.art.endAeminiumRuntime();				
 				
 				subtotal = System.nanoTime()-start;
 				System.out.println(subtotal);
