@@ -19,7 +19,8 @@ public class WebSerial {
 	Users users;
 	public Reader reader;
 	
-	public WebSerial(int postsNum, boolean useSpin){
+	public WebSerial(int workTime, int postsNum, boolean useSpin){
+		this.workTime = workTime;
 		this.useSpin = useSpin;
 		receiver = new Receiver(useSpin);
 		users = new Users(adder,workTime,rt,useSpin);
@@ -34,7 +35,7 @@ public class WebSerial {
 		WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
 		WebSerial.rt.init();
 		
-		WebSerial web = new WebSerial(100,false);
+		WebSerial web = new WebSerial(200000,100,false);
 		
 		web.adder.addMessage("Ace","[Vamos lá por isto a funcionar]");
 		

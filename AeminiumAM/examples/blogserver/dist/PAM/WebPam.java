@@ -5,7 +5,7 @@ import java.util.Random;
 import examples.blogserver.dist.PAM.actors.*;
 
 public class WebPam {
-	public int numCopies=20;
+	public int numCopies=3;
 	public boolean useSpin = false;
 
 	public static aeminium.runtime.Runtime rt;
@@ -22,8 +22,10 @@ public class WebPam {
 
 	public Reader [] readersArray = new Reader[numCopies];
 
-	public WebPam(int postsNum, boolean useSpin){
+	public WebPam(int numCopies,int workTime ,int postsNum, boolean useSpin){
 		this.useSpin = useSpin;
+		this.numCopies = numCopies;
+		this.workTime = workTime;
 		int i;
 
 		for(i=0;i<numCopies;i++){
@@ -54,7 +56,7 @@ public class WebPam {
 		WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 		WebPam.rt.init();
 
-		WebPam web = new WebPam(100, false);
+		WebPam web = new WebPam(3,100,250000, false);
 		
 		Random ran = new Random(20);
 
