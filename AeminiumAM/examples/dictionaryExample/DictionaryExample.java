@@ -10,6 +10,7 @@ import java.util.Random;
 
 import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Runtime;
 
 public class DictionaryExample {
 	
@@ -19,21 +20,22 @@ public class DictionaryExample {
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
+	public static Runtime rt;
 	
 	public DictionaryExample(int num, int num2){
 		noMsgsRead = num;
 		noMsgs = num2;
-		reader = new Reader();
-		receiver = new Receiver();
-		dictionary = new Dictionary();
+		reader = new Reader(rt);
+		receiver = new Receiver(rt);
+		dictionary = new Dictionary(rt);
 	}
 	
 	public static class Reader extends Actor{
 		private String [] words;
 		
-		public Reader(){
+		public Reader(Runtime rt){
 			super();
-			
+			this.rt = rt;
 			words = new String[noMsgs];
 			
 			try {
@@ -85,7 +87,7 @@ public class DictionaryExample {
 		
 		public Dictionary(){
 			super();
-			
+			this.rt = rt;
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
@@ -113,6 +115,11 @@ public class DictionaryExample {
 			
 		}
 		
+		public Dictionary(Runtime rt) {
+			this.rt = rt;
+			// TODO Auto-generated constructor stub
+		}
+
 		@Read
 		public void getVal(String word) {
 			for(int i=0; i<keyWords.length; i++){
@@ -126,6 +133,11 @@ public class DictionaryExample {
 	
 	public static class Receiver extends Actor{
 		
+		public Receiver(Runtime rt) {
+			this.rt = rt;
+			// TODO Auto-generated constructor stub
+		}
+
 		@Read
 		public void sendMessage(String value) {
 			// System.out.println(value);	

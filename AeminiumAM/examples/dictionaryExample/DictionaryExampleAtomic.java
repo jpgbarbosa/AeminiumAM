@@ -10,6 +10,7 @@ import java.util.Random;
 
 import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Runtime;
 
 public class DictionaryExampleAtomic {
 	
@@ -19,21 +20,22 @@ public class DictionaryExampleAtomic {
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
+	public static Runtime rt;
 	
 	public DictionaryExampleAtomic(int num, int num2){
 		noMsgsRead = num;
 		noMsgs = num2;
-		reader = new Reader();
-		receiver = new Receiver();
-		dictionary = new Dictionary();
+		reader = new Reader(rt);
+		receiver = new Receiver(rt);
+		dictionary = new Dictionary(rt);
 	}
 	
 	public static class Reader extends Actor{
 		private String [] words;
 		
-		public Reader(){
+		public Reader(Runtime rt){
 			super();
-			
+			this.rt = rt;
 			words = new String[noMsgs];
 			
 			try {
@@ -83,9 +85,9 @@ public class DictionaryExampleAtomic {
 		private String [] keyWords;
 		private String [] valueWords;
 		
-		public Dictionary(){
+		public Dictionary(Runtime rt){
 			super();
-			
+			this.rt = rt;
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
@@ -126,6 +128,10 @@ public class DictionaryExampleAtomic {
 	
 	public static class Receiver extends Actor{
 		
+		public Receiver(Runtime rt) {
+			this.rt = rt;
+		}
+
 		@Write
 		public void sendMessage(String value) {
 			// System.out.println(value);	
