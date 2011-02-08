@@ -4,8 +4,8 @@ import java.util.Random;
 
 import actor.AeminiumRuntime;
 
-import examples.blogserver.PAM.dist.PutRequest;
-import examples.blogserver.PAM.dist.ReadPost;
+import examples.blogserver.Serial.dist.PutRequest;
+import examples.blogserver.Serial.dist.ReadPost;
 import examples.blogserver.Serial.dist.WebSerialDist;
 
 public class DistSerialBench {
