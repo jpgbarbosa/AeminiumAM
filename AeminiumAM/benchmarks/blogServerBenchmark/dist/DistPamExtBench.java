@@ -4,11 +4,11 @@ import java.util.Random;
 
 import actor.AeminiumRuntime;
 
-import examples.blogserver.PAM.dist.real.PutRequest;
-import examples.blogserver.PAM.dist.real.ReadPost;
-import examples.blogserver.PAM.dist.real.WebPamDist;
+import examples.blogserver.PAM.dist.extreme.PutRequest;
+import examples.blogserver.PAM.dist.extreme.ReadPost;
+import examples.blogserver.PAM.dist.extreme.WebPamDist;
 
-public class DistPamBench {
+public class DistPamExtBench {
 	
 	public static void main(String[] args) {
 		
