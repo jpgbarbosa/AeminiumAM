@@ -7,11 +7,10 @@ public class WebSerial {
 	public int numCopies=20;
 	
 	boolean useSpin = false;
-
-
+	
 	public static aeminium.runtime.Runtime rt;
 	
-	long workTime = 250000;
+	long workTime = 5000000;
 	
 	Receiver receiver;
 	public Add adder;

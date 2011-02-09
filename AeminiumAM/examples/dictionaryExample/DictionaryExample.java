@@ -13,7 +13,8 @@ import actor.annotations.*;
 import aeminium.runtime.Runtime;
 
 public class DictionaryExample {
-	
+	public static boolean useSpin = false;
+	public static long workTime;
 	public static int noMsgs;
 	public static int noMsgsRead;
 	
@@ -22,7 +23,9 @@ public class DictionaryExample {
 	public static Receiver receiver;
 	public static Runtime rt;
 	
-	public DictionaryExample(int num, int num2){
+	public DictionaryExample(int num, int num2,boolean useSpin, long workTime){
+		DictionaryExample.useSpin = useSpin;
+		DictionaryExample.workTime = workTime;
 		noMsgsRead = num;
 		noMsgs = num2;
 		reader = new Reader(rt);
@@ -74,6 +77,11 @@ public class DictionaryExample {
 		
 		@Read
 		public void startAsking(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			for(int i=0; i<noMsgsRead; i++ ){
 				dictionary.getVal(words[i]);
 			}
@@ -122,6 +130,11 @@ public class DictionaryExample {
 
 		@Read
 		public void getVal(String word) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			for(int i=0; i<keyWords.length; i++){
 				if(keyWords[i].equals(word)){
 					receiver.sendMessage(valueWords[i]);
@@ -140,6 +153,11 @@ public class DictionaryExample {
 
 		@Read
 		public void sendMessage(String value) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			// System.out.println(value);	
 		}
 		

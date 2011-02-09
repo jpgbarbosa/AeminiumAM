@@ -10,7 +10,7 @@ public class WebSerial {
 
 	public static aeminium.runtime.Runtime rt;
 
-	long workTime = 250000;
+	long workTime = 5000000;
 
 	Receiver [] receiverArray = new Receiver[numCopies];
 
