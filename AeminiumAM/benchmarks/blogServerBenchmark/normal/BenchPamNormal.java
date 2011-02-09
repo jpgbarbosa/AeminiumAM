@@ -2,7 +2,7 @@ package benchmarks.blogServerBenchmark.normal;
 
 import java.util.Random;
 
-import examples.blogserver.normal.pam.WebPam;
+import examples.blogserver.normal.pam.real.WebPam;
 
 
 

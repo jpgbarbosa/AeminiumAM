@@ -1,10 +1,12 @@
-package benchmarks.blogServerBenchmark.dist;
+package benchmarks.blogServerBenchmark.normal;
 
 import java.util.Random;
 
-import examples.blogserver.dist.PAM.real.WebPam;
+import examples.blogserver.normal.pam.extreme.WebPam;
 
-public class BenchPamDist {
+
+
+public class BenchPamExtNormal {
 	
 	public static void main(String[] args) {
 		
@@ -17,18 +19,17 @@ public class BenchPamDist {
 				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebPam.rt.init();
 				
-				WebPam web = new WebPam(3,200000,1000,true);
+				WebPam web = new WebPam(200000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
-				Random ran = new Random (2);
 			
 				long start = System.nanoTime();
 				for(int i = 0; i<num; i++){
 					if(randP.nextInt(10)<2){
-						web.addActorArray[ran.nextInt(web.numCopies)].addMessage("Ace","Post gerado na "+i+"iteracao.");
+						web.adder.addMessage("Ace","Post gerado na "+i+"iteracao.");
 					} else {
-						web.readersArray[ran.nextInt(web.numCopies)].reqReadPost(randMID.nextInt(110),"BenchUser"+i);
+						web.reader.reqReadPost(randMID.nextInt(110),"BenchUser"+i);
 					}
 				}
 				WebPam.rt.shutdown();

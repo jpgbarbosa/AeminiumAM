@@ -25,7 +25,7 @@ public aspect ActorAspect {
 	declare error:    within(actor.Actor+)
 	               && execution(protected * actor.Actor+.*(..)): "Actor cannot have protected methods.";
 	// check that Read methods do not contain field assignments
-	declare error:    withincode(@annotations.Read * actor.Actor+.*(..)) 
+	declare warning:    withincode(@annotations.Read * actor.Actor+.*(..)) 
 	               && set(* actor.Actor+.*) : "Cannot write fields in read only methods,";
 	// check that Read methods do not contain method calls to write methods
 	declare warning:    withincode(@annotations.Read * actor.Actor+.*(..)) 

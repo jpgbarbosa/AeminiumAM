@@ -4,7 +4,7 @@ import java.util.Random;
 
 import examples.blogserver.dist.PAM.real.WebPam;
 
-public class BenchPamDist {
+public class BenchPamExtDist {
 	
 	public static void main(String[] args) {
 		
