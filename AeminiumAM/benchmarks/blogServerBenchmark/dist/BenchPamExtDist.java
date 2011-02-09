@@ -2,7 +2,7 @@ package benchmarks.blogServerBenchmark.dist;
 
 import java.util.Random;
 
-import examples.blogserver.dist.PAM.real.WebPam;
+import examples.blogserver.dist.PAM.extreme.WebPam;
 
 public class BenchPamExtDist {
 	
