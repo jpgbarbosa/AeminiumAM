@@ -13,6 +13,8 @@ import actor.AeminiumRuntime;
 
 public class DictionaryExample {
 	
+	public static long workTime;
+	public static boolean useSpin;
 	public static int noMsgs;
 	public static int noMsgsRead;
 	
@@ -20,7 +22,9 @@ public class DictionaryExample {
 	public static Reader reader;
 	public static Receiver receiver;
 	
-	public DictionaryExample(int num, int num2){
+	public DictionaryExample(int num, int num2, boolean useSpin, long workTime){
+		DictionaryExample.workTime = workTime;
+		DictionaryExample.useSpin = useSpin;
 		noMsgsRead = num;
 		noMsgs = num2;
 		art=new AeminiumRuntime();
@@ -73,6 +77,12 @@ public class DictionaryExample {
 		
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
+			
 			for(int i=0; i<noMsgsRead; i++ ){
 				dictionary.sendMessage(words[i]);
 			}
@@ -116,6 +126,11 @@ public class DictionaryExample {
 		
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			try{
 				String word = ((String)obj);
 				
@@ -134,6 +149,11 @@ public class DictionaryExample {
 	public static class Receiver extends Actor{
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			//System.out.println((String)obj);
 		}
 		

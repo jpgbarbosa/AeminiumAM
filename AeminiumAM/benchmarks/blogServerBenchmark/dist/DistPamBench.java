@@ -20,7 +20,7 @@ public class DistPamBench {
 			for(int x=0; x<15; x++){
 				WebPamDist.art = new AeminiumRuntime();
 				
-				WebPamDist web = new WebPamDist(3,200000,1000,true);
+				WebPamDist web = new WebPamDist(3,5000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

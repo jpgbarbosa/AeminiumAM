@@ -20,7 +20,7 @@ public class DistSerialBench {
 			for(int x=0; x<15; x++){
 				WebSerialDist.art = new AeminiumRuntime();
 				
-				WebSerialDist web = new WebSerialDist(3,200000,1000,true);
+				WebSerialDist web = new WebSerialDist(3,5000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

@@ -13,6 +13,8 @@ import annotations.writable;
 
 public class DictionaryExampleAtomic {
 	
+	public static long workTime;
+	public static boolean useSpin;
 	public static int noMsgs;
 	public static int noMsgsRead;
 	
@@ -20,7 +22,9 @@ public class DictionaryExampleAtomic {
 	public static Reader reader;
 	public static Receiver receiver;
 	
-	public DictionaryExampleAtomic(int num, int num2){
+	public DictionaryExampleAtomic(int num, int num2, boolean useSpin, long workTime){
+		DictionaryExampleAtomic.workTime = workTime;
+		DictionaryExampleAtomic. useSpin = useSpin;
 		noMsgsRead = num;
 		noMsgs = num2;
 		art=new AeminiumRuntime();
@@ -75,6 +79,11 @@ public class DictionaryExampleAtomic {
 		
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			for(int i=0; i<noMsgsRead; i++ ){
 				dictionary.sendMessage(words[i]);
 			}
@@ -120,6 +129,11 @@ public class DictionaryExampleAtomic {
 		
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			try{
 				String word = ((String)obj);
 				
@@ -140,6 +154,11 @@ public class DictionaryExampleAtomic {
 		int x;
 		@Override
 		protected void react(Object obj) {
+			if(useSpin){
+				long sleepTime = workTime; // convert to nanoseconds
+			    long startTime = System.nanoTime();
+			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}
 			//System.out.println((String)obj);
 		}
 		

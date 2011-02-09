@@ -20,7 +20,7 @@ public class NormPamBench {
 			for(int x=0; x<15; x++){
 				WebPamNormal.art = new AeminiumRuntime();
 				
-				WebPamNormal web = new WebPamNormal(200000,1000,true);
+				WebPamNormal web = new WebPamNormal(5000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

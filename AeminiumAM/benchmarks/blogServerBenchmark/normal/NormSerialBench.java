@@ -20,7 +20,7 @@ public class NormSerialBench {
 			for(int x=0; x<15; x++){
 				WebSerialNormal.art = new AeminiumRuntime();
 				
-				WebSerialNormal web = new WebSerialNormal(200000,1000,true);
+				WebSerialNormal web = new WebSerialNormal(5000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
