@@ -24,8 +24,8 @@ public class DictionaryExampleAtomic {
 	public static Runtime rt;
 	
 	public DictionaryExampleAtomic(int num, int num2,boolean useSpin, long workTime){
-		DictionaryExample.useSpin = useSpin;
-		DictionaryExample.workTime = workTime;
+		DictionaryExampleAtomic.useSpin = useSpin;
+		DictionaryExampleAtomic.workTime = workTime;
 		noMsgsRead = num;
 		noMsgs = num2;
 		reader = new Reader(rt);

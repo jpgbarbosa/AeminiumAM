@@ -5,7 +5,7 @@ import examples.dictionaryExample.*;
 public class SimpleDictSerialBench {
 	
 	public static void main(String[] args) {
-		long workTime = 5000000;
+		long workTime = 15000000;
 
 		for(int j=100; j<=500; j+=100){
 			long subtotal=0;

@@ -13,11 +13,11 @@ public class BenchSerialNormal {
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<15; x++){
+			for(int x=0; x<30; x++){
 				WebSerial.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebSerial.rt.init();
 				
-				WebSerial web = new WebSerial(200000,1000,true);
+				WebSerial web = new WebSerial(5000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
