@@ -70,12 +70,12 @@ public class Users extends Actor{
 		return addActorArray;
 	}
 
-	@Write
+	@Read
 	public void setAddActor(Add[] add) {
 		this.addActorArray = add;
 	}
 
-	@Write
+	@Read
 	public void initAddActor(int numCopies2) {
 		this.addActorArray = new Add[numCopies2];
 	}
