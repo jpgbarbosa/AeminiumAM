@@ -2,10 +2,10 @@ package examples.blogserver.PAM.dist.extreme.actors;
 
 import java.util.Random;
 
-import examples.blogserver.PAM.dist.real.AddPost;
-import examples.blogserver.PAM.dist.real.AskPermission;
-import examples.blogserver.PAM.dist.real.PermissionResponse;
-import examples.blogserver.PAM.dist.real.PutRequest;
+import examples.blogserver.PAM.dist.extreme.AddPost;
+import examples.blogserver.PAM.dist.extreme.AskPermission;
+import examples.blogserver.PAM.dist.extreme.PermissionResponse;
+import examples.blogserver.PAM.dist.extreme.PutRequest;
 import actor.Actor;
 
 public class Add extends Actor{

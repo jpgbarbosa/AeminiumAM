@@ -3,12 +3,11 @@ package examples.blogserver.PAM.dist.extreme.actors;
 import java.util.Hashtable;
 import java.util.Random;
 
-import examples.blogserver.PAM.dist.real.AddPost;
-import examples.blogserver.PAM.dist.real.Gen;
-import examples.blogserver.PAM.dist.real.ReadPost;
+import examples.blogserver.PAM.dist.extreme.AddPost;
+import examples.blogserver.PAM.dist.extreme.Gen;
+import examples.blogserver.PAM.dist.extreme.ReadPost;
 
 import actor.Actor;
-import annotations.writable;
 
 public class Posts extends Actor{
 	Receiver[] receivers;

@@ -17,7 +17,7 @@ public class DistSerialBench {
 			
 			System.out.println();
 			System.out.println(num);
-			for(int x=0; x<15; x++){
+			for(int x=0; x<30; x++){
 				WebSerialDist.art = new AeminiumRuntime();
 				
 				WebSerialDist web = new WebSerialDist(3,5000000,1000,true);
