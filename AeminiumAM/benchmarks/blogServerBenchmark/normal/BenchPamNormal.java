@@ -10,7 +10,7 @@ public class BenchPamNormal {
 	
 	public static void main(String[] args) {
 		
-		for(int num=100000; num<=100000; num+=10000){
+		for(int num=10000; num<=10000; num+=10000){
 			long total=0;
 			
 			System.out.println();
@@ -19,7 +19,7 @@ public class BenchPamNormal {
 				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebPam.rt.init();
 				
-				WebPam web = new WebPam(5000000,1000,true);
+				WebPam web = new WebPam(500000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
