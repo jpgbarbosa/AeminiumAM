@@ -12,7 +12,7 @@ public class NormPamBench {
 	
 	public static void main(String[] args) {
 		
-		for(int num=100000; num<=100000; num+=10000){
+		for(int num=10000; num<=10000; num+=10000){
 			long total=0;
 			
 			System.out.println();
@@ -20,7 +20,7 @@ public class NormPamBench {
 			for(int x=0; x<30; x++){
 				WebPamNormal.art = new AeminiumRuntime();
 				
-				WebPamNormal web = new WebPamNormal(5000000,1000,true);
+				WebPamNormal web = new WebPamNormal(500000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
