@@ -20,7 +20,7 @@ public class DistSerialBench {
 			for(int x=0; x<30; x++){
 				WebSerialDist.art = new AeminiumRuntime();
 				
-				WebSerialDist web = new WebSerialDist(3,500000,1000,true);
+				WebSerialDist web = new WebSerialDist(3,2000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
@@ -28,7 +28,7 @@ public class DistSerialBench {
 				
 				long start = System.nanoTime();
 				for(int i = 0; i<num; i++){
-					if(randP.nextInt(10)<2){
+					if(false/*randP.nextInt(10)<2*/){
 						web.addActorArray[ran.nextInt(web.numCopies)].sendMessage(new PutRequest("Ace","Post gerado na "+i+"iteracao."));
 					} else {
 						web.readersArray[ran.nextInt(web.numCopies)].sendMessage(new ReadPost(randMID.nextInt(110),"BenchUser"+i));
