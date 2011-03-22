@@ -8,11 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import actor.Actor;
+import actor.normal.Actor;
 import actor.annotations.*;
-import aeminium.runtime.Runtime;
 
-public class DictionaryExampleAtomic {
+public class DictionaryExampleAtomic_noDebug {
 	public static boolean useSpin = false;
 	public static long workTime;
 	public static int noMsgs;
@@ -21,24 +20,22 @@ public class DictionaryExampleAtomic {
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
-	public static Runtime rt;
 	
-	public DictionaryExampleAtomic(int num, int num2,boolean useSpin, long workTime){
-		DictionaryExampleAtomic.useSpin = useSpin;
-		DictionaryExampleAtomic.workTime = workTime;
-		noMsgsRead = num;
-		noMsgs = num2;
-		reader = new Reader(rt);
-		receiver = new Receiver(rt);
-		dictionary = new Dictionary(rt);
+	public DictionaryExampleAtomic_noDebug(int noMsgsRead, int noMsgs,boolean useSpin, long workTime){
+		DictionaryExampleAtomic_noDebug.useSpin = useSpin;
+		DictionaryExampleAtomic_noDebug.workTime = workTime;
+		DictionaryExampleAtomic_noDebug.noMsgsRead = noMsgsRead;
+		DictionaryExampleAtomic_noDebug.noMsgs = noMsgs;
+		reader = new Reader();
+		receiver = new Receiver();
+		dictionary = new Dictionary();
 	}
 	
 	public static class Reader extends Actor{
 		private String [] words;
 		
-		public Reader(Runtime rt){
+		public Reader(){
 			super();
-			this.rt = rt;
 			words = new String[noMsgs];
 			
 			try {
@@ -93,9 +90,8 @@ public class DictionaryExampleAtomic {
 		private String [] keyWords;
 		private String [] valueWords;
 		
-		public Dictionary(Runtime rt){
+		public Dictionary(){
 			super();
-			this.rt = rt;
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
@@ -140,11 +136,8 @@ public class DictionaryExampleAtomic {
 	}
 	
 	public static class Receiver extends Actor{
-		
-		public Receiver(Runtime rt) {
-			this.rt = rt;
-			// TODO Auto-generated constructor stub
-		}
+		int ctr=0;
+		public Receiver() { }
 
 		@Write
 		public void sendMessage(String value) {
@@ -153,9 +146,7 @@ public class DictionaryExampleAtomic {
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			// System.out.println(value);	
-		}
-		
+		}		
 	}
 
 }
