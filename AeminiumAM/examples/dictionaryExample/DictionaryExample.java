@@ -55,7 +55,7 @@ public class DictionaryExample {
 				
 				in.close();
 				
-				Random random = new Random(System.currentTimeMillis());
+				Random random = new Random(System.nanoTime());
 				int rand;
 				String temp;
 				
@@ -78,7 +78,7 @@ public class DictionaryExample {
 		@Read
 		public void startAsking(Object obj) {
 			if(useSpin){
-				long sleepTime = workTime; // convert to nanoseconds
+				long sleepTime = workTime;
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
@@ -93,7 +93,7 @@ public class DictionaryExample {
 		private String [] keyWords;
 		private String [] valueWords;
 		
-		public Dictionary(){
+		public Dictionary(Runtime rt){
 			super();
 			this.rt = rt;
 			keyWords = new String[noMsgs];
@@ -122,16 +122,11 @@ public class DictionaryExample {
 			}
 			
 		}
-		
-		public Dictionary(Runtime rt) {
-			this.rt = rt;
-			// TODO Auto-generated constructor stub
-		}
 
 		@Read
 		public void getVal(String word) {
 			if(useSpin){
-				long sleepTime = workTime; // convert to nanoseconds
+				long sleepTime = workTime;
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
@@ -148,19 +143,17 @@ public class DictionaryExample {
 		
 		public Receiver(Runtime rt) {
 			this.rt = rt;
-			// TODO Auto-generated constructor stub
 		}
 
 		@Read
 		public void sendMessage(String value) {
 			if(useSpin){
-				long sleepTime = workTime; // convert to nanoseconds
+				long sleepTime = workTime;
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			// System.out.println(value);	
 		}
-		
+
 	}
 
 }

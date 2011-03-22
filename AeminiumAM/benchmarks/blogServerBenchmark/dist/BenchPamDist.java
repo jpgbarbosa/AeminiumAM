@@ -17,7 +17,7 @@ public class BenchPamDist {
 				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebPam.rt.init();
 				
-				WebPam web = new WebPam(3,500000,1000,true);
+				WebPam web = new WebPam(3,2000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));

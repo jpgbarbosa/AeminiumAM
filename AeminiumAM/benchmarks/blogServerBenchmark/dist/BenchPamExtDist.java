@@ -17,7 +17,7 @@ public class BenchPamExtDist {
 				WebPam.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				WebPam.rt.init();
 				
-				WebPam web = new WebPam(3,500000,1000,true);
+				WebPam web = new WebPam(3,2000000,1000,true);
 				
 				Random randP = new Random(10);
 				Random randMID = new Random((int) (num+0.2*num));
@@ -25,7 +25,7 @@ public class BenchPamExtDist {
 			
 				long start = System.nanoTime();
 				for(int i = 0; i<num; i++){
-					if(randP.nextInt(10)<2){
+					if(false/*randP.nextInt(10)<2*/){
 						web.addActorArray[ran.nextInt(web.numCopies)].addMessage("Ace","Post gerado na "+i+"iteracao.");
 					} else {
 						web.readersArray[ran.nextInt(web.numCopies)].reqReadPost(randMID.nextInt(110),"BenchUser"+i);

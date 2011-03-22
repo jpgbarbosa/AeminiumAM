@@ -70,6 +70,8 @@ public aspect ActorAspect {
 					return "Reader";
 				}
 			}, Hints.NO_HINTS);
+			long temp; 
+			temp=System.nanoTime();
 			Collection<Task> deps = Runtime.NO_DEPS;
 			if ( actor.previousTasksAreWriters ) {
 				deps = actor.previousTasks;
@@ -81,31 +83,81 @@ public aspect ActorAspect {
 				deps = actor.latestWriters;
 			}
 			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
+			actor.avg+=System.nanoTime()-temp;
+			actor.ctr++;
 		}
 	}
 	
 	// replace all public write methods calls
 	void around (): PublicWriteActorMethods() {
-		Actor actor = (Actor)thisJoinPoint.getTarget();
+		long tempOut, tempIn; 
+
+		final Actor actor = (Actor)thisJoinPoint.getTarget();
+		
+		tempOut = System.nanoTime();
+		
 		synchronized (actor) {
+			actor.idCounter++;
+			
+			final int boxVar = actor.idCounter; 
+			
+			tempIn = System.nanoTime();
+			
 			Task task = actor.rt.createNonBlockingTask(new Body() {
 				@Override
 				public void execute(Runtime rt, Task current) throws Exception {
-					proceed();				
+					long temp = 0;
+					int id = 0;
+					try{
+						String m = current.toString();
+						
+						id = Integer.parseInt(m.substring(m.indexOf('<')+1, m.indexOf('>')));
+						
+						// Save time before task is scheduled
+						temp = actor.mapActor.get(id);
+						
+						if(temp!=0)
+							actor.mapActor.put(id,System.nanoTime()-temp);
+						
+					} catch (Exception e){
+						System.out.println("Error inside aspectJ - execute - writes: "+e+" "+temp+" "+id);
+					}
+					
+					proceed();
 				}
 				
 				@Override 
 				public String toString() {
-					return "Writer";
+					return boxVar+"";
 				}
 			}, Hints.NO_HINTS);
+				
+			
 			Collection<Task> deps = actor.previousTasks;
 			actor.previousTasks = new LinkedList<Task>();
 			actor.previousTasks.add(task);
 			actor.latestWriters = actor.previousTasks;
 			actor.previousTasksAreWriters = true;
+			
+			// Save time before task is scheduled
+			
+			long t = System.nanoTime();
+			actor.mapActor.put(actor.idCounter,t);
+			
+			
 			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
+			
+			actor.insideSideLock += System.nanoTime()-tempIn;
+			
 		}
+		
+		actor.outSideLock += System.nanoTime()-tempOut;
+		
+		actor.ctr++;
+		
+
+		
+
 	}
 	
 	// TODO: remove comment after benchmarks! 
