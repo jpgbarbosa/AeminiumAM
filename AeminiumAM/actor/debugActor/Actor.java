@@ -1,0 +1,22 @@
+package actor.debugActor;
+
+import java.util.Collection;
+import java.util.LinkedList;
+
+import aeminium.runtime.Task;
+
+public abstract class Actor{
+	
+	/* AspectJ vars*/
+	protected Collection<Task> previousTasks;
+	protected Collection<Task> latestWriters;
+	protected boolean previousTasksAreWriters;
+	
+	protected aeminium.runtime.Runtime rt;
+	
+	public Actor() {
+		previousTasks           = new LinkedList<Task>();
+		latestWriters           = previousTasks;
+		previousTasksAreWriters = true;
+	}
+}

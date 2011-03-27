@@ -1,4 +1,4 @@
-package examples.dictionaryExample;
+package examples.simpleDictionaryExample;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

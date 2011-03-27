@@ -1,4 +1,4 @@
-package examples.dictionaryExample;
+package examples.simpleDictionaryExample;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import actor.normal.Actor;
+import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Runtime;
 
-public class DictionaryExampleAtomic_noDebug {
+public class DictionaryExample {
 	public static boolean useSpin = false;
 	public static long workTime;
 	public static int noMsgs;
@@ -20,24 +21,26 @@ public class DictionaryExampleAtomic_noDebug {
 	public static Dictionary dictionary;
 	public static Reader reader;
 	public static Receiver receiver;
+	public static Runtime rt;
 	
-	public DictionaryExampleAtomic_noDebug(int noMsgsRead, int noMsgs,boolean useSpin, long workTime){
-		DictionaryExampleAtomic_noDebug.useSpin = useSpin;
-		DictionaryExampleAtomic_noDebug.workTime = workTime;
-		DictionaryExampleAtomic_noDebug.noMsgsRead = noMsgsRead;
-		DictionaryExampleAtomic_noDebug.noMsgs = noMsgs;
-		reader = new Reader();
-		receiver = new Receiver();
-		dictionary = new Dictionary();
+	public DictionaryExample(int num, int num2,boolean useSpin, long workTime){
+		DictionaryExample.useSpin = useSpin;
+		DictionaryExample.workTime = workTime;
+		noMsgsRead = num;
+		noMsgs = num2;
+		reader = new Reader(rt);
+		receiver = new Receiver(rt);
+		dictionary = new Dictionary(rt);
 	}
 	
 	public static class Reader extends Actor{
 		private String [] words;
 		
-		public Reader(){
+		public Reader(Runtime rt){
 			super();
+			this.rt = rt;
 			words = new String[noMsgs];
-			/*
+			
 			try {
 				FileInputStream fstream = new FileInputStream("500Word1.txt");
 			    DataInputStream in = new DataInputStream(fstream);
@@ -49,14 +52,7 @@ public class DictionaryExampleAtomic_noDebug {
 					words[index] = word;
 					index++;
 				}
-				*/
-				int index=0;
-				while (index<noMsgs){
-					words[index] = "ola";
-					index++;
-				}
-			
-				/*
+				
 				in.close();
 				
 				Random random = new Random(System.currentTimeMillis());
@@ -71,13 +67,15 @@ public class DictionaryExampleAtomic_noDebug {
 		        }
 				
 			
-			} catch (Exception e) {
+			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}*/
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		
-		@Write
+		@Read
 		public void startAsking(Object obj) {
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
@@ -89,15 +87,6 @@ public class DictionaryExampleAtomic_noDebug {
 			}
 		}
 		
-		@Write
-		public void emptyMethod(Object obj) {
-			if(useSpin){
-				long sleepTime = workTime; // convert to nanoseconds
-			    long startTime = System.nanoTime();
-			    while ((System.nanoTime() - startTime) < sleepTime) {}
-			}
-		}
-		
 	}
 	
 	public static class Dictionary extends Actor{
@@ -106,9 +95,10 @@ public class DictionaryExampleAtomic_noDebug {
 		
 		public Dictionary(){
 			super();
+			this.rt = rt;
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
-			/*
+			
 			try {
 				FileInputStream fstream = new FileInputStream("500Word1.txt");
 			    DataInputStream in = new DataInputStream(fstream);
@@ -130,17 +120,15 @@ public class DictionaryExampleAtomic_noDebug {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			*/
 			
-			int index=0;
-			while (index<noMsgs){
-				keyWords[index] = "ola";
-				valueWords[index] = "ola-V";
-				index++;
-			}
+		}
+		
+		public Dictionary(Runtime rt) {
+			this.rt = rt;
+			// TODO Auto-generated constructor stub
 		}
 
-		@Write
+		@Read
 		public void getVal(String word) {
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
@@ -150,7 +138,6 @@ public class DictionaryExampleAtomic_noDebug {
 			for(int i=0; i<keyWords.length; i++){
 				if(keyWords[i].equals(word)){
 					receiver.sendMessage(valueWords[i]);
-					break;
 				}
 			}			
 		}
@@ -158,17 +145,20 @@ public class DictionaryExampleAtomic_noDebug {
 	}
 	
 	public static class Receiver extends Actor{
-		int ctr=0;
-		public Receiver() { }
 		
-		
-		@Write
+		public Receiver(Runtime rt) {
+			this.rt = rt;
+			// TODO Auto-generated constructor stub
+		}
+
+		@Read
 		public void sendMessage(String value) {
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
+			// System.out.println(value);	
 		}
 		
 	}

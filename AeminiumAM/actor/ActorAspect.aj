@@ -87,7 +87,8 @@ public aspect ActorAspect {
 	// replace all public write methods calls
 	void around (): PublicWriteActorMethods() {
 		Actor actor = (Actor)thisJoinPoint.getTarget();
-		synchronized (actor) {
+		Collection<Task> deps = null;
+		
 			Task task = actor.rt.createNonBlockingTask(new Body() {
 				@Override
 				public void execute(Runtime rt, Task current) throws Exception {
@@ -99,13 +100,15 @@ public aspect ActorAspect {
 					return "Writer";
 				}
 			}, Hints.NO_HINTS);
-			Collection<Task> deps = actor.previousTasks;
-			actor.previousTasks = new LinkedList<Task>();
-			actor.previousTasks.add(task);
-			actor.latestWriters = actor.previousTasks;
-			actor.previousTasksAreWriters = true;
+			synchronized (actor) {
+				deps = actor.previousTasks;
+				actor.previousTasks = new LinkedList<Task>();
+				actor.previousTasks.add(task);
+				actor.latestWriters = actor.previousTasks;
+				actor.previousTasksAreWriters = true;
+			}
 			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
-		}
+		
 	}
 	
 	// TODO: remove comment after benchmarks! 

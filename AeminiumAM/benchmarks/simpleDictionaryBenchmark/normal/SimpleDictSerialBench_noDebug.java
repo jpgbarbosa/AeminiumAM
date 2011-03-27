@@ -1,4 +1,4 @@
-package benchmarks.dictionaryBenchmark.normal;
+package benchmarks.simpleDictionaryBenchmark.normal;
 
 import examples.dictionaryExample.DictionaryExampleAtomic_noDebug;
 
