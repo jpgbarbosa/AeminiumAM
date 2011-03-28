@@ -9,14 +9,14 @@ import aeminium.runtime.Runtime;
 import aeminium.runtime.Task;
 
 public aspect ActorAspect {
-	//private aeminium.runtime.Runtime rt;
-	
+	// private aeminium.runtime.Runtime rt;
+
 	// don't access to public fields => public fields get unusable
 	declare warning: (   get(public * actor.Actor+.*) 
 	               || set(public * actor.Actor+.*) ) 
 	               && !withincode(new(..))
 	               : "Cannot access public fields on an Actor.";
-    // don't access to public fields => public fields get unusable
+	// don't access to public fields => public fields get unusable
 	declare warning: (   get(protected * actor.Actor+.*) 
 				    || set(protected * actor.Actor+.*))
 				   && !within(actor.Actor) 
@@ -44,34 +44,35 @@ public aspect ActorAspect {
 	               && withincode(private * actor.Actor+.*(..))
 	               && call(public * actor.Actor+.*(..)): "You should not call public methods from an internal method.";
 
-	
 	// All public read methods of actors
 	pointcut PublicReadActorMethods() :	(execution (@annotations.Read public void  actor.Actor+.*(..)) 
 											&& !(execution (static * actor.Actor+.*(..))));
+
 	// All public write methods of actors
 	pointcut PublicWriteActorMethods() : (execution (@annotations.Write public void  actor.Actor+.*(..)) 
 											&& !(execution (static * actor.Actor+.*(..))));
-    // the main methods
+
+	// the main methods
 	pointcut MainMethod(): (execution(public static void *.main(String[])));
-	
-	
+
 	// replace all public read methods calls
-	void around (): PublicReadActorMethods() {
-		Actor actor = (Actor)thisJoinPoint.getTarget();
+	void around(): PublicReadActorMethods() {
+		Actor actor = (Actor) thisJoinPoint.getTarget();
+
+		Task task = actor.rt.createNonBlockingTask(new Body() {
+			@Override
+			public void execute(Runtime rt, Task current) throws Exception {
+				proceed();
+			}
+
+			@Override
+			public String toString() {
+				return "Reader";
+			}
+		}, Hints.NO_HINTS);
+		Collection<Task> deps = Runtime.NO_DEPS;
 		synchronized (actor) {
-			Task task = actor.rt.createNonBlockingTask(new Body() {
-				@Override
-				public void execute(Runtime rt, Task current) throws Exception {
-					proceed();				
-				}
-				
-				@Override 
-				public String toString() {
-					return "Reader";
-				}
-			}, Hints.NO_HINTS);
-			Collection<Task> deps = Runtime.NO_DEPS;
-			if ( actor.previousTasksAreWriters ) {
+			if (actor.previousTasksAreWriters) {
 				deps = actor.previousTasks;
 				actor.previousTasks = new LinkedList<Task>();
 				actor.previousTasks.add(task);
@@ -80,48 +81,44 @@ public aspect ActorAspect {
 				actor.previousTasks.add(task);
 				deps = actor.latestWriters;
 			}
-			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 		}
+		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 	}
-	
+
 	// replace all public write methods calls
-	void around (): PublicWriteActorMethods() {
-		Actor actor = (Actor)thisJoinPoint.getTarget();
+	void around(): PublicWriteActorMethods() {
+		Actor actor = (Actor) thisJoinPoint.getTarget();
 		Collection<Task> deps = null;
-		
-			Task task = actor.rt.createNonBlockingTask(new Body() {
-				@Override
-				public void execute(Runtime rt, Task current) throws Exception {
-					proceed();				
-				}
-				
-				@Override 
-				public String toString() {
-					return "Writer";
-				}
-			}, Hints.NO_HINTS);
-			synchronized (actor) {
-				deps = actor.previousTasks;
-				actor.previousTasks = new LinkedList<Task>();
-				actor.previousTasks.add(task);
-				actor.latestWriters = actor.previousTasks;
-				actor.previousTasksAreWriters = true;
+
+		Task task = actor.rt.createNonBlockingTask(new Body() {
+			@Override
+			public void execute(Runtime rt, Task current) throws Exception {
+				proceed();
 			}
-			actor.rt.schedule(task, Runtime.NO_PARENT, deps);
-		
+
+			@Override
+			public String toString() {
+				return "Writer";
+			}
+		}, Hints.NO_HINTS);
+
+		synchronized (actor) {
+			deps = actor.previousTasks;
+			actor.previousTasks = new LinkedList<Task>();
+			actor.previousTasks.add(task);
+			actor.latestWriters = actor.previousTasks;
+			actor.previousTasksAreWriters = true;
+		}
+		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
+
 	}
-	
-	// TODO: remove comment after benchmarks! 
+
+	// TODO: remove comment after benchmarks!
 	/*
-	// setup before we start
-	before(): MainMethod() {
-		rt = aeminium.runtime.implementations.Factory.getRuntime();
-		rt.init();
-	}
-	
-	// cleanup after the program has finished
-	after(): MainMethod() {
-		rt.shutdown();
-	}
-	*/
+	 * // setup before we start before(): MainMethod() { rt =
+	 * aeminium.runtime.implementations.Factory.getRuntime(); rt.init(); }
+	 * 
+	 * // cleanup after the program has finished after(): MainMethod() {
+	 * rt.shutdown(); }
+	 */
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import actor.normal.Actor;
+import actor.Actor;
 import actor.annotations.*;
 
 public class DictionaryExampleAtomic_noDebug {

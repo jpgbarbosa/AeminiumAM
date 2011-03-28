@@ -6,6 +6,7 @@ import aeminium.runtime.Runtime;
 
 public class DictionaryExampleInsertsReads {
 	public static boolean useSpin = false;
+	public static boolean useFor = false;
 	public static long workTime;
 	
 	public static Dictionary dictionary;
@@ -13,7 +14,8 @@ public class DictionaryExampleInsertsReads {
 	public static Receiver receiver;
 	public static Runtime rt;
 	
-	public DictionaryExampleInsertsReads(boolean useSpin, long workTime){
+	public DictionaryExampleInsertsReads(boolean useSpin, boolean useFor, long workTime){
+		DictionaryExampleInsertsReads.useFor = useFor;
 		DictionaryExampleInsertsReads.useSpin = useSpin;
 		DictionaryExampleInsertsReads.workTime = workTime;
 		reader = new Reader(rt);
@@ -29,12 +31,16 @@ public class DictionaryExampleInsertsReads {
 			
 		}
 		
+		
+		
 		@Read
 		public void makeReadRequest(Object obj) {
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			} else if(useFor){
+				for(int i=0; i< workTime; i++){}
 			}
 			dictionary.getVal("read request");
 		}
@@ -45,6 +51,8 @@ public class DictionaryExampleInsertsReads {
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			} else if(useFor){
+				for(int i=0; i< workTime; i++){}
 			}
 			dictionary.insertEntry("write request");
 		}
@@ -64,6 +72,8 @@ public class DictionaryExampleInsertsReads {
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}  else if(useFor){
+				for(int i=0; i< workTime; i++){}
 			}
 			
 			receiver.sendMessage("value "+word);
@@ -75,6 +85,8 @@ public class DictionaryExampleInsertsReads {
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}  else if(useFor){
+				for(int i=0; i< workTime; i++){}
 			}
 			
 			receiver.sendMessage("confirmation "+word);
@@ -88,12 +100,14 @@ public class DictionaryExampleInsertsReads {
 			this.rt = rt;
 		}
 
-		@Write
+		@Read
 		public void sendMessage(String value) {
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
+			}  else if(useFor){
+				for(int i=0; i< workTime; i++){}
 			}
 		}
 		
