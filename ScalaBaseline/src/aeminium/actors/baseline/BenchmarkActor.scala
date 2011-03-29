@@ -40,6 +40,6 @@ object BenchmarkActor {
 			}
 		}
 		ba !? Stop
-		java.lang.System.out.println("Took: " + (System.nanoTime() - startTime))
+		java.lang.System.out.println("Took (nanoseconds): " + (System.nanoTime() - startTime))
 	}
 }

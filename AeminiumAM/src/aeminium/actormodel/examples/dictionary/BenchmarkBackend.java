@@ -3,7 +3,7 @@ package aeminium.actormodel.examples.dictionary;
 import java.util.HashMap;
 
 public class BenchmarkBackend {
-	protected final static int fibn = 30;
+	protected final static int fibn = 40;
 	protected boolean debug = false;
 	
 	private HashMap<Integer, Integer> dictionary = new HashMap<Integer, Integer>();
