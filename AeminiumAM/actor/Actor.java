@@ -13,7 +13,7 @@ import aeminium.runtime.Task;
 
 public abstract class Actor {
 
-	protected class Consumer implements Runnable {
+	protected class Consumer {
 		private final BlockingQueue<Task> queue;
 
 		Consumer(BlockingQueue<Task> q) {
@@ -22,11 +22,26 @@ public abstract class Actor {
 
 		public void run() {
 			try {
-				while (true) {
 					System.out.println("waiting");
+					
 					consume(queue.take());
+					
+					Task t = rt.createNonBlockingTask(new Body() {
+						@Override
+						public void execute(Runtime rt, Task current) throws Exception {
+							consumer.run();
+						}
+
+						@Override
+						public String toString() {
+							return "ConsumerRec";
+						}
+					}, Hints.NO_HINTS);
+					
+					rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
+					
 					System.out.println("took task");
-				}
+					
 			} catch (InterruptedException ex) {
 				System.out.println("exception consumer actor");
 			}
@@ -64,6 +79,9 @@ public abstract class Actor {
 				
 				rt.schedule(task, Runtime.NO_PARENT, deps);
 			}
+			
+			
+			
 		}
 	}
 
