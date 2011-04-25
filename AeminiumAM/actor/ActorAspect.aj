@@ -52,6 +52,11 @@ public aspect ActorAspect {
 	// All public write methods of actors
 	pointcut PublicWriteActorMethods() : (execution (@annotations.Write public void  actor.Actor+.*(..)) 
 											&& !(execution (static * actor.Actor+.*(..))));
+	
+	// All public write methods of actors
+	pointcut PublicEndActorMethods() : (execution (@annotations.End public void  actor.Actor+.*(..)) 
+											&& !(execution (static * actor.Actor+.*(..))));
+
 
 	// the main methods
 	pointcut MainMethod(): (execution(public static void *.main(String[])));
@@ -101,6 +106,31 @@ public aspect ActorAspect {
 			actor.queue.put(task);
 		} catch (InterruptedException e) {
 			System.out.println("queue put in aspectJ writer");
+			e.printStackTrace();
+		}
+
+	}
+	
+	// replace all public write methods calls
+	void around(): PublicWriteActorMethods() {
+		Actor actor = (Actor) thisJoinPoint.getTarget();
+
+		Task task = actor.rt.createNonBlockingTask(new Body() {
+			@Override
+			public void execute(Runtime rt, Task current) throws Exception {
+				proceed();
+			}
+
+			@Override
+			public String toString() {
+				return "End";
+			}
+		}, Hints.NO_HINTS);
+		
+		try {
+			actor.queue.put(task);
+		} catch (InterruptedException e) {
+			System.out.println("queue put in aspectJ End");
 			e.printStackTrace();
 		}
 

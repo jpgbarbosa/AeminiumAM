@@ -104,6 +104,12 @@ public class DictionaryExample {
 				dictionary.getVal(words[i]);
 			}
 		}
+
+		@Override
+		@End
+		public void end() {
+			dictionary.end();
+		}
 		
 	}
 	
@@ -170,6 +176,12 @@ public class DictionaryExample {
 			//}			
 		}
 		
+		@Override
+		@End
+		public void end() {
+			receiver.end();
+		}
+		
 	}
 	
 	public static class Receiver extends Actor{
@@ -202,6 +214,11 @@ public class DictionaryExample {
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
 			// System.out.println(value +" "+(++ctr));	
+		}
+		
+		@Override
+		@End
+		public void end() {
 		}
 		
 	}

@@ -22,38 +22,39 @@ public abstract class Actor {
 
 		public void run() {
 			try {
-					System.out.println("waiting");
-					
-					consume(queue.take());
-					
-					Task t = rt.createNonBlockingTask(new Body() {
-						@Override
-						public void execute(Runtime rt, Task current) throws Exception {
-							consumer.run();
-						}
+				System.out.println("waiting");
 
-						@Override
-						public String toString() {
-							return "ConsumerRec";
-						}
-					}, Hints.NO_HINTS);
-					
-					rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
-					
-					System.out.println("took task");
-					
+				consume(queue.take());
+
+				Task t = rt.createNonBlockingTask(new Body() {
+					@Override
+					public void execute(Runtime rt, Task current)
+							throws Exception {
+						consumer.run();
+					}
+
+					@Override
+					public String toString() {
+						return "ConsumerRec";
+					}
+				}, Hints.NO_HINTS);
+
+				rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
+
+				System.out.println("took task");
+
 			} catch (InterruptedException ex) {
-				System.out.println("exception consumer actor");
+				System.out.println("exception consumer actor, exiting...");
 			}
 		}
 
-		void consume(Object obj) {
+		void consume(Object obj) throws InterruptedException {
 			Task task = (Task) obj;
 			// write
 			String m = task.toString();
-			String name = m.substring(m.indexOf('<')+1, m.indexOf('>'));
-			System.out.println("task name: "+name);
-			if (name.equals("Writer")) {
+			String name = m.substring(m.indexOf('<') + 1, m.indexOf('>'));
+			System.out.println("task name: " + name);
+			if (!name.equals("Reader")) {
 				Collection<Task> deps = null;
 				if (previousTaskWasWriter) {
 					deps = new ArrayList<Task>(1);
@@ -66,6 +67,11 @@ public abstract class Actor {
 				lastWriter = new ArrayList<Task>(1);
 				lastWriter.add(task);
 				rt.schedule(task, Runtime.NO_PARENT, deps);
+
+				if (name.equals("End")) {
+					throw new InterruptedException();
+				}
+
 			} else {
 				Collection<Task> deps = Runtime.NO_DEPS;
 
@@ -76,12 +82,9 @@ public abstract class Actor {
 				lastReaders.add(task);
 				deps = new ArrayList<Task>(1);
 				deps.addAll(lastWriter);
-				
+
 				rt.schedule(task, Runtime.NO_PARENT, deps);
 			}
-			
-			
-			
 		}
 	}
 
@@ -93,13 +96,15 @@ public abstract class Actor {
 	protected BlockingQueue<Task> queue = new LinkedBlockingQueue<Task>();
 
 	protected aeminium.runtime.Runtime rt;
-	
+
 	public Task t;
-	
+
 	public Consumer consumer = new Consumer(queue);
 
 	public Actor() {
-		//Consumer consumer = new Consumer(queue);
-		//new Thread(consumer).start();		
+		// Consumer consumer = new Consumer(queue);
+		// new Thread(consumer).start();
 	}
+
+	abstract public void end();
 }
