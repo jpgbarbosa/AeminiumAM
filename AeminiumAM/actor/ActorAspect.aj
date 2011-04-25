@@ -1,5 +1,6 @@
 package actor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -71,17 +72,17 @@ public aspect ActorAspect {
 			}
 		}, Hints.NO_HINTS);
 		Collection<Task> deps = Runtime.NO_DEPS;
+/*
 		synchronized (actor) {
-			if (actor.previousTasksAreWriters) {
-				deps = actor.previousTasks;
-				actor.previousTasks = new LinkedList<Task>();
-				actor.previousTasks.add(task);
-				actor.previousTasksAreWriters = false;
-			} else {
-				actor.previousTasks.add(task);
-				deps = actor.latestWriters;
+			if (actor.previousTaskWasWriter) {
+				actor.lastReaders.clear();
+				actor.previousTaskWasWriter = false;
 			}
+			actor.lastReaders.add(task);
+			deps = new ArrayList<Task>(1);
+			deps.addAll(actor.lastWriter);
 		}
+			*/
 		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 	}
 
@@ -103,11 +104,16 @@ public aspect ActorAspect {
 		}, Hints.NO_HINTS);
 
 		synchronized (actor) {
-			deps = actor.previousTasks;
-			actor.previousTasks = new LinkedList<Task>();
-			actor.previousTasks.add(task);
-			actor.latestWriters = actor.previousTasks;
-			actor.previousTasksAreWriters = true;
+			if (actor.previousTaskWasWriter) {
+				deps = new ArrayList<Task>(1);
+				deps.addAll(actor.lastWriter);
+			} else {
+				deps = new ArrayList<Task>();
+				deps.addAll(actor.lastReaders);
+			}
+			actor.previousTaskWasWriter = true;
+			actor.lastWriter = new ArrayList<Task>(1);
+			actor.lastWriter.add(task);
 		}
 		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 

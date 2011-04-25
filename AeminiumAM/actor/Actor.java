@@ -8,15 +8,11 @@ import aeminium.runtime.Task;
 public abstract class Actor{
 	
 	/* AspectJ vars*/
-	protected Collection<Task> previousTasks;
-	protected Collection<Task> latestWriters;
-	protected boolean previousTasksAreWriters;
+	protected Collection<Task> lastWriter = new LinkedList<Task>();
+	protected Collection<Task> lastReaders = new LinkedList<Task>();
+	protected boolean previousTaskWasWriter = false;
 	
 	protected aeminium.runtime.Runtime rt;
 	
-	public Actor() {
-		previousTasks           = new LinkedList<Task>();
-		latestWriters           = previousTasks;
-		previousTasksAreWriters = true;
-	}
+	public Actor() {}
 }

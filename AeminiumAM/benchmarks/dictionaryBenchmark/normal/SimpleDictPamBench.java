@@ -1,22 +1,27 @@
 package benchmarks.dictionaryBenchmark.normal;
 
-import examples.dictionaryExample.*;
+import examples.dictionaryExample.DictionaryExample;
 
 public class SimpleDictPamBench {
 	
 	public static void main(String[] args) {
 		long workTime = 15000000;
-		
-		for(int j=100; j<=500; j+=100){
+		int reps = 5;
+		int inc = 500;
+		int nMsg = 500;
+		int dictSize = 500; //Can be <= 500. No more than that!
+		boolean useSpin = true;
+
+		for(int j=inc; j<=nMsg; j+=inc){
 			long subtotal=0;
 			
 			System.out.println();
 			System.out.println(j);
-			for(int i=0; i<30;i++){
+			for(int i=0; i<reps;i++){
 				DictionaryExample.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				DictionaryExample.rt.init();
 				
-				new DictionaryExample(j,100,true,workTime);
+				new DictionaryExample(j,dictSize,useSpin,workTime);
 				
 				long start = System.nanoTime();
 				DictionaryExample.reader.startAsking(null);			

@@ -7,23 +7,26 @@ import examples.simpleDictionaryExample.DictionaryExampleInsertsReads;
 public class ReadsAndWritesPam {
 	
 	public static void main(String[] args) {
-		long maxWorkTime = 20000000;
+		long maxWorkTime = 1000000;
 		long inc = 1000000;
 		int nMsgs = 5000;
 		long init=0;
+		int i=0;
+		long first = 0;
+		long temp;
 		
-		int repetitions = 1;
+		int repetitions = 3;
 		
 		for(long workTime=init; workTime<=maxWorkTime; workTime+=inc){
 			long subtotal=0;
 			
 			System.out.println();
 			System.out.println(workTime);
-			for(int i=0; i<repetitions;i++){
+			for(i=1; i<=repetitions;i++){
 				DictionaryExampleInsertsReads.rt = aeminium.runtime.implementations.Factory.getRuntime();
 				DictionaryExampleInsertsReads.rt.init();
 				
-				new DictionaryExampleInsertsReads(false,true,workTime);
+				new DictionaryExampleInsertsReads(true,false,maxWorkTime);
 				
 				long start = System.nanoTime();
 				
@@ -38,10 +41,20 @@ public class ReadsAndWritesPam {
 				}
 						
 				DictionaryExampleInsertsReads.rt.shutdown();
-
-				subtotal = System.nanoTime()-start;
-				System.out.println(subtotal);
+				
+				temp = System.nanoTime()-start;
+				
+				if(i==1){
+					first = temp;
+				}
+				
+				subtotal += temp;
 			}
+			
+			i--;
+			System.out.println("Reps: "+i);
+			System.out.println("no warm up: "+subtotal/i);
+			System.out.println("with warm up: "+(subtotal-first)/(i-1));
 		}
 	}
 }

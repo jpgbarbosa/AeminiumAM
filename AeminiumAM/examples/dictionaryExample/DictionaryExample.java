@@ -42,7 +42,7 @@ public class DictionaryExample {
 			words = new String[noMsgs];
 			
 			try {
-				FileInputStream fstream = new FileInputStream("500Word1.txt");
+				FileInputStream fstream = new FileInputStream("WordsSorted.txt");
 			    DataInputStream in = new DataInputStream(fstream);
 			    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				
@@ -93,14 +93,14 @@ public class DictionaryExample {
 		private String [] keyWords;
 		private String [] valueWords;
 		
-		public Dictionary(){
+		public Dictionary(Runtime rt){
 			super();
 			this.rt = rt;
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
 			try {
-				FileInputStream fstream = new FileInputStream("500Word1.txt");
+				FileInputStream fstream = new FileInputStream("WordsSorted.txt");
 			    DataInputStream in = new DataInputStream(fstream);
 			    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				
@@ -122,11 +122,6 @@ public class DictionaryExample {
 			}
 			
 		}
-		
-		public Dictionary(Runtime rt) {
-			this.rt = rt;
-			// TODO Auto-generated constructor stub
-		}
 
 		@Read
 		public void getVal(String word) {
@@ -135,16 +130,17 @@ public class DictionaryExample {
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			for(int i=0; i<keyWords.length; i++){
-				if(keyWords[i].equals(word)){
-					receiver.sendMessage(valueWords[i]);
-				}
-			}			
+			//for(int i=0; i<keyWords.length; i++){
+				//if(keyWords[i].equals(word)){
+					receiver.sendMessage(valueWords[1]);
+				//}
+			//}			
 		}
 		
 	}
 	
 	public static class Receiver extends Actor{
+		//int ctr=0;
 		
 		public Receiver(Runtime rt) {
 			this.rt = rt;
@@ -158,7 +154,7 @@ public class DictionaryExample {
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			// System.out.println(value);	
+			// System.out.println(value +" "+(++ctr));	
 		}
 		
 	}
