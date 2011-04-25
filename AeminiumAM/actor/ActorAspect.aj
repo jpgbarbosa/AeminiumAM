@@ -71,25 +71,19 @@ public aspect ActorAspect {
 				return "Reader";
 			}
 		}, Hints.NO_HINTS);
-		Collection<Task> deps = Runtime.NO_DEPS;
-/*
-		synchronized (actor) {
-			if (actor.previousTaskWasWriter) {
-				actor.lastReaders.clear();
-				actor.previousTaskWasWriter = false;
-			}
-			actor.lastReaders.add(task);
-			deps = new ArrayList<Task>(1);
-			deps.addAll(actor.lastWriter);
+		
+		try {
+			actor.queue.put(task);
+		} catch (InterruptedException e) {
+			System.out.println("queue put in aspectJ reader");
+			e.printStackTrace();
 		}
-			*/
-		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
+		
 	}
 
 	// replace all public write methods calls
 	void around(): PublicWriteActorMethods() {
 		Actor actor = (Actor) thisJoinPoint.getTarget();
-		Collection<Task> deps = null;
 
 		Task task = actor.rt.createNonBlockingTask(new Body() {
 			@Override
@@ -102,20 +96,13 @@ public aspect ActorAspect {
 				return "Writer";
 			}
 		}, Hints.NO_HINTS);
-
-		synchronized (actor) {
-			if (actor.previousTaskWasWriter) {
-				deps = new ArrayList<Task>(1);
-				deps.addAll(actor.lastWriter);
-			} else {
-				deps = new ArrayList<Task>();
-				deps.addAll(actor.lastReaders);
-			}
-			actor.previousTaskWasWriter = true;
-			actor.lastWriter = new ArrayList<Task>(1);
-			actor.lastWriter.add(task);
+		
+		try {
+			actor.queue.put(task);
+		} catch (InterruptedException e) {
+			System.out.println("queue put in aspectJ writer");
+			e.printStackTrace();
 		}
-		actor.rt.schedule(task, Runtime.NO_PARENT, deps);
 
 	}
 

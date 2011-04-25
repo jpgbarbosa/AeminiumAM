@@ -39,6 +39,7 @@ public class DictionaryExample {
 		public Reader(Runtime rt){
 			super();
 			this.rt = rt;
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
 			words = new String[noMsgs];
 			
 			try {
@@ -93,9 +94,11 @@ public class DictionaryExample {
 		private String [] keyWords;
 		private String [] valueWords;
 		
-		public Dictionary(){
+		public Dictionary(Runtime rt){
 			super();
 			this.rt = rt;
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
+			
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
@@ -122,11 +125,6 @@ public class DictionaryExample {
 			}
 			
 		}
-		
-		public Dictionary(Runtime rt) {
-			this.rt = rt;
-			// TODO Auto-generated constructor stub
-		}
 
 		@Read
 		public void getVal(String word) {
@@ -147,7 +145,9 @@ public class DictionaryExample {
 	public static class Receiver extends Actor{
 		
 		public Receiver(Runtime rt) {
+			super();
 			this.rt = rt;
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
 			// TODO Auto-generated constructor stub
 		}
 

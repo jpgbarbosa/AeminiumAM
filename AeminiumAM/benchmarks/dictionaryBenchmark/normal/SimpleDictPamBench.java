@@ -6,9 +6,9 @@ public class SimpleDictPamBench {
 	
 	public static void main(String[] args) {
 		long workTime = 15000000;
-		int reps = 5;
-		int inc = 500;
-		int nMsg = 500;
+		int reps = 1;
+		int inc = 3;
+		int nMsg = 3;
 		int dictSize = 500; //Can be <= 500. No more than that!
 		boolean useSpin = true;
 

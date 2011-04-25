@@ -10,7 +10,10 @@ import java.util.Random;
 
 import actor.Actor;
 import actor.annotations.*;
+import aeminium.runtime.Body;
+import aeminium.runtime.Hints;
 import aeminium.runtime.Runtime;
+import aeminium.runtime.Task;
 
 public class DictionaryExample {
 	public static boolean useSpin = false;
@@ -39,6 +42,21 @@ public class DictionaryExample {
 		public Reader(Runtime rt){
 			super();
 			this.rt = rt;
+			
+			t = rt.createNonBlockingTask(new Body() {
+				@Override
+				public void execute(Runtime rt, Task current) throws Exception {
+					consumer.run();
+				}
+
+				@Override
+				public String toString() {
+					return "Consumer";
+				}
+			}, Hints.NO_HINTS);
+			
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
+			
 			words = new String[noMsgs];
 			
 			try {
@@ -96,6 +114,21 @@ public class DictionaryExample {
 		public Dictionary(Runtime rt){
 			super();
 			this.rt = rt;
+			
+			t = rt.createNonBlockingTask(new Body() {
+				@Override
+				public void execute(Runtime rt, Task current) throws Exception {
+					consumer.run();
+				}
+
+				@Override
+				public String toString() {
+					return "Consumer";
+				}
+			}, Hints.NO_HINTS);
+			
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
+			
 			keyWords = new String[noMsgs];
 			valueWords = new String[noMsgs];
 			
@@ -143,8 +176,22 @@ public class DictionaryExample {
 		//int ctr=0;
 		
 		public Receiver(Runtime rt) {
+			super();
 			this.rt = rt;
-			// TODO Auto-generated constructor stub
+			
+			t = rt.createNonBlockingTask(new Body() {
+				@Override
+				public void execute(Runtime rt, Task current) throws Exception {
+					consumer.run();
+				}
+
+				@Override
+				public String toString() {
+					return "Consumer";
+				}
+			}, Hints.NO_HINTS);
+			
+			this.rt.schedule(t, Runtime.NO_PARENT, Runtime.NO_DEPS);
 		}
 
 		@Read
