@@ -6,9 +6,9 @@ public class SimpleDictPamBench {
 	
 	public static void main(String[] args) {
 		long workTime = 15000000;
-		int reps = 1;
-		int inc = 3;
-		int nMsg = 3;
+		int reps = 15;
+		int inc = 500;
+		int nMsg = 500;
 		int dictSize = 500; //Can be <= 500. No more than that!
 		boolean useSpin = true;
 
@@ -24,7 +24,8 @@ public class SimpleDictPamBench {
 				new DictionaryExample(j,dictSize,useSpin,workTime);
 				
 				long start = System.nanoTime();
-				DictionaryExample.reader.startAsking(null);			
+				DictionaryExample.reader.startAsking(null);
+				DictionaryExample.reader.end();
 				DictionaryExample.rt.shutdown();
 
 				subtotal = System.nanoTime()-start;
