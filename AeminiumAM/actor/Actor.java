@@ -39,7 +39,9 @@ public abstract class Actor {
 			String name = m.substring(m.indexOf('<') + 1, m.indexOf('>'));
 			// System.out.println("task name: " + m);
 			if (!name.equals("Reader")) {
-				System.out.println("is in consume inside !Reader");
+				System.out
+						.println("is in consume OUTOUTOUT inside !Reader, name: <"
+								+ name + "<" + m + ">" + ">");
 				Collection<Task> deps = null;
 
 				if (previousTaskWasWriter) {
@@ -81,9 +83,9 @@ public abstract class Actor {
 
 	}
 
-	public int privateCounter=0;
-	public int msgs=500;
-	
+	public int privateCounter = 0;
+	public int msgs = 500;
+
 	protected class Consumer {
 		private final BlockingQueue<Task> queue;
 
@@ -93,17 +95,22 @@ public abstract class Actor {
 
 		public void run() {
 			try {
+				boolean flag;
 				while (true) {
-					// System.out.println("waiting");
 					Task task = queue.poll(100, TimeUnit.MICROSECONDS);
+
+					if (privateCounter == msgs)
+						break;
+
 					if (task != null) {
 						privateCounter++;
-						consume(task);
-						if(!consume(task) || privateCounter==msgs){
+						
+						flag=consume(task);
+
+						if (!flag || privateCounter == msgs) {
 							System.out.println("if exiting...");
 							break;
 						}
-						// System.out.println("took task");
 					} else {
 						Task t = rt.createNonBlockingTask(new Body() {
 							@Override
@@ -122,23 +129,43 @@ public abstract class Actor {
 						break;
 					}
 				}
-			} catch (InterruptedException ex) {
-				System.out.println("exception consumer actor, exiting...");
+			} catch (Exception e) {
+				System.out.println("exception consumer actor, exiting..."+e);
 			}
 		}
 
-		public boolean consume(Task task){
+		public boolean consume(Task task) {
 
 			String m = task.toString();
 			String name = m.substring(m.indexOf('<') + 1, m.indexOf('>'));
-			// System.out.println("task name: " + m);
-			if (!name.equals("Reader")) {
+			if (name.equals("Reader")) {
+				//try {
+					Collection<Task> deps = Runtime.NO_DEPS;
+
+					if (previousTaskWasWriter) {
+						lastReaders.clear();
+						previousTaskWasWriter = false;
+					}
+					lastReaders.add(task);
+					deps = new ArrayList<Task>(1);
+					deps.addAll(lastWriter);
+					
+					rt.schedule(task, Runtime.NO_PARENT,deps);
+
+			} else {
+
 				if (name.equals("End")) {
-					System.out.println("End exiting...");
+					System.out.println("End exiting... " + name);
 					return false;
 				}
-				
-				System.out.println("is in consume inside !Reader");
+/*
+				try {
+					System.out.println("is in consume inside !Reader, name: <"
+							+ name + "> <" + m + ">");
+				} catch (Exception e) {
+					System.out.println("here: " + e);
+				}
+	*/			
 				Collection<Task> deps = null;
 
 				if (previousTaskWasWriter) {
@@ -153,24 +180,6 @@ public abstract class Actor {
 				lastWriter.add(task);
 				rt.schedule(task, Runtime.NO_PARENT, deps);
 
-			} else {
-				try {
-					Collection<Task> deps = Runtime.NO_DEPS;
-
-					if (previousTaskWasWriter) {
-						lastReaders.clear();
-						previousTaskWasWriter = false;
-					}
-					lastReaders.add(task);
-					deps = new ArrayList<Task>(1);
-					deps.addAll(lastWriter);
-
-					rt.schedule(task, Runtime.NO_PARENT, deps);
-					// System.out.println("scheduled "+task.toString());
-
-				} catch (Exception e) {
-					System.out.println("here " + e);
-				}
 			}
 			return true;
 		}
@@ -185,13 +194,13 @@ public abstract class Actor {
 
 	protected aeminium.runtime.Runtime rt;
 
-	//public ConsumerOut consumer;
+	// public ConsumerOut consumer;
 	public Consumer consumer;
 
 	public Actor() {
 		consumer = new Consumer(queue);
-		//consumer = new ConsumerOut(queue);
-		//new Thread(consumer).start();
+		// consumer = new ConsumerOut(queue);
+		// new Thread(consumer).start();
 	}
 
 	abstract public void end();

@@ -64,17 +64,11 @@ public aspect ActorAspect {
 	// replace all public read methods calls
 	void around(): PublicReadActorMethods() {
 		Actor actor = (Actor) thisJoinPoint.getTarget();
-
+		
 		Task task = actor.rt.createNonBlockingTask(new Body() {
 			@Override
 			public void execute(Runtime rt, Task current) throws Exception {
-
-				//System.out.println("here before");
-				try{
 					proceed();
-				} catch (Exception e){
-					System.out.println("kikiki");
-				}
 			}
 			@Override
 			public String toString() {
@@ -82,30 +76,24 @@ public aspect ActorAspect {
 			}
 		}, Hints.NO_HINTS);
 		
-		//System.out.println("before");
 		try {
 			actor.queue.put(task);
 		} catch (Exception e) {
 			System.out.println("queue put in aspectJ reader");
 			e.printStackTrace();
 		}
-		//System.out.println("after");
 		
 	}
 
 	// replace all public write methods calls
 	void around(): PublicWriteActorMethods() {
 		Actor actor = (Actor) thisJoinPoint.getTarget();
-
+		
 		Task task = actor.rt.createNonBlockingTask(new Body() {
 			@Override
 			public void execute(Runtime rt, Task current) throws Exception {
-				try{
-					System.out.println("here before");
+					System.out.println("here before W");
 					proceed();
-				} catch (Exception e){
-					System.out.println("kikiki");
-				}
 			}
 
 			@Override
@@ -127,9 +115,11 @@ public aspect ActorAspect {
 	void around(): PublicEndActorMethods() {
 		Actor actor = (Actor) thisJoinPoint.getTarget();
 
+		
 		Task task = actor.rt.createNonBlockingTask(new Body() {
 			@Override
 			public void execute(Runtime rt, Task current) throws Exception {
+				System.out.println("here before E");
 				proceed();
 			}
 

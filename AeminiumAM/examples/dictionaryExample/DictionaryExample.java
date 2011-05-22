@@ -46,7 +46,7 @@ public class DictionaryExample {
 			this.rt = rt;
 			
 			if(useAeTasks){
-				Task t = rt.createNonBlockingTask(new Body() {
+				Task t = this.rt.createNonBlockingTask(new Body() {
 					@Override
 					public void execute(Runtime rt, Task current) throws Exception {
 						consumer.run();
@@ -98,7 +98,10 @@ public class DictionaryExample {
 		}
 		
 		@Read
-		public void startAsking(Object obj) {			
+		public void startAsking(Object obj) {
+			
+			System.out.println("Im in startAsking");
+			
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
@@ -120,13 +123,14 @@ public class DictionaryExample {
 	public static class Dictionary extends Actor{
 		private String [] keyWords;
 		private String [] valueWords;
+		private int ctr=0;
 		
 		public Dictionary(Runtime rt){
 			super();
 			this.rt = rt;
 
 			if(useAeTasks){
-				Task t = rt.createNonBlockingTask(new Body() {
+				Task t = this.rt.createNonBlockingTask(new Body() {
 					@Override
 					public void execute(Runtime rt, Task current) throws Exception {
 						consumer.run();
@@ -170,6 +174,8 @@ public class DictionaryExample {
 
 		@Read
 		public void getVal(String word) {
+			//ctr++;
+			
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
@@ -179,7 +185,8 @@ public class DictionaryExample {
 				//if(keyWords[i].equals(word)){
 					receiver.sendMessage(valueWords[1]);
 				//}
-			//}			
+			//}		
+					//System.out.println(ctr);
 		}
 		
 		@Override
@@ -198,7 +205,7 @@ public class DictionaryExample {
 			this.rt = rt;
 
 			if(useAeTasks){
-				Task t = rt.createNonBlockingTask(new Body() {
+				Task t = this.rt.createNonBlockingTask(new Body() {
 					@Override
 					public void execute(Runtime rt, Task current) throws Exception {
 						consumer.run();
@@ -218,13 +225,16 @@ public class DictionaryExample {
 		@Read
 		public void sendMessage(String value) {
 			ctr++;
+			
 			if(useSpin){
 				long sleepTime = workTime; // convert to nanoseconds
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			if(ctr==500)
+			
+			if(ctr>=500)
 				System.out.println(value +" "+ctr);	
+			
 		}
 		
 		@Override

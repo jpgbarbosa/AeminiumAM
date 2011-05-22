@@ -6,7 +6,7 @@ public class SimpleDictPamBench {
 	
 	public static void main(String[] args) {
 		long workTime = 15000000;
-		int reps = 15;
+		int reps = 1;
 		int inc = 500;
 		int nMsg = 500;
 		int dictSize = 500; //Can be <= 500. No more than that!
@@ -22,7 +22,6 @@ public class SimpleDictPamBench {
 				DictionaryExample.rt.init();
 				
 				new DictionaryExample(j,dictSize,useSpin,workTime);
-				
 				long start = System.nanoTime();
 				DictionaryExample.reader.startAsking(null);
 				DictionaryExample.reader.end();
