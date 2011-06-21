@@ -12,7 +12,7 @@ public class Philosopher extends Actor{
 	}
 	
 	@Override
-	protected void react(Object obj) {
+	public void react(Object obj) {
 		
 		Reply msg = (Reply) obj;
 		

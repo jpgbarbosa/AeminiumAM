@@ -38,7 +38,7 @@ public class DictionaryExampleAtomic {
 		@writable
 		static public String [] words;
 		
-		public Reader(){
+		Reader(){
 			super();
 			
 			words = new String[noMsgs];
@@ -97,7 +97,7 @@ public class DictionaryExampleAtomic {
 		@writable
 		static public String [] valueWords;
 		
-		public Dictionary(){
+		Dictionary(){
 			super();
 			
 			keyWords = new String[noMsgs];
@@ -159,7 +159,6 @@ public class DictionaryExampleAtomic {
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			//System.out.println((String)obj);
 		}
 		
 	}

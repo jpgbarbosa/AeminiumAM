@@ -16,7 +16,7 @@ public class TableA extends Actor{
 	}
 	
 	@Override
-	protected void react(Object obj) {
+	public void react(Object obj) {
 		
 		try{
 			MessageActionA msgA = (MessageActionA)obj;

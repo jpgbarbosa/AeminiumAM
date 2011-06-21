@@ -12,7 +12,7 @@ public class DictSerial {
 			System.out.println();
 			System.out.println(j);
 			for(int i=0; i<30;i++){
-				new DictionaryExampleAtomic(j,500,true,15000000);
+				new DictionaryExampleAtomic(j,500,false,15000000);
 				
 				long start = System.nanoTime();
 				DictionaryExampleAtomic.reader.sendMessage(null);

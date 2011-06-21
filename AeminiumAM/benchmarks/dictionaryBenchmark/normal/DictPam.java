@@ -12,7 +12,7 @@ public class DictPam {
 			System.out.println();
 			System.out.println(j);
 			for(int i=0; i<30;i++){
-				new DictionaryExample(j,500,true,15000000);
+				new DictionaryExample(j,500,false,15000000);
 				
 				long start = System.nanoTime();
 				DictionaryExample.reader.sendMessage(null);

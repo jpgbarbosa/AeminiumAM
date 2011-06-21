@@ -13,7 +13,7 @@ public class Table extends Actor{
 	}
 	
 	@Override
-	protected void react(Object obj) {
+	public void react(Object obj) {
 		
 		try{
 			MessageAction msgA = (MessageAction)obj;

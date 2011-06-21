@@ -154,7 +154,6 @@ public class DictionaryExample {
 			    long startTime = System.nanoTime();
 			    while ((System.nanoTime() - startTime) < sleepTime) {}
 			}
-			//System.out.println((String)obj);
 		}
 		
 	}
